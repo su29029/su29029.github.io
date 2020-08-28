@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>python爬虫学习(BeautifulSoup) | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="今天学习的内容是python爬虫，利用BeautifulSoup库。 0x00 基本使用安装： 1pip3 install beautifulsoup4  使用： 我们先定义一个简单的index.html文件： 123456789&lt;html&gt;&lt;body&gt;	&lt;h1&gt;hello beautifulsoup&lt;&#x2F;h1&gt;	&lt;div&gt;		&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python爬虫学习(BeautifulSoup)">
+<meta property="og:url" content="https://su29029.github.io/2020/08/28/python%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0-BeautifulSoup/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="今天学习的内容是python爬虫，利用BeautifulSoup库。 0x00 基本使用安装： 1pip3 install beautifulsoup4  使用： 我们先定义一个简单的index.html文件： 123456789&lt;html&gt;&lt;body&gt;	&lt;h1&gt;hello beautifulsoup&lt;&#x2F;h1&gt;	&lt;div&gt;		&amp;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-08-28T02:40:07.000Z">
+<meta property="article:modified_time" content="2020-08-28T02:40:26.557Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="web安全">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://su29029.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-python爬虫学习-BeautifulSoup" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/28/python%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0-BeautifulSoup/" class="article-date">
+  <time datetime="2020-08-28T02:40:07.000Z" itemprop="datePublished">2020-08-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web/">web</a>►<a class="article-category-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      python爬虫学习(BeautifulSoup)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天学习的内容是python爬虫，利用BeautifulSoup库。</p>
+<h3 id="0x00-基本使用"><a href="#0x00-基本使用" class="headerlink" title="0x00 基本使用"></a>0x00 基本使用</h3><p>安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install beautifulsoup4</span><br></pre></td></tr></table></figure>
+
+<p>使用：</p>
+<p>我们先定义一个简单的index.html文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;h1&gt;hello beautifulsoup&lt;&#x2F;h1&gt;</span><br><span class="line">	&lt;div&gt;</span><br><span class="line">		&lt;a href&#x3D;&quot;#&quot;&gt;123&lt;&#x2F;a&gt;</span><br><span class="line">		&lt;p class&#x3D;&quot;hello&quot;&gt;hello&lt;&#x2F;p&gt;</span><br><span class="line">	&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>python引用BeautifulSoup：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line">demo = </span><br><span class="line">soup = BeautifulSoup(open(<span class="string">&quot;index.html&quot;</span>), <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">print(soup.prettify())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">输出：</span></span><br><span class="line"><span class="string">&lt;html&gt;</span></span><br><span class="line"><span class="string"> &lt;body&gt;</span></span><br><span class="line"><span class="string">  &lt;h1&gt;</span></span><br><span class="line"><span class="string">   hello beautifulsoup</span></span><br><span class="line"><span class="string">  &lt;/h1&gt;</span></span><br><span class="line"><span class="string">  &lt;div&gt;</span></span><br><span class="line"><span class="string">   &lt;a href=&quot;#&quot;&gt;</span></span><br><span class="line"><span class="string">    123</span></span><br><span class="line"><span class="string">   &lt;/a&gt;</span></span><br><span class="line"><span class="string">   &lt;p class=&quot;hello&quot;&gt;</span></span><br><span class="line"><span class="string">    hello</span></span><br><span class="line"><span class="string">   &lt;/p&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;</span></span><br><span class="line"><span class="string"> &lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>基本操作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">soup.prettify()   <span class="comment"># 美化输出html/xml文档内容</span></span><br><span class="line">soup.a <span class="comment"># 获取html中的第一个a标签</span></span><br><span class="line">soup.title <span class="comment"># 获取html中的title标签</span></span><br><span class="line">soup.a[<span class="string">&#x27;href&#x27;</span>] <span class="comment"># 获取html的第一个a标签的href属性</span></span><br><span class="line">soup.p[<span class="string">&#x27;class&#x27;</span>] <span class="comment"># 获取html的第一个p标签的class属性</span></span><br><span class="line">soup.name <span class="comment"># u&#x27;[document]&#x27;</span></span><br><span class="line">soup.a.name <span class="comment"># &#x27;a&#x27;</span></span><br><span class="line">soup.a.contents <span class="comment"># 将html中第一个a标签的所有子节点以列表的方式输出</span></span><br><span class="line">soup.contents[<span class="number">0</span>] <span class="comment"># 获取html标签所有子节点列表中的第一个元素</span></span><br><span class="line">soup.a.contents[<span class="number">0</span>].contents <span class="comment"># AttributeError,字符串没有.contents属性，因为字符串没有子节点</span></span><br><span class="line">soup.a.parent <span class="comment"># 通过.parent属性来获取某个元素的父节点</span></span><br><span class="line">soup.title.string.parent <span class="comment"># &#x27;title&#x27; 文档title的字符串的父亲结点存在，为&lt;title&gt;标签</span></span><br><span class="line"><span class="keyword">for</span> parent <span class="keyword">in</span> soup.a.parents:</span><br><span class="line">	<span class="keyword">if</span> parent <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">		print(parent)</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		print(parent.name)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过元素的.parents属性递归得到元素的所有父亲节点</span></span><br><span class="line">soup.a.next_sibling </span><br><span class="line">soup.a.previous_sibling  <span class="comment"># 使用.next_sibling和previous_sibling查询兄弟节点</span></span><br><span class="line"><span class="keyword">for</span> sibling <span class="keyword">in</span> soup.a.next_siblings:</span><br><span class="line">    print(repr(sibling))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> sibling <span class="keyword">in</span> soup.a.previous_siblings:</span><br><span class="line">    print(repr(sibling))</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 通过.next_siblings和.previous_siblings属性对当前节点的兄弟节点迭代输出</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="0x01-进阶用法"><a href="#0x01-进阶用法" class="headerlink" title="0x01 进阶用法"></a>0x01 进阶用法</h3><h4 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h4><p>找出所有以b开头的标签(<body>,<b>)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">for</span> tag <span class="keyword">in</span> soup.find_all(re.compile(<span class="string">&quot;^b&quot;</span>)):</span><br><span class="line">    print(tag.name)</span><br></pre></td></tr></table></figure>
+
+<h4 id="find-all-函数"><a href="#find-all-函数" class="headerlink" title="find_all()函数"></a>find_all()函数</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">函数原型：find_all( name, attrs, recursive, text, **kwargs)</span><br><span class="line">常见示例：</span><br><span class="line">soup.find_all(<span class="string">&#x27;a&#x27;</span>) <span class="comment"># 获取html中的所有a标签</span></span><br><span class="line">soup.find_all(<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>) <span class="comment"># 获取html中的所有a标签和b标签</span></span><br><span class="line">soup.find_all(href=<span class="string">&quot;#&quot;</span>) <span class="comment"># 获取html中所有href属性为&quot;#&quot;的标签</span></span><br><span class="line">soup.find_all(id=<span class="literal">True</span>) <span class="comment"># 获取html中所有包含id属性的标签</span></span><br><span class="line">soup.find_all(<span class="string">&#x27;a&#x27;</span>, limit=<span class="number">2</span>) <span class="comment"># 获取html中所有的a标签，返回最多2个</span></span><br><span class="line">soup.find_all(<span class="string">&#x27;title&#x27;</span>, recursive=<span class="literal">False</span>) <span class="comment"># 搜索title标签的直接子节点(recursive默认为True, 将搜索该标签的所有子孙节点)</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://su29029.github.io/2020/08/28/python%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0-BeautifulSoup/" data-id="ckedn8mtd000pfcty4m5v4b3o" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/08/28/Python%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%9E%E6%88%98-cnvd%E7%BD%91%E4%BF%A1%E6%81%AF%E7%88%AC%E5%8F%96/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Python爬虫学习与实战(cnvd网信息爬取)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/28/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%AD%A6%E4%B9%A0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">文件上传学习</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/c%E8%AF%AD%E8%A8%80/">c语言</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/web%E5%BC%80%E5%8F%91/">web开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/web%E5%AE%89%E5%85%A8/">web安全</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/windows%E7%BC%96%E7%A8%8B/">windows编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/">软件工程</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80/" rel="tag">c语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%BC%80%E5%8F%91/" rel="tag">web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows%E7%BC%96%E7%A8%8B/" rel="tag">windows编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag">网络编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag">软件工程</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/c%E8%AF%AD%E8%A8%80/" style="font-size: 10px;">c语言</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 20px;">web安全</a> <a href="/tags/web%E5%BC%80%E5%8F%91/" style="font-size: 15px;">web开发</a> <a href="/tags/windows%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">windows编程</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">网络编程</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 10px;">软件工程</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/08/28/%E6%B4%9B%E8%B0%B7%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-1-1-2-3%E7%BB%84/">洛谷刷题记录(1)(1,2,3组)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/28/ctfshow%E8%90%8C%E6%96%B0%E8%AE%A1%E5%88%92%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">ctfshow萌新计划刷题记录</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/28/buu%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%951/">buu刷题记录1</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/28/csrf-ssrf-session%E4%BC%AA%E9%80%A0/">csrf&amp;ssrf&amp;session伪造</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/28/xxe%E9%97%AE%E9%A2%98/">xxe问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

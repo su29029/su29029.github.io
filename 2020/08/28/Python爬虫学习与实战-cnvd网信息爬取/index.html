@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Python爬虫学习与实战(cnvd网信息爬取) | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Python爬虫学习与实战(cnvd网信息爬取)0x00 爬虫基础1.python requests库基础使用： 12345678import requeststry:	r &#x3D; requests.get(&quot;https:&#x2F;&#x2F;www.baidu.com&#x2F;&quot;)	if r.status_code &#x3D;&#x3D; 200:		r.encoding &#x3D; &quot;utf-8&quot;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python爬虫学习与实战(cnvd网信息爬取)">
+<meta property="og:url" content="https://su29029.github.io/2020/08/28/Python%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%9E%E6%88%98-cnvd%E7%BD%91%E4%BF%A1%E6%81%AF%E7%88%AC%E5%8F%96/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Python爬虫学习与实战(cnvd网信息爬取)0x00 爬虫基础1.python requests库基础使用： 12345678import requeststry:	r &#x3D; requests.get(&quot;https:&#x2F;&#x2F;www.baidu.com&#x2F;&quot;)	if r.status_code &#x3D;&#x3D; 200:		r.encoding &#x3D; &quot;utf-8&quot;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-08-28T02:41:04.000Z">
+<meta property="article:modified_time" content="2020-08-28T02:41:54.060Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="web安全">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://su29029.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Python爬虫学习与实战-cnvd网信息爬取" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/28/Python%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%9E%E6%88%98-cnvd%E7%BD%91%E4%BF%A1%E6%81%AF%E7%88%AC%E5%8F%96/" class="article-date">
+  <time datetime="2020-08-28T02:41:04.000Z" itemprop="datePublished">2020-08-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web/">web</a>►<a class="article-category-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python爬虫学习与实战(cnvd网信息爬取)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Python爬虫学习与实战-cnvd网信息爬取"><a href="#Python爬虫学习与实战-cnvd网信息爬取" class="headerlink" title="Python爬虫学习与实战(cnvd网信息爬取)"></a>Python爬虫学习与实战(cnvd网信息爬取)</h2><h4 id="0x00-爬虫基础"><a href="#0x00-爬虫基础" class="headerlink" title="0x00 爬虫基础"></a>0x00 爬虫基础</h4><h5 id="1-python-requests库"><a href="#1-python-requests库" class="headerlink" title="1.python requests库"></a>1.python requests库</h5><p>基础使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	r = requests.get(<span class="string">&quot;https://www.baidu.com/&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> r.status_code == <span class="number">200</span>:</span><br><span class="line">		r.encoding = <span class="string">&quot;utf-8&quot;</span></span><br><span class="line">        print(r.text)</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">	print(<span class="string">&quot;error&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>几个主要使用方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">request.get(url, params=payload)</span><br><span class="line">request.post(url, data=payload)</span><br><span class="line">request.request(HTTP_METHODS, url, **kwargs)</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">HTTP_METHODS:http请求方法</span></span><br><span class="line"><span class="string">url:请求url</span></span><br><span class="line"><span class="string">kwargs:控制参数，主要使用的有：</span></span><br><span class="line"><span class="string">1.params字典序列(主要用于get)</span></span><br><span class="line"><span class="string">2.data字典，字节序列或文件对象(主要用于post)</span></span><br><span class="line"><span class="string">3.cookies字典或者CookieJar，Request中的cookie</span></span><br><span class="line"><span class="string">4.timeout设定超时时间，秒为单位</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="2-正则表达式基础"><a href="#2-正则表达式基础" class="headerlink" title="2.正则表达式基础"></a>2.正则表达式基础</h5><table>
+<thead>
+<tr>
+<th>字符</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\</td>
+<td>将下一个字符标记为一个特殊字符、或一个原义字符、或一个向后引用、或一个八进制转义符。</td>
+</tr>
+<tr>
+<td>^</td>
+<td>字符串开始</td>
+</tr>
+<tr>
+<td>$</td>
+<td>字符串结束</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配前面的子表达式零次或多次，例如，zo*能匹配“<code>z</code>”以及“<code>zoo</code>“</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配前面的子表达式一次或多次。例如，“<code>zo+</code>”能匹配“<code>zo</code>”以及“<code>zoo</code>”，但不能匹配“<code>z</code>”</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配前面的子表达式零次或一次。例如，“<code>do(es)?</code>”可以匹配“<code>does</code>”或“<code>does</code>”中的“<code>do</code>”</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>匹配n次，例如，“<code>o&#123;2&#125;</code>”不能匹配“<code>Bob</code>”中的“<code>o</code>”，但是能匹配“<code>food</code>”中的两个o。</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td>至少匹配n次</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>至少匹配n次，最多m次</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配除“<code>\</code>*<code>n</code>*”之外的任何单个字符。</td>
+</tr>
+<tr>
+<td>(pattern)</td>
+<td>匹配pattern并获取这一匹配。</td>
+</tr>
+<tr>
+<td>(?:pattern)</td>
+<td>匹配pattern但不获取匹配结果</td>
+</tr>
+<tr>
+<td>x|y</td>
+<td>匹配x或y</td>
+</tr>
+<tr>
+<td>[xyz]</td>
+<td>匹配字符集合，例如，“<code>[abc]</code>”可以匹配“<code>plain</code>”中的“<code>a</code>”</td>
+</tr>
+<tr>
+<td>[a-z]</td>
+<td>匹配字符范围，例如，“<code>[a-z]</code>”可以匹配“<code>a</code>”到“<code>z</code>”范围内的任意小写字母字符。</td>
+</tr>
+<tr>
+<td>[^a-z]</td>
+<td>负值字符范围。匹配任何不在指定范围内的任意字符。例如，“<code>[^a-z]</code>”可以匹配任何不在“<code>a</code>”到“<code>z</code>”范围内的任意字符。</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配一个数字</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>匹配一个非数字</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>匹配换行</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>匹配回车</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配任何空白字符，包括空格、制表符、换页符等等。</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配任何非空白字符</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>匹配制表符</td>
+</tr>
+<tr>
+<td>\v</td>
+<td>匹配垂直制表符</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>匹配包括下划线的任何单词字符。等价于“<code>[A-Za-z0-9_]</code>”。</td>
+</tr>
+</tbody></table>
+<h5 id="3-python-re库"><a href="#3-python-re库" class="headerlink" title="3.python re库"></a>3.python re库</h5><p>基础使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">strings = [<span class="string">&#x27;I love python&#x27;</span>, <span class="string">&#x27;I love China&#x27;</span>, <span class="string">&#x27;I like running&#x27;</span>]</span><br><span class="line">pattern = <span class="string">r&#x27;^(I)(\s)(love)(\s)(\w+)$&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range (<span class="number">0</span>, <span class="number">3</span>):</span><br><span class="line">    res = re.findall(pattern, strings[i])</span><br><span class="line">    <span class="keyword">if</span> len(res) &gt; <span class="number">0</span>:</span><br><span class="line">        print(strings[i])</span><br><span class="line">        </span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">output:</span></span><br><span class="line"><span class="string">I love python</span></span><br><span class="line"><span class="string">I love China</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>几个主要使用方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">re.search(pattern, string, flag&#x3D;0) # 在一个字符串中搜索匹配的第一个位置，返回match对象</span><br><span class="line">re.match(pattern, string, flag&#x3D;0) # 在一个字符串的开始位置开始匹配，返回match对象</span><br><span class="line">re.findall(pattern,string) # 搜索字符串，以列表类型返回全部匹配字串</span><br><span class="line">re.split(pattern, string, maxsplit&#x3D;0, flag&#x3D;0) # 将一个字符串按照匹配结果进行分割，返回列表类型</span><br><span class="line">re.sub(pattern, replace, string, count&#x3D;0, flag&#x3D;0) # 在字符串中替换所有匹配的字串，返回替换后的结果</span><br></pre></td></tr></table></figure>
+
+<h5 id="4-python多线程"><a href="#4-python多线程" class="headerlink" title="4.python多线程"></a>4.python多线程</h5><p>Python中使用线程有两种方式：函数或者用类来包装线程对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">函数式：调用 _thread 模块中的start_new_thread()函数来产生新线程。语法如下:</span><br><span class="line"></span><br><span class="line">_thread.start_new_thread ( function, args[, kwargs] )</span><br><span class="line"></span><br><span class="line">参数说明:</span><br><span class="line"></span><br><span class="line">function - 线程函数。</span><br><span class="line">args - 传递给线程函数的参数,他必须是个tuple[数组]类型。</span><br><span class="line">kwargs - 可选参数。</span><br><span class="line">实例：</span><br><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;python3</span><br><span class="line"></span><br><span class="line">import _thread</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line"># 为线程定义一个函数</span><br><span class="line">def print_time( threadName, delay):</span><br><span class="line">   count &#x3D; 0</span><br><span class="line">   while count &lt; 5:</span><br><span class="line">      time.sleep(delay)</span><br><span class="line">      count +&#x3D; 1</span><br><span class="line">      print (&quot;%s: %s&quot; % ( threadName, time.ctime(time.time()) ))</span><br><span class="line"></span><br><span class="line"># 创建两个线程</span><br><span class="line">try:</span><br><span class="line">   _thread.start_new_thread( print_time, (&quot;Thread-1&quot;, 2, ) )</span><br><span class="line">   _thread.start_new_thread( print_time, (&quot;Thread-2&quot;, 4, ) )</span><br><span class="line">except:</span><br><span class="line">   print (&quot;Error: 无法启动线程&quot;)</span><br><span class="line"></span><br><span class="line">while 1:</span><br><span class="line">   pass</span><br><span class="line">执行结果：</span><br><span class="line">    执行以上程序输出结果如下：</span><br><span class="line"></span><br><span class="line">Thread-1: Wed Apr  6 11:36:31 2016</span><br><span class="line">Thread-1: Wed Apr  6 11:36:33 2016</span><br><span class="line">Thread-2: Wed Apr  6 11:36:33 2016</span><br><span class="line">Thread-1: Wed Apr  6 11:36:35 2016</span><br><span class="line">Thread-1: Wed Apr  6 11:36:37 2016</span><br><span class="line">Thread-2: Wed Apr  6 11:36:37 2016</span><br><span class="line">Thread-1: Wed Apr  6 11:36:39 2016</span><br><span class="line">Thread-2: Wed Apr  6 11:36:41 2016</span><br><span class="line">Thread-2: Wed Apr  6 11:36:45 2016</span><br><span class="line">Thread-2: Wed Apr  6 11:36:49 2016</span><br></pre></td></tr></table></figure>
+
+<p>线程模块 Python3 通过两个标准库 _thread 和 threading 提供对线程的支持。</p>
+<p>_thread 提供了低级别的、原始的线程以及一个简单的锁，它相比于 threading 模块的功能还是比较有限的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">threading 模块除了包含 _thread 模块中的所有方法外，还提供的其他方法：</span><br><span class="line"></span><br><span class="line">threading.currentThread(): 返回当前的线程变量。</span><br><span class="line">threading.enumerate(): 返回一个包含正在运行的线程的list。正在运行指线程启动后、结束前，不包括启动前和终止后的线程。</span><br><span class="line">threading.activeCount(): 返回正在运行的线程数量，与len(threading.enumerate())有相同的结果。</span><br><span class="line">除了使用方法外，线程模块同样提供了Thread类来处理线程，Thread类提供了以下方法:</span><br><span class="line"></span><br><span class="line">run(): 用以表示线程活动的方法。</span><br><span class="line">start():启动线程活动。</span><br><span class="line">join([time]): 等待至线程中止。这阻塞调用线程直至线程的join() 方法被调用中止-正常退出或者抛出未处理的异常-或者是可选的超时发生。</span><br><span class="line">isAlive(): 返回线程是否活动的。</span><br><span class="line">getName(): 返回线程名。</span><br><span class="line">setName(): 设置线程名。</span><br></pre></td></tr></table></figure>
+
+<h6 id="使用-threading-模块创建线程"><a href="#使用-threading-模块创建线程" class="headerlink" title="使用 threading 模块创建线程"></a>使用 threading 模块创建线程</h6><p>我们可以通过直接从 threading.Thread 继承创建一个新的子类，并实例化后调用 start() 方法启动新线程，即它调用了线程的 run() 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"># -*- icoding:UTF-8 -*-</span><br><span class="line"># 使用threading模块中的thread类来创建线程</span><br><span class="line"># 本文件不能以threading.py为名，与python中的模块名称重复了</span><br><span class="line">import threading</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line"># 定义一个线程类</span><br><span class="line">class myThread(threading.Thread):</span><br><span class="line">    def __init__(self,threadId,name,delay):</span><br><span class="line">        threading.Thread.__init__(self)</span><br><span class="line">        self.threadId &#x3D; threadId</span><br><span class="line">        self.name &#x3D; name</span><br><span class="line">        self.delay &#x3D; delay</span><br><span class="line">    def run(self):</span><br><span class="line">        print(&quot;开始线程%s&quot;%(self.name))</span><br><span class="line">        work(self.name,self.delay)</span><br><span class="line">        print(&quot;线程%s结束&quot;%(self.name))</span><br><span class="line">        </span><br><span class="line">def work(name,delay):</span><br><span class="line">    count &#x3D; 0;</span><br><span class="line">    while count &lt; 5:</span><br><span class="line">        time.sleep(delay)</span><br><span class="line">        print(&quot;线程%s正在工作:%s&quot;%(name,time.ctime()))</span><br><span class="line">        count +&#x3D; 1</span><br><span class="line">    </span><br><span class="line">#使用threading模块中的Thread类创建线程</span><br><span class="line">thread1 &#x3D; myThread(1,&quot;工作1&quot;,2)</span><br><span class="line">thread2 &#x3D; myThread(2,&quot;工作2&quot;,2)</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    thread1.start()</span><br><span class="line">    print(&quot;当前线程开始阻塞，为已启动线程让位&quot;)</span><br><span class="line">    thread1.join()</span><br><span class="line">    thread2.start()</span><br><span class="line">    print(&quot;已启动线程已运行完毕，启动第二线程，并且当前线程开始开始阻塞，以等待调用join方法的线程先运行完毕&quot;)</span><br><span class="line">    thread2.join()</span><br><span class="line">    print(&quot;主线程结束&quot;)</span><br><span class="line">    </span><br><span class="line">运行结果：</span><br><span class="line">开始线程工作1</span><br><span class="line">当前线程开始阻塞，为已启动线程让位</span><br><span class="line">线程工作1正在工作:Fri Jul  3 10:21:56 2020</span><br><span class="line">线程工作1正在工作:Fri Jul  3 10:21:58 2020</span><br><span class="line">线程工作1正在工作:Fri Jul  3 10:22:00 2020</span><br><span class="line">线程工作1正在工作:Fri Jul  3 10:22:02 2020</span><br><span class="line">线程工作1正在工作:Fri Jul  3 10:22:04 2020</span><br><span class="line">线程工作1结束</span><br><span class="line">开始线程工作2</span><br><span class="line">已启动线程已运行完毕，启动第二线程，并且当前线程开始开始阻塞，以等待调用join方法的线程先运行完毕</span><br><span class="line">线程工作2正在工作:Fri Jul  3 10:22:06 2020</span><br><span class="line">线程工作2正在工作:Fri Jul  3 10:22:08 2020</span><br><span class="line">线程工作2正在工作:Fri Jul  3 10:22:10 2020</span><br><span class="line">线程工作2正在工作:Fri Jul  3 10:22:12 2020</span><br><span class="line">线程工作2正在工作:Fri Jul  3 10:22:14 2020</span><br><span class="line">线程工作2结束</span><br><span class="line">主线程结束</span><br></pre></td></tr></table></figure>
+
+<h4 id="0x01-实战-爬取cnvd网的所有漏洞信息"><a href="#0x01-实战-爬取cnvd网的所有漏洞信息" class="headerlink" title="0x01 实战(爬取cnvd网的所有漏洞信息)"></a>0x01 实战(爬取cnvd网的所有漏洞信息)</h4><p>代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests, threading, re</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span>(<span class="params">n1, n2</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range (n1, n2):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            r = requests.get(<span class="string">&quot;https://www.cnvd.org.cn/webinfo/show/&#123;&#125;&quot;</span>.format(i))</span><br><span class="line">            <span class="keyword">if</span> (r.status_code == <span class="number">200</span>):</span><br><span class="line">                isExist = re.findall(<span class="string">r&#x27;(&lt;title&gt;)([\u0000-\uFFFF]+)(&lt;/title&gt;)&#x27;</span>,r.text)[<span class="number">0</span>]</span><br><span class="line">                <span class="keyword">if</span> (isExist[<span class="number">1</span>] != <span class="string">&quot;出错了....&quot;</span>):</span><br><span class="line">                    title = re.findall(<span class="string">r&#x27;(blkContainerSblk&quot;)([\u0000-\uFFFF]+)(&lt;h1&gt;)([\u0000-\uFFFF]+)(&lt;/h1&gt;)&#x27;</span>,r.text)[<span class="number">0</span>]</span><br><span class="line">                    content = re.findall(<span class="string">r&#x27;(blkContainerSblkCon clearfix)([\u0000-\uFFFF]+)(&lt;p&gt;)([\u0000-\uFFFF]+)(&lt;/p&gt;)(&lt;p&gt;\u53c2\u8003\u94fe\u63a5)&#x27;</span>,r.text)[<span class="number">0</span>]</span><br><span class="line">                    print(i, title[<span class="number">3</span>], content[<span class="number">3</span>])</span><br><span class="line">                    fp = open(<span class="string">&quot;res/&#123;&#125;.html&quot;</span>.format(i), <span class="string">&#x27;w&#x27;</span>)</span><br><span class="line">                    fp.write(title[<span class="number">3</span>])</span><br><span class="line">                    fp.write(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line">                    fp.write(content[<span class="number">3</span>])</span><br><span class="line">                    fp.close()</span><br><span class="line"></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                print(r.status_code)</span><br><span class="line">                print(<span class="string">&quot;No&quot;</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            print(i, e)</span><br><span class="line">th = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range (<span class="number">1</span>,<span class="number">100</span>):</span><br><span class="line">    th.append(threading.Thread(target=run, args=((i<span class="number">-1</span>)*<span class="number">100</span>, i*<span class="number">100</span>)))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> th:</span><br><span class="line">    t.start()</span><br></pre></td></tr></table></figure>
+
+<p>注释：</p>
+<p>1.首先对网页进行源代码审计，寻找需要的目标信息的位置和特征</p>
+<p>2.编写正则表达式，进行目标信息匹配</p>
+<p>3.先进行requests.get()直接访问网页，注意网页的反爬措施</p>
+<p>4.随后根据目标网页集合的特征，进行循环访问</p>
+<p>5.整理代码</p>
+<p>6.提高爬取速度，采用多线程进行爬取</p>
+<p>7.汇总结果</p>
+<p>最终结果将汇总在res/i.html中。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://su29029.github.io/2020/08/28/Python%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%9E%E6%88%98-cnvd%E7%BD%91%E4%BF%A1%E6%81%AF%E7%88%AC%E5%8F%96/" data-id="ckedn8msm0000fcty65ligdz7" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/08/28/sqlilab%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          sqlilab做题总结（一）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/28/python%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0-BeautifulSoup/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">python爬虫学习(BeautifulSoup)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/c%E8%AF%AD%E8%A8%80/">c语言</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/web%E5%BC%80%E5%8F%91/">web开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/web%E5%AE%89%E5%85%A8/">web安全</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/windows%E7%BC%96%E7%A8%8B/">windows编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/">软件工程</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80/" rel="tag">c语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%BC%80%E5%8F%91/" rel="tag">web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows%E7%BC%96%E7%A8%8B/" rel="tag">windows编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag">网络编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag">软件工程</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/c%E8%AF%AD%E8%A8%80/" style="font-size: 10px;">c语言</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 20px;">web安全</a> <a href="/tags/web%E5%BC%80%E5%8F%91/" style="font-size: 15px;">web开发</a> <a href="/tags/windows%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">windows编程</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">网络编程</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 10px;">软件工程</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/08/28/%E6%B4%9B%E8%B0%B7%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-1-1-2-3%E7%BB%84/">洛谷刷题记录(1)(1,2,3组)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/28/ctfshow%E8%90%8C%E6%96%B0%E8%AE%A1%E5%88%92%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">ctfshow萌新计划刷题记录</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/28/buu%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%951/">buu刷题记录1</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/28/csrf-ssrf-session%E4%BC%AA%E9%80%A0/">csrf&amp;ssrf&amp;session伪造</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/28/xxe%E9%97%AE%E9%A2%98/">xxe问题</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
