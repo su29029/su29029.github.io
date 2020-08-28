@@ -1,37 +1,257 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    csrf&amp;ssrf&amp;session伪造 |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
+  
+<link rel="stylesheet" href="/css/technology.css">
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
-{% block page_class %}page-post-detail{% endblock %}
+  
+  
+<script src="/js/pace.min.js"></script>
 
+<meta name="generator" content="Hexo 5.1.1"></head>
 
-{% block content %}
+<body>
+  <div id="container">
+    <div id="wrap">
+      <section class="outer">
+  <article id="post-csrf-ssrf-session伪造" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      csrf&amp;ssrf&amp;session伪造
+    </h1>
+  
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
-    </div>
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2020/08/28/csrf-ssrf-session%E4%BC%AA%E9%80%A0/" class="article-date">
+  <time datetime="2020-08-28T02:48:41.000Z" itemprop="datePublished">2020-08-28</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web/">web</a> / <a class="article-category-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a>
   </div>
 
-{% endblock %}
+      </div>
+    
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <div class="article-entry" itemprop="articleBody">
+      
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+      
+
+      
+        <h2 id="csrf-amp-ssrf-amp-session伪造问题"><a href="#csrf-amp-ssrf-amp-session伪造问题" class="headerlink" title="csrf&amp;ssrf&amp;session伪造问题"></a>csrf&amp;ssrf&amp;session伪造问题</h2><p>今天学习的内容是csrf，ssrf，session伪造这三个内容。复现平台dvwa&amp;pikachu。</p>
+<h3 id="0x01-csrf"><a href="#0x01-csrf" class="headerlink" title="0x01 csrf"></a>0x01 csrf</h3><p>跨站请求伪造（Cross-site request forgery），也被称为one-click attack 或者session riding，通常缩写为CSRF 或者XSRF， 是一种挟制用户在当前已登录的Web应用程序上执行非本意的操作的攻击方法。</p>
+<p>实施 CSRF 攻击，必须满足以下三个条件</p>
+<ol>
+<li><strong>攻击者能执行相关的流程。</strong></li>
+<li><strong>基于 Cookie 的会话机制.</strong></li>
+<li><strong>没有不可预测的成分.</strong></li>
+</ol>
+<p>一些常见的 CSRF 产生原因：</p>
+<ol>
+<li>仅从 HTTP 请求格式来选择性验证 Token. 比如对于 POST 型请求进行 Token 验证，但忽略 GET 型.</li>
+<li>仅对出现的 Token 进行验证，若请求中忽略了 Token，则不校验.</li>
+<li>Token 没有和 Session 对应起来. 也就是其他用户的 Token 可以用于该用户建立的 Session 中，攻击者可以用自己的 Session 自己获取一个合法 Token，然后将其用于攻击.</li>
+<li>CSRF 与非 Session 的 Cookie 关联，相当于也没有与 Session 挂钩.</li>
+<li>CSRF 出现在 Cookie 中.</li>
+<li>仅仅依靠 <code>Referer</code> 来应对 CSRF，判断用户是不是从相同网站跳转来.</li>
+</ol>
+<h4 id="靶场Pikachu"><a href="#靶场Pikachu" class="headerlink" title="靶场Pikachu"></a>靶场Pikachu</h4><h5 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h5><p>登录后点击修改发现url上出现修改链接，那么只需要点击这个链接，内容就会被瞬间修改。</p>
+<h5 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h5><p>登录后点击修改抓包发现跟GET无区别，那么只需要一个钓鱼网站，信息即可全部被修改。</p>
+<h5 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h5><p>这次用了token，不能再直接操作了，需要靠xss等方式来获取token。</p>
+<h4 id="靶场DVWA"><a href="#靶场DVWA" class="headerlink" title="靶场DVWA"></a>靶场DVWA</h4><h5 id="Low"><a href="#Low" class="headerlink" title="Low"></a>Low</h5><p>点击修改密码发现信息在url中出现，那么只需要点击这个url，密码直接被修改。</p>
+<h5 id="Medium"><a href="#Medium" class="headerlink" title="Medium"></a>Medium</h5><p>审计代码发现检查了HTTP_REFERER是否包含SERVER_NAME，Referer修改成服务器就绕过了。</p>
+<h5 id="High"><a href="#High" class="headerlink" title="High"></a>High</h5><p>这次有了user_token，token正确才可以修改密码，但是依然是没有验证用户是否直到原来的密码，如果我们通过xss等方式得到了token，那么验证也就失效了。(注意提交的时候依然使用的是GET请求，存在信息泄露隐患)。</p>
+<h5 id="Impossible"><a href="#Impossible" class="headerlink" title="Impossible"></a>Impossible</h5><p>注意到这次表单多了一项当前密码，增大的攻击者的难度：哪怕得到一个可用的 Token，还需进一步拿到用户的密码才能修改。</p>
+<h4 id="CSRF-的防御"><a href="#CSRF-的防御" class="headerlink" title="CSRF 的防御"></a>CSRF 的防御</h4><p>目前最好的方法就是使用 CSRF Token. 但是要求<strong>安全</strong>地生成 Token 并且<strong>正确</strong>地使用.</p>
+<p>这意味着，产生 Token 时:</p>
+<ol>
+<li>随机数发生器必须达到足够的安全性，并且不会重复生成/使用相同的随机值，生成的随机数不能被预测. 推荐 <code>PRNG</code>.</li>
+<li>使用的 Hash 算法必须够强，不能是 <code>MD5</code> 等安全性较差的 Hash 算法.</li>
+</ol>
+<p>传输和使用 Token 时需要注意的是： </p>
+<ol>
+<li>尽量使用 POST 方法. 使用 GET 方法会导致: - Token 会被记录 - Token 可能传输到 HTTP Referer 的第三方服务器. - Token 可以在浏览器的地址栏中被显示. </li>
+<li>Token 不应通过 Cookie 传输.</li>
+<li>Token 必须趁早放置在 HTML 中，并且设置为 <code>hidden</code>.</li>
+</ol>
+<p>还可以通过验证码来强制交互。</p>
+<h3 id="0x02-SSRF"><a href="#0x02-SSRF" class="headerlink" title="0x02 SSRF"></a>0x02 SSRF</h3><blockquote>
+<p>服务器端请求伪造 (Server-Side Request Forgery, SSRF)</p>
+<p>其形成的原因大都是由于服务端提供了从其他服务器应用获取数据的功能,但又没有对目标地址做严格过滤与限制导致攻击者可以传入任意的地址来让后端服务器对其发起请求,并返回对该目标地址请求的数据.</p>
+<p>比如可以突破防火墙，搞一些代理之类的；也可以向服务器发起请求，绕开 CDN 找到真实 IP.</p>
+</blockquote>
+<p>PHP 中一些容易引发 SSRF 工具的函数:</p>
+<ol>
+<li><code>file_get_contents()</code></li>
+<li><code>fsockopen()</code></li>
+<li><code>curl_exec()</code></li>
+</ol>
+<h4 id="curl-exec"><a href="#curl-exec" class="headerlink" title="curl_exec()"></a>curl_exec()</h4><p>打开页面，点击链接发现url处有个url参数明显有问题，改个路径试试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url&#x3D;https:&#x2F;&#x2F;www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<p>发现页面被正常渲染显示。随后尝试文件协议：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
+
+<p>发现成功读取。。。</p>
+<blockquote>
+<p>curl支持的协议有：</p>
+<p>dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtmp rtsp smb smbs smtp smtps telnet tftp</p>
+<p>其中最主要的几个：</p>
+<ol>
+<li><code>file://</code> 随便读取文件</li>
+<li><code>dict://</code> 扫描端口</li>
+<li><code>gopher://</code> 万金油协议，危害最大.</li>
+<li><code>telnet://</code> 连接主机</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>参考文献:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 利用file协议查看文件</span><br><span class="line">curl -v &#39;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd&#39;</span><br><span class="line"></span><br><span class="line"># 利用dict探测端口</span><br><span class="line">curl -v &#39;dict:&#x2F;&#x2F;127.0.0.1:22&#39;</span><br><span class="line">curl -v &#39;dict:&#x2F;&#x2F;127.0.0.1:6379&#x2F;info&#39;</span><br><span class="line"></span><br><span class="line"># Gopher 协议可以做很多事情，特别是在 SSRF 中可以发挥很多重要的作用。利用此协议可以攻击内网的 FTP、Telnet、Redis、Memcache，也可以进行 GET,POST 请求。这极大拓宽了 SSRF 的攻击面。例如，利用gopher协议反弹shell。</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h4 id="file-get-contents"><a href="#file-get-contents" class="headerlink" title="file_get_contents()"></a>file_get_contents()</h4><p>跟上一个同理，url处可以随意构造。这里使用了file_get_contents()，故可以使用php伪协议，例如将/etc/passwd的内容输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost:8081&#x2F;vul&#x2F;ssrf&#x2F;ssrf_fgc.php?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
+
+<p>成功读取，base64解码即可。</p>
+<h4 id="fsockopen"><a href="#fsockopen" class="headerlink" title="fsockopen()"></a>fsockopen()</h4><p>fsockopen的作用主要是与对端服务器建立socket连接。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GetFile</span>(<span class="params">$host,$port,$link</span>) </span>&#123;</span><br><span class="line">    $fp = fsockopen($host, intval($port), $errno, $errstr, <span class="number">30</span>);</span><br><span class="line">    <span class="keyword">if</span> (!$fp) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;$errstr (error number $errno) \n&quot;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $out = <span class="string">&quot;GET $link HTTP/1.1\r\n&quot;</span>;</span><br><span class="line">        $out .= <span class="string">&quot;Host: $host\r\n&quot;</span>;</span><br><span class="line">        $out .= <span class="string">&quot;Connection: Close\r\n\r\n&quot;</span>;</span><br><span class="line">        $out .= <span class="string">&quot;\r\n&quot;</span>;</span><br><span class="line">        fwrite($fp, $out);</span><br><span class="line">        $contents=<span class="string">&#x27;&#x27;</span>;</span><br><span class="line">        <span class="keyword">while</span> (!feof($fp)) &#123;</span><br><span class="line">            $contents.= fgets($fp, <span class="number">1024</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        fclose($fp);</span><br><span class="line">        <span class="keyword">return</span> $contents;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这段代码使用 fsockopen 函数实现获取用户制定 URL 的数据（文件或者 HTML）。这个函数会使用 socket 跟服务器建立 TCP 连接，传输原始数据。</p>
+</blockquote>
+<p>最简单的应用可以设置 DNS log 绕过 CDN 看真实 IP.</p>
+<h4 id="防范-SSRF-的一些手段"><a href="#防范-SSRF-的一些手段" class="headerlink" title="防范 SSRF 的一些手段"></a>防范 SSRF 的一些手段</h4><ol>
+<li>服务器开启 OpenSSL 无法进行交互利用</li>
+<li>服务端需要鉴权（Cookies &amp; User: Pass）不能完美利用</li>
+<li>限制请求的端口为 http 常用的端口，比如，80, 443, 8080, 8090.</li>
+<li>禁用不需要的协议,仅仅允许 http 和 https 请求。可以防止类似于 <code>file://,gopher://,ftp://</code> 等引起的问题。</li>
+<li>统一错误信息，避免用户可以根据错误信息来判断远端服务器的端口状态.</li>
+</ol>
+<h3 id="0x03-session伪造"><a href="#0x03-session伪造" class="headerlink" title="0x03 session伪造"></a>0x03 session伪造</h3><h4 id="session简介和常见session的问题"><a href="#session简介和常见session的问题" class="headerlink" title="session简介和常见session的问题"></a>session简介和常见session的问题</h4><p>Session 会话机制是一种服务器端机制，它使用类似于哈希表（可能就是哈希表）的结构来保存信息。当程序需要为客户端的请求创建会话时，服务器首先检查客户端的请求是否包含会话标识符（称为会话ID）。如果包含它，它先前已为此客户端创建了一个会话。服务器根据会话ID检索会话（无法检索，将创建新会话），如果客户端请求不包含会话ID，则为客户端创建会话并生成与会话关联的会话ID。 Seeion ID 应该是一个既不重复也不容易被复制的字符串。会话ID将返回给客户端以保存此响应。</p>
+<p>session如果使用不当依然会造成严重的安全问题，主要有：</p>
+<ol>
+<li>会话预测: 即 Session ID 生成方式太简单，能够被预测. 攻击者可以预测有效的 Session ID 并获得对应用程序的访问权限.</li>
+<li>会话劫持: 通过利用各种手段获取用户 Session ID 后，使用该 Session ID 登录网站，获取目标用户的操作权限.</li>
+<li>会话重用: 服务器端Session未失效，攻击者可利用此Session向服务器继续发送服务请求. 测试方法：登录后将会话注销，再次重放登录时的数据包仍然可正常登录系统.</li>
+<li>会话失效时间过长: Session ID 的保存是比较麻烦，有的应用将 Session ID 的失效时间设置得过长，不仅增大服务器的负荷，还导致同一个 Session ID 可以被多次利用。 测试方法：系统登录后会话长时间不失效，使用系统功能，仍可正常使用。</li>
+<li>会话固定: 在用户进入登录页面，但还未登录时，就已经产生了一个 Session ID，用户输入信息，登录以后，Session ID 不会改变，也就是说没有建立新会话，原来的会话也没有被销毁. 测试方法：系统登录前和登录后，用户的 Session ID 保持不变。</li>
+</ol>
+<h4 id="DVWA-复现"><a href="#DVWA-复现" class="headerlink" title="DVWA 复现"></a>DVWA 复现</h4><h5 id="Low-1"><a href="#Low-1" class="headerlink" title="Low"></a>Low</h5><p>点Generate发现Http Header里的cookie值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cookie: dvwaSession&#x3D;1; PHPSESSID&#x3D;sml91451sl2vms4iftcson2fm2; security&#x3D;low</span><br></pre></td></tr></table></figure>
+
+<p>再点一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cookie: dvwaSession&#x3D;2; PHPSESSID&#x3D;sml91451sl2vms4iftcson2fm2; security&#x3D;low</span><br></pre></td></tr></table></figure>
+
+<p>太明显了，dvwaSession每次加一。</p>
+<h5 id="Medium-1"><a href="#Medium-1" class="headerlink" title="Medium"></a>Medium</h5><p>点击后查看cookie：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cookie: dvwaSession&#x3D;1594535470; PHPSESSID&#x3D;lmf4ka7t6ofsau9um2nl3jjsc7; security&#x3D;mediu</span><br></pre></td></tr></table></figure>
+
+<p>还是太明显了…时间戳。</p>
+<h5 id="High-1"><a href="#High-1" class="headerlink" title="High"></a>High</h5><p>点击后查看cookie：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cookie: dvwaSession&#x3D;c4ca4238a0b923820dcc509a6f75849b; PHPSESSID&#x3D;lmf4ka7t6ofsau9um2nl3jjsc7; security&#x3D;high</span><br></pre></td></tr></table></figure>
+
+<p>这回不那么明显了，不过看着像md5，解密一下<a target="_blank" rel="noopener" href="https://www.cmd5.com,发现就是数字从1递增,加了一层md5.....还是没有安全性可言./">https://www.cmd5.com，发现就是数字从1递增，加了一层md5.....还是没有安全性可言。</a></p>
+<h5 id="Impossible-1"><a href="#Impossible-1" class="headerlink" title="Impossible"></a>Impossible</h5><p>这回解密发现无法成功了。查看源码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">$html = <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ($_SERVER[<span class="string">&#x27;REQUEST_METHOD&#x27;</span>] == <span class="string">&quot;POST&quot;</span>) &#123;</span><br><span class="line">    $cookie_value = sha1(mt_rand() . time() . <span class="string">&quot;Impossible&quot;</span>);</span><br><span class="line">    setcookie(<span class="string">&quot;dvwaSession&quot;</span>, $cookie_value, time()+<span class="number">3600</span>, <span class="string">&quot;/vulnerabilities/weak_id/&quot;</span>, $_SERVER[<span class="string">&#x27;HTTP_HOST&#x27;</span>], <span class="literal">true</span>, <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这回session的生成基本是无法破解了，将随机数，时间和 <code>Impossible</code> 凭借生成的字符串再加强 Hash. 而且采用比较安全的 POST 型提交, 减少 GET 型带来的潜在风险。这个方法是安全的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://su29029.github.io/2020/08/28/csrf-ssrf-session%E4%BC%AA%E9%80%A0/" data-id="ckedortlu000pxityd1tw3h1f"
+         class="article-share-link">分享</a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2020/08/28/buu%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%951/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            buu刷题记录1
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/08/28/xxe%E9%97%AE%E9%A2%98/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">xxe问题</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+    </div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+<script src="/js/technology.js"></script>
+
+
+  </div>
+</body>
+</html>

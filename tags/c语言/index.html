@@ -1,37 +1,107 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post-collapse.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    Tag: c语言 |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
-{% block title %}{{ __('title.tag') }}: {{ page.tag }} | {{ config.title }}{% endblock %}
+  
+<link rel="stylesheet" href="/css/technology.css">
 
-{% block content %}
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
-  {#################}
-  {### TAG BLOCK ###}
-  {#################}
-  <div class="post-block tag">
+  
+  
+<script src="/js/pace.min.js"></script>
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <{% if theme.seo %}h2{% else %}h1{% endif %}>{#
-        #}{{ page.tag }}{#
-        #}<small>{{  __('title.tag')  }}</small>
-        </{% if theme.seo %}h2{% else %}h1{% endif %}>
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <section class="outer">
+  <article class="articles">
+    
+    <h1 class="page-type-title">#&nbspc语言</h1>
+
+    
+    
+    
+      
+      
+        
+        
+    <div class="archives-wrap">
+      <div class="archive-year-wrap">
+        <a href="/archives/2020" class="archive-year">2020</a>
       </div>
+      <div class="archives">
+        
+        <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2020/08/28/%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E6%A8%A1%E6%8B%9Fjs%E5%89%8D%E5%90%8E%E7%AB%AF%E4%BA%A4%E4%BA%92/" class="archive-article-date">
+  <time datetime="2020-08-28T02:31:36.000Z" itemprop="datePublished">08/28</time>
+</a>
+      
+  
+    <h2 itemprop="name">
+      <a class="archive-article-title" href="/2020/08/28/%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E6%A8%A1%E6%8B%9Fjs%E5%89%8D%E5%90%8E%E7%AB%AF%E4%BA%A4%E4%BA%92/">使用C语言模拟js前后端交互</a>
+    </h2>
+  
 
-      {% for post in page.posts %}
-        {{ post_template.render(post) }}
-      {% endfor %}
+    </header>
+    
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80/" rel="tag">c语言</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%BC%80%E5%8F%91/" rel="tag">web开发</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag">网络编程</a></li></ul>
+
+    
+  </div>
+</article>
+        
+        
+      </div>
     </div>
+    
+  
+  
+</section>
+    </div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+<script src="/js/technology.js"></script>
+
 
   </div>
-  {#####################}
-  {### END TAG BLOCK ###}
-  {#####################}
-
-  {% include '_partials/pagination.swig' %}
-{% endblock %}
-
-{% block sidebar %}
-  {{ sidebar_template.render(false) }}
-{% endblock %}
+</body>
+</html>

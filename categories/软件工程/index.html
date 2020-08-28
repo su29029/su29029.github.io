@@ -1,38 +1,103 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post-collapse.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    Category: 软件工程 |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
-{% block title %}{{ __('title.category') }}: {{ page.category }} | {{ config.title }}{% endblock %}
+  
+<link rel="stylesheet" href="/css/technology.css">
 
-{% block content %}
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
-  {######################}
-  {### CATEGORY BLOCK ###}
-  {######################}
-  <div class="post-block category">
+  
+  
+<script src="/js/pace.min.js"></script>
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <{% if theme.seo %}h2{% else %}h1{% endif %}>{#
-        #}{{ page.category }}{#
-        #}<small>{{  __('title.category')  }}</small>
-        </{% if theme.seo %}h2{% else %}h1{% endif %}>
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <section class="outer">
+  <article class="articles">
+    
+    <h1 class="page-type-title">软件工程</h1>
+
+    
+    
+    
+      
+      
+        
+        
+    <div class="archives-wrap">
+      <div class="archive-year-wrap">
+        <a href="/archives/2020" class="archive-year">2020</a>
       </div>
+      <div class="archives">
+        
+        <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2020/08/28/%E8%B0%88%E8%B0%88%E5%AF%B9MVC%EF%BC%8CMVP%EF%BC%8CMVVM%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%90%86%E8%A7%A3/" class="archive-article-date">
+  <time datetime="2020-08-28T02:27:43.000Z" itemprop="datePublished">08/28</time>
+</a>
+      
+  
+    <h2 itemprop="name">
+      <a class="archive-article-title" href="/2020/08/28/%E8%B0%88%E8%B0%88%E5%AF%B9MVC%EF%BC%8CMVP%EF%BC%8CMVVM%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%90%86%E8%A7%A3/">谈谈对MVC，MVP，MVVM设计模式的理解</a>
+    </h2>
+  
 
-      {% for post in page.posts %}
-        {{ post_template.render(post) }}
-      {% endfor %}
+    </header>
+    
+  </div>
+</article>
+        
+        
+      </div>
     </div>
+    
+  
+  
+</section>
+    </div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+<script src="/js/technology.js"></script>
+
 
   </div>
-  {##########################}
-  {### END CATEGORY BLOCK ###}
-  {##########################}
-
-  {% include '_partials/pagination.swig' %}
-
-{% endblock %}
-
-{% block sidebar %}
-  {{ sidebar_template.render(false) }}
-{% endblock %}
+</body>
+</html>

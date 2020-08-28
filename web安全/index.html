@@ -1,70 +1,107 @@
-{% extends '_layout.swig' %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    web安全 |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  {% block title %}{#
-  #}{% set page_title_suffix = ' | ' + config.title %}{#
+  
+<link rel="stylesheet" href="/css/technology.css">
 
-  #}{% if page.type === "categories" and not page.title %}{#
-    #}{{ __('title.category') + page_title_suffix }}{#
-  #}{% elif page.type === "tags" and not page.title %}{#
-    #}{{ __('title.tag') + page_title_suffix }}{#
-  #}{% else %}{#
-    #}{{ page.title + page_title_suffix }}{#
-  #}{% endif %}{#
-#}{% endblock %}
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
-{% block page_class %}page-post-detail{% endblock %}
+  
+  
+<script src="/js/pace.min.js"></script>
 
-{% block content %}
+<meta name="generator" content="Hexo 5.1.1"></head>
 
-  <div id="posts" class="posts-expand">
-    {##################}
-    {### PAGE BLOCK ###}
-    {##################}
-    <div class="post-block page">
-      {% include '_partials/page-header.swig' %}
-      {#################}
-      {### PAGE BODY ###}
-      {#################}
-      <div class="post-body{% if theme.han %} han-init-context{% endif %}{% if page.direction && page.direction.toLowerCase() === 'rtl' %} rtl{% endif %}">
-        {# tagcloud page support #}
-        {% if page.type === "tags" %}
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-                {{ _p('counter.tag_cloud', site.tags.length) }}
-            </div>
-            <div class="tag-cloud-tags">
-              {{ tagcloud({min_font: 12, max_font: 30, amount: 300, color: true, start_color: '#ccc', end_color: '#111'}) }}
-            </div>
-          </div>
-        {% elif page.type === 'categories' %}
-          <div class="category-all-page">
-            <div class="category-all-title">
-                {{ _p('counter.categories', site.categories.length) }}
-            </div>
-            <div class="category-all">
-              {{ list_categories() }}
-            </div>
-          </div>
-        {% else %}
-          {{ page.content }}
-        {% endif %}
-      </div>
-      {#####################}
-      {### END PAGE BODY ###}
-      {#####################}
+<body>
+  <div id="container">
+    <div id="wrap">
+      <section class="outer">
+  <article id="page-" class="article article-type-page" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      web安全
+    </h1>
+  
+
+      </header>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        
+      
     </div>
-    {######################}
-    {### END PAGE BLOCK ###}
-    {######################}
+    <footer class="article-footer">
+      <a data-url="https://su29029.github.io/web%E5%AE%89%E5%85%A8/index.html" data-id="ckedortlk0009xityd8023xlx"
+         class="article-share-link">分享</a>
+      
+    </footer>
+
   </div>
 
-{% endblock %}
+  
+    
 
-{% block sidebar %}
-  {{ sidebar_template.render(false) }}
-{% endblock %}
+  
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  
+
+</article>
+
+
+
+</section>
+    </div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+<script src="/js/technology.js"></script>
+
+
+  </div>
+</body>
+</html>

