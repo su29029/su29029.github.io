@@ -27,17 +27,17 @@
 <meta property="og:site_name" content="su29029的博客">
 <meta property="og:description" content="设计模式，emmmm，感觉很高深的样子，虽然感觉离我这个菜鸡还很遥远，不过了解一下还是没坏处。">
 <meta property="og:locale">
-<meta property="og:image" content="https://su29029.github.io/2020/08/28/assets/img/MVC,MVP,MVVM设计模式/MVC设计模式.jpg">
-<meta property="og:image" content="https://su29029.github.io/2020/08/28/assets/img/MVC,MVP,MVVM设计模式/MVP设计模式.jpg">
-<meta property="og:image" content="https://su29029.github.io/2020/08/28/assets/img/MVC,MVP,MVVM设计模式/MVVM设计模式1.jpg">
-<meta property="og:image" content="https://su29029.github.io/2020/08/28/assets/img/MVC,MVP,MVVM设计模式/MVVM设计模式2.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/MVC,MVP,MVVM设计模式/MVC设计模式.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/MVC,MVP,MVVM设计模式/MVP设计模式.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/MVC,MVP,MVVM设计模式/MVVM设计模式1.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/MVC,MVP,MVVM设计模式/MVVM设计模式2.jpg">
 <meta property="article:published_time" content="2020-08-28T02:27:43.000Z">
-<meta property="article:modified_time" content="2020-08-28T07:32:59.844Z">
+<meta property="article:modified_time" content="2020-08-28T09:06:46.845Z">
 <meta property="article:author" content="su29029">
 <meta property="article:tag" content="web开发">
 <meta property="article:tag" content="软件工程">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://su29029.github.io/2020/08/28/assets/img/MVC,MVP,MVVM设计模式/MVC设计模式.jpg">
+<meta name="twitter:image" content="https://su29029.github.io/images/img/MVC,MVP,MVVM设计模式/MVC设计模式.jpg">
 
 <link rel="canonical" href="https://su29029.github.io/2020/08/28/%E8%B0%88%E8%B0%88%E5%AF%B9MVC%EF%BC%8CMVP%EF%BC%8CMVVM%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%90%86%E8%A7%A3/">
 
@@ -177,7 +177,7 @@
     <link itemprop="mainEntityOfPage" href="https://su29029.github.io/2020/08/28/%E8%B0%88%E8%B0%88%E5%AF%B9MVC%EF%BC%8CMVP%EF%BC%8CMVVM%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%90%86%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="su29029">
       <meta itemprop="description" content="因为心在那里">
     </span>
@@ -198,7 +198,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-28 10:27:43 / Modified: 15:32:59" itemprop="dateCreated datePublished" datetime="2020-08-28T10:27:43+08:00">2020-08-28</time>
+              <time title="Created: 2020-08-28 10:27:43 / Modified: 17:06:46" itemprop="dateCreated datePublished" datetime="2020-08-28T10:27:43+08:00">2020-08-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -232,7 +232,7 @@
         <p>设计模式，emmmm，感觉很高深的样子，虽然感觉离我这个菜鸡还很遥远，不过了解一下还是没坏处。</p>
 <a id="more"></a>
 <h2 id="0x01-关于MVC设计模式"><a href="#0x01-关于MVC设计模式" class="headerlink" title="0x01 关于MVC设计模式"></a>0x01 关于MVC设计模式</h2><p>MVC模式（Model–view–controller）是软件工程中的一种软件架构模式，把软件系统分为三个基本部分：模型（Model）、视图（View）和控制器（Controller）。</p>
-<img src='../assets/img/MVC,MVP,MVVM设计模式/MVC设计模式.jpg'>
+<img src='/images/img/MVC,MVP,MVVM设计模式/MVC设计模式.jpg'>
 
 <p>MVC模式最早由Trygve Reenskaug在1978年提出，是施乐帕罗奥多研究中心在20世纪80年代为程序语言Smalltalk发明的一种软件架构。MVC模式的目的是实现一种动态的程序设计，使后续对程序的修改和扩展简化，并且使程序某一部分的重复利用成为可能。除此之外，此模式透过对复杂度的简化，使程序结构更加直观。软件系统透过对自身基本部分分离的同时也赋予了各个基本部分应有的功能。</p>
 <p>MVC模式在概念上强调 Model, View, Controller 的分离，各个模块也遵循着由 Controller 来处理消息，Model 掌管数据源，View 负责数据显示的职责分离原则，因此在实现上，MVC 模式的 Framework 通常会将 MVC 三个部分分离实现：  </p>
@@ -245,13 +245,13 @@
 <p>View 视图为呈现用户界面的终端，用以表现来自 Model 的数据，和用户命令路由再经过 Presenter 对事件处理后的数据。</p>
 <p>Presenter 包含着组件的事件处理，负责检索 Model 获取数据，和将获取的数据经过格式转换与 View 进行沟通。</p>
 <p>MVP 设计模式通常会再加上 Controller 做为整体应用程序的后端程序工作。</p>
-<img src='../assets/img/MVC,MVP,MVVM设计模式/MVP设计模式.jpg'>
+<img src='/images/img/MVC,MVP,MVVM设计模式/MVP设计模式.jpg'>
 
 <p>MVP是把MVC中的Controller换成了Presenter（呈现），目的是为了完全切断View跟Model之间的联系，由Presenter充当桥梁，做到View-Model之间通信的完全隔离。</p>
 <h2 id="0x03-关于MVVM设计模式"><a href="#0x03-关于MVVM设计模式" class="headerlink" title="0x03 关于MVVM设计模式"></a>0x03 关于MVVM设计模式</h2><p>MVVM（Model–view–viewmodel）是一种软件架构模式。</p>
-<p>MVVM有助于将图形用户界面的开发与业务逻辑或后端逻辑（数据模型）的开发分离开来。MVVM的视图模型是一个值转换器， 这意味着视图模型负责从模型中暴露（转换）数据对象，以便轻松管理和呈现对象。在这方面，视图模型比视图做得更多，并且处理大部分视图的显示逻辑。视图模型可以实现中介者模式，组织对视图所支持的用例集的后端逻辑的访问。<br><img src='../assets/img/MVC,MVP,MVVM设计模式/MVVM设计模式1.jpg'></p>
+<p>MVVM有助于将图形用户界面的开发与业务逻辑或后端逻辑（数据模型）的开发分离开来。MVVM的视图模型是一个值转换器， 这意味着视图模型负责从模型中暴露（转换）数据对象，以便轻松管理和呈现对象。在这方面，视图模型比视图做得更多，并且处理大部分视图的显示逻辑。视图模型可以实现中介者模式，组织对视图所支持的用例集的后端逻辑的访问。<br><img src='/images/img/MVC,MVP,MVVM设计模式/MVVM设计模式1.jpg'></p>
 <p>MVVM将“数据模型数据双向绑定”的思想作为核心，因此在View和Model之间没有联系，通过ViewModel进行交互，而且Model和ViewModel之间的交互是双向的，因此视图的数据的变化会同时修改数据源，而数据源数据的变化也会立即反应到View上。即，ViewModel 是一个 View 信息的存储结构，ViewModel 和 View 上的信息是一一映射关系。</p>
-<h4 id="使用MVVM模式的好处"><a href="#使用MVVM模式的好处" class="headerlink" title="使用MVVM模式的好处"></a>使用MVVM模式的好处</h4><p>低耦合。View可以独立于Model变化和修改，一个ViewModel可以绑定到不同的View上，当View变化的时候Model可以不变，当Model变化的时候View也可以不变。<br>可重用性。可以把一些视图的逻辑放在ViewModel里面，让很多View重用这段视图逻辑。<br>独立开发。开发人员可以专注与业务逻辑和数据的开发(ViewModel)。设计人员可以专注于界面(View)的设计。<br>可测试性。可以针对ViewModel来对界面(View)进行测试<br>使用 MVVM 模式，程序的 UI 和其背后的展现与业务逻辑将被分离至三个类中：<br>1-视图，封装 UI 与 UI 逻辑<br>2-模型视图，封装展示逻辑与状态<br>3-模型，封装程序的业务逻辑以及数据<br>在 MVVM 模式中，视图通过数据绑定以及命令行与视图模型交互，并改变事件通知。视图模型查询观察并协调模型更新，转换，校验以及聚合数据，从而在视图显示。<br>下图展示了 MVVM 类以及它们之间的交互：<br><img src='../assets/img/MVC,MVP,MVVM设计模式/MVVM设计模式2.jpg'></p>
+<h4 id="使用MVVM模式的好处"><a href="#使用MVVM模式的好处" class="headerlink" title="使用MVVM模式的好处"></a>使用MVVM模式的好处</h4><p>低耦合。View可以独立于Model变化和修改，一个ViewModel可以绑定到不同的View上，当View变化的时候Model可以不变，当Model变化的时候View也可以不变。<br>可重用性。可以把一些视图的逻辑放在ViewModel里面，让很多View重用这段视图逻辑。<br>独立开发。开发人员可以专注与业务逻辑和数据的开发(ViewModel)。设计人员可以专注于界面(View)的设计。<br>可测试性。可以针对ViewModel来对界面(View)进行测试<br>使用 MVVM 模式，程序的 UI 和其背后的展现与业务逻辑将被分离至三个类中：<br>1-视图，封装 UI 与 UI 逻辑<br>2-模型视图，封装展示逻辑与状态<br>3-模型，封装程序的业务逻辑以及数据<br>在 MVVM 模式中，视图通过数据绑定以及命令行与视图模型交互，并改变事件通知。视图模型查询观察并协调模型更新，转换，校验以及聚合数据，从而在视图显示。<br>下图展示了 MVVM 类以及它们之间的交互：<br><img src='/images/img/MVC,MVP,MVVM设计模式/MVVM设计模式2.jpg'></p>
 <h2 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h2><p>总的来讲，MVC，MVP，MVVM是历史不断进步发展的产物，随着业务需求的扩大，软件规模的提升，用户需求的提高，催生出了软件工程，催生出了这些设计模式。对每种设计模式，我们既应当看到它们的最大优点，也不能忽视它们存在的问题。例如，MVVM模式的数据双向绑定存在着Bug调试困难，大项目占用内存多等问题。对于设计模式，在不同的场合，应当具体问题具体分析，使用最适合项目开发的设计模式，而不能一味追求新技术或是守旧，我们需要保持的是一个拥抱变化的心，以及理性分析的态度。在新技术的面前，不盲从，不守旧，一切的决策都应该建立在认真分析的基础上，这样才能应对技术的变化。</p>
 
     </div>
@@ -343,6 +343,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="su29029"
+      src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">su29029</p>
   <div class="site-description" itemprop="description">因为心在那里</div>
 </div>

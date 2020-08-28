@@ -27,18 +27,18 @@
 <meta property="og:site_name" content="su29029的博客">
 <meta property="og:description" content="总结一下php反序列化吧，最基础的内容。">
 <meta property="og:locale">
-<meta property="og:image" content="https://su29029.github.io/assets/img/php反序列化总结/php反序列化总结1.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/php反序列化总结/php反序列化总结2.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/php反序列化总结/php反序列化总结3.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/php反序列化总结/php反序列化总结4.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/php反序列化总结/php反序列化总结5.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/php反序列化总结/php反序列化总结6.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/php反序列化总结/php反序列化总结1.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/php反序列化总结/php反序列化总结2.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/php反序列化总结/php反序列化总结3.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/php反序列化总结/php反序列化总结4.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/php反序列化总结/php反序列化总结5.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/php反序列化总结/php反序列化总结6.jpg">
 <meta property="article:published_time" content="2020-08-28T02:36:49.000Z">
-<meta property="article:modified_time" content="2020-08-28T07:32:50.581Z">
+<meta property="article:modified_time" content="2020-08-28T09:06:51.028Z">
 <meta property="article:author" content="su29029">
 <meta property="article:tag" content="web安全">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://su29029.github.io/assets/img/php反序列化总结/php反序列化总结1.jpg">
+<meta name="twitter:image" content="https://su29029.github.io/images/img/php反序列化总结/php反序列化总结1.jpg">
 
 <link rel="canonical" href="https://su29029.github.io/2020/08/28/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%80%BB%E7%BB%93/">
 
@@ -178,7 +178,7 @@
     <link itemprop="mainEntityOfPage" href="https://su29029.github.io/2020/08/28/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="su29029">
       <meta itemprop="description" content="因为心在那里">
     </span>
@@ -199,7 +199,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-28 10:36:49 / Modified: 15:32:50" itemprop="dateCreated datePublished" datetime="2020-08-28T10:36:49+08:00">2020-08-28</time>
+              <time title="Created: 2020-08-28 10:36:49 / Modified: 17:06:51" itemprop="dateCreated datePublished" datetime="2020-08-28T10:36:49+08:00">2020-08-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -267,12 +267,12 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">class cls1&#123;</span><br><span class="line">	var $ser;</span><br><span class="line">	function __construct()&#123;</span><br><span class="line">		$ser &#x3D; new ser2();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	function __wakeup()&#123;</span><br><span class="line">		$this-&gt;ser-&gt;evil();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class cls2&#123;</span><br><span class="line">	var $value &#x3D; &quot;echo 123;&quot;;</span><br><span class="line">	function evil()&#123;</span><br><span class="line">		eval($this-&gt;value);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">$cls &#x3D; $GET[&#39;cls&#39;];</span><br><span class="line">$instance &#x3D; unserialize($cls);</span><br></pre></td></tr></table></figure>
 <p>我们可以构造序列化字符串<code>O:4:&quot;cls1&quot;:1:&#123;s:3:&quot;ser&quot;;O:4:&quot;cls2&quot;:1:&#123;s:5:&quot;value&quot;;s:10:&quot;phpinfo();&quot;;&#125;&#125;</code>，传入get中即可触发漏洞。<br>运行结果：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">phpinfo()</span><br><span class="line">PHP Version &#x3D;&gt; 5.6.40-26+ubuntu18.04.1+deb.sury.org+1</span><br><span class="line"></span><br><span class="line">System &#x3D;&gt; Linux LAPTOP-FQL3FC52 4.19.104-microsoft-standard #1 SMP Wed Feb 19 06:37:35 UTC 2020 x86_64</span><br><span class="line">Server API &#x3D;&gt; Command Line Interface</span><br><span class="line">Virtual Directory Support &#x3D;&gt; disabled</span><br><span class="line">Configuration File (php.ini) Path &#x3D;&gt; &#x2F;etc&#x2F;php&#x2F;5.6&#x2F;cli</span><br><span class="line">Loaded Configuration File &#x3D;&gt; &#x2F;etc&#x2F;php&#x2F;5.6&#x2F;cli&#x2F;php.ini</span><br><span class="line">Scan this dir for additional .ini files &#x3D;&gt; &#x2F;etc&#x2F;php&#x2F;5.6&#x2F;cli&#x2F;conf.d</span><br><span class="line">Additional .ini files parsed &#x3D;&gt; &#x2F;etc&#x2F;php&#x2F;5.6&#x2F;cli&#x2F;conf.d&#x2F;10-opcache.ini</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
-<h3 id="0x05session反序列化漏洞"><a href="#0x05session反序列化漏洞" class="headerlink" title="0x05session反序列化漏洞"></a>0x05session反序列化漏洞</h3><h4 id="什么是session反序列化"><a href="#什么是session反序列化" class="headerlink" title="什么是session反序列化"></a>什么是session反序列化</h4><p>PHP在session存储和读取时，都会有一个序列化和反序列化的过程，PHP内置了多种处理器用于存储和读取session数据，都会对数据进行序列化和反序列化。<br>在php.ini中有以下配置项：<br><img src="/assets/img/php反序列化总结/php反序列化总结1.jpg"> </p>
-<img src="/assets/img/php反序列化总结/php反序列化总结2.jpg">   
+<h3 id="0x05session反序列化漏洞"><a href="#0x05session反序列化漏洞" class="headerlink" title="0x05session反序列化漏洞"></a>0x05session反序列化漏洞</h3><h4 id="什么是session反序列化"><a href="#什么是session反序列化" class="headerlink" title="什么是session反序列化"></a>什么是session反序列化</h4><p>PHP在session存储和读取时，都会有一个序列化和反序列化的过程，PHP内置了多种处理器用于存储和读取session数据，都会对数据进行序列化和反序列化。<br>在php.ini中有以下配置项：<br><img src="/images/img/php反序列化总结/php反序列化总结1.jpg"> </p>
+<img src="/images/img/php反序列化总结/php反序列化总结2.jpg">   
 
 <p>其中：<br><code>session.save_path</code>设置session的存储路径<br><code>session.save_handler</code>设置用户自定义存储函数<br><code>session.serialize_handler</code>定义用来序列化/反序列化的处理器名称，主要有：php[默认]，php_serialize，php_binary<br><code>session.auto_start</code>指定会话模块是否在请求开始时启动一个会话<br>php的session内容是以<strong>文件</strong>方式来存储的，由<code>session.save_handler</code>来决定，文件名由<code>sess_sessionid</code>来命名，文件内容则为session序列化后的值。<br>例如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">        ini_set(&#39;session.serialize_handler&#39;,&#39;php_serialize&#39;);</span><br><span class="line">        session_start();</span><br><span class="line">        $_SESSION[&#39;name&#39;] &#x3D; &#39;abc&#39;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-<p>执行，随后可以看到结果：<br><img src="/assets/img/php反序列化总结/php反序列化总结3.jpg"><br>发现目录下面多了一个存session的文件，查看它：<br><img src="/assets/img/php反序列化总结/php反序列化总结4.jpg"><br>发现里面存的就是序列化之后的session。<br>上面是存储引擎为<code>php_serialize</code>时的存储结果，如果存储引擎为php，则存储结果为：<br><img src="/assets/img/php反序列化总结/php反序列化总结5.jpg"><br>如果存储引擎为php_binary，则存储结果为：<br><img src="/assets/img/php反序列化总结/php反序列化总结6.jpg"><br>三种处理器的存储格式差异，将会造成在session序列化和反序列化处理器设置不当时的安全隐患。</p>
+<p>执行，随后可以看到结果：<br><img src="/images/img/php反序列化总结/php反序列化总结3.jpg"><br>发现目录下面多了一个存session的文件，查看它：<br><img src="/images/img/php反序列化总结/php反序列化总结4.jpg"><br>发现里面存的就是序列化之后的session。<br>上面是存储引擎为<code>php_serialize</code>时的存储结果，如果存储引擎为php，则存储结果为：<br><img src="/images/img/php反序列化总结/php反序列化总结5.jpg"><br>如果存储引擎为php_binary，则存储结果为：<br><img src="/images/img/php反序列化总结/php反序列化总结6.jpg"><br>三种处理器的存储格式差异，将会造成在session序列化和反序列化处理器设置不当时的安全隐患。</p>
 
     </div>
 
@@ -362,6 +362,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="su29029"
+      src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">su29029</p>
   <div class="site-description" itemprop="description">因为心在那里</div>
 </div>

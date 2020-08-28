@@ -27,13 +27,13 @@
 <meta property="og:site_name" content="su29029的博客">
 <meta property="og:description" content="最近开始进行正式的安全培训了，按照大佬的学习进度安排，今天先学习文件上传upload-labs。">
 <meta property="og:locale">
-<meta property="og:image" content="https://su29029.github.io/assets/img/20200629学习总结/20200629学习总结1.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/20200629学习总结/20200629学习总结1.jpg">
 <meta property="article:published_time" content="2020-08-28T02:39:16.000Z">
-<meta property="article:modified_time" content="2020-08-28T07:32:58.400Z">
+<meta property="article:modified_time" content="2020-08-28T09:06:47.262Z">
 <meta property="article:author" content="su29029">
 <meta property="article:tag" content="web安全">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://su29029.github.io/assets/img/20200629学习总结/20200629学习总结1.jpg">
+<meta name="twitter:image" content="https://su29029.github.io/images/img/20200629学习总结/20200629学习总结1.jpg">
 
 <link rel="canonical" href="https://su29029.github.io/2020/08/28/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%AD%A6%E4%B9%A0/">
 
@@ -173,7 +173,7 @@
     <link itemprop="mainEntityOfPage" href="https://su29029.github.io/2020/08/28/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="su29029">
       <meta itemprop="description" content="因为心在那里">
     </span>
@@ -194,7 +194,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-28 10:39:16 / Modified: 15:32:58" itemprop="dateCreated datePublished" datetime="2020-08-28T10:39:16+08:00">2020-08-28</time>
+              <time title="Created: 2020-08-28 10:39:16 / Modified: 17:06:47" itemprop="dateCreated datePublished" datetime="2020-08-28T10:39:16+08:00">2020-08-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -268,7 +268,7 @@
 <h4 id="pass-20"><a href="#pass-20" class="headerlink" title="pass-20"></a>pass-20</h4><p>数组绕过。查看源码发现文件名$file_name通过了<code>reset($file).&#39;.&#39;.$file[count($file)-1]</code>进行处理。且如果上传数组则会跳过<code>$file=explode(&#39;.&#39;, strtolower($file));</code></p>
 <p>最终的文件名后缀取的是<code>$file[count($file) - 1]</code>，因此我们可以让$file为数组。</p>
 <p>我们上传文件名为20.php的文件，文件内容为一句话木马，随后save_name[0]设置为”20.php/“,save_name[2]设置为jpg，即可成功上传webshell。</p>
-<h4 id="文件上传思维导图"><a href="#文件上传思维导图" class="headerlink" title="文件上传思维导图"></a>文件上传思维导图</h4><img src="/assets/img/20200629学习总结/20200629学习总结1.jpg"/>
+<h4 id="文件上传思维导图"><a href="#文件上传思维导图" class="headerlink" title="文件上传思维导图"></a>文件上传思维导图</h4><img src="/images/img/20200629学习总结/20200629学习总结1.jpg"/>
 
     </div>
 
@@ -358,6 +358,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="su29029"
+      src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">su29029</p>
   <div class="site-description" itemprop="description">因为心在那里</div>
 </div>

