@@ -1,12 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-  
-  <title>洛谷刷题记录(1)(1,2,3组) | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"su29029.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
   <meta name="description" content="安全培训中途插入了算法…不过算法还是基础，很有用的，需要认真学。记录一下做题记录，这次是1-3组。 ps.简单题目就只给出代码不解释了，复杂的会做一些解释。 pss.题目使用的语言不同，主要是c,c++和python 0x01 顺序结构首先是顺序结构。顺序结构作为程序的最基本结构，题目难度不大，就当复习基础了。 A+B Problem12345678#include &lt;stdio.h&gt;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="洛谷刷题记录(1)(1,2,3组)">
@@ -19,79 +32,186 @@
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
 
-<meta name="generator" content="Hexo 5.1.1"></head>
+<link rel="canonical" href="https://su29029.github.io/2020/08/28/%E6%B4%9B%E8%B0%B7%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-1-1-2-3%E7%BB%84/">
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>洛谷刷题记录(1)(1,2,3组) | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://su29029.github.io"></form>
-      </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
   </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-洛谷刷题记录-1-1-2-3组" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/08/28/%E6%B4%9B%E8%B0%B7%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-1-1-2-3%E7%BB%84/" class="article-date">
-  <time datetime="2020-08-28T02:51:30.000Z" itemprop="datePublished">2020-08-28</time>
-</a>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
     
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
   </div>
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      洛谷刷题记录(1)(1,2,3组)
-    </h1>
-  
 
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://su29029.github.io/2020/08/28/%E6%B4%9B%E8%B0%B7%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-1-1-2-3%E7%BB%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          洛谷刷题记录(1)(1,2,3组)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-08-28 10:51:30 / Modified: 10:52:03" itemprop="dateCreated datePublished" datetime="2020-08-28T10:51:30+08:00">2020-08-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
       </header>
+
     
-    <div class="article-entry" itemprop="articleBody">
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
         <p>安全培训中途插入了算法…不过算法还是基础，很有用的，需要认真学。记录一下做题记录，这次是1-3组。</p>
 <p>ps.简单题目就只给出代码不解释了，复杂的会做一些解释。</p>
@@ -224,144 +344,194 @@
 
 <p>细心一点，模拟操作即可。</p>
 
-      
     </div>
-    <footer class="article-footer">
-      <a data-url="https://su29029.github.io/2020/08/28/%E6%B4%9B%E8%B0%B7%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-1-1-2-3%E7%BB%84/" data-id="ckedou6hd0035yvtyc3707uru" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
 
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/28/ctfshow%E8%90%8C%E6%96%B0%E8%AE%A1%E5%88%92%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" rel="prev" title="ctfshow萌新计划刷题记录">
+      <i class="fa fa-chevron-left"></i> ctfshow萌新计划刷题记录
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-%E9%A1%BA%E5%BA%8F%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">0x01 顺序结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A-B-Problem"><span class="nav-number">1.1.</span> <span class="nav-text">A+B Problem</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B6%85%E7%BA%A7%E7%8E%9B%E4%B8%BD%E6%B8%B8%E6%88%8F"><span class="nav-number">1.2.</span> <span class="nav-text">超级玛丽游戏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA2-%E4%BE%8B5%E3%80%91%E8%8B%B9%E6%9E%9C%E9%87%87%E8%B4%AD"><span class="nav-number">1.3.</span> <span class="nav-text">【深基2.例5】苹果采购</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA2-%E4%BE%8B6%E3%80%91%E5%AD%97%E6%AF%8D%E8%BD%AC%E6%8D%A2"><span class="nav-number">1.4.</span> <span class="nav-text">【深基2.例6】字母转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA2-%E4%BE%8B7%E3%80%91%E6%95%B0%E5%AD%97%E5%8F%8D%E8%BD%AC"><span class="nav-number">1.5.</span> <span class="nav-text">【深基2.例7】数字反转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA2-%E4%BE%8B8%E3%80%91%E5%86%8D%E5%88%86%E8%82%A5%E5%AE%85%E6%B0%B4"><span class="nav-number">1.6.</span> <span class="nav-text">【深基2.例8】再分肥宅水</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E9%B1%BC%E7%9A%84%E6%B8%B8%E6%B3%B3%E6%97%B6%E9%97%B4"><span class="nav-number">1.7.</span> <span class="nav-text">小鱼的游泳时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA1-2%E3%80%91%E5%B0%8F%E5%AD%A6%E6%95%B0%E5%AD%A6-N-%E5%90%88%E4%B8%80"><span class="nav-number">1.8.</span> <span class="nav-text">【深基1-2】小学数学 N 合一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA2-%E4%B9%A02%E3%80%91%E4%B8%89%E8%A7%92%E5%BD%A2%E9%9D%A2%E7%A7%AF"><span class="nav-number">1.9.</span> <span class="nav-text">【深基2.习2】三角形面积</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E7%8E%89%E4%B9%B0%E6%96%87%E5%85%B7"><span class="nav-number">1.10.</span> <span class="nav-text">小玉买文具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA2-%E4%B9%A06%E3%80%91Apples-Prologue"><span class="nav-number">1.11.</span> <span class="nav-text">【深基2.习6】Apples Prologue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%A7%92%E7%BA%BF"><span class="nav-number">1.12.</span> <span class="nav-text">对角线</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-%E9%80%89%E6%8B%A9%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">0x02 选择结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA3-%E4%BE%8B2%E3%80%91%E6%95%B0%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="nav-number">2.1.</span> <span class="nav-text">【深基3.例2】数的性质</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA3-%E4%BE%8B3%E3%80%91%E9%97%B0%E5%B9%B4%E5%88%A4%E6%96%AD"><span class="nav-number">2.2.</span> <span class="nav-text">【深基3.例3】闰年判断</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA3-%E4%BE%8B4%E3%80%91Apples"><span class="nav-number">2.3.</span> <span class="nav-text">【深基3.例4】Apples</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA3-%E4%BE%8B5%E3%80%91%E6%B4%9B%E8%B0%B7%E5%9B%A2%E9%98%9F%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.4.</span> <span class="nav-text">【深基3.例5】洛谷团队系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA3-%E4%BE%8B7%E3%80%91%E8%82%A5%E8%83%96%E9%97%AE%E9%A2%98"><span class="nav-number">2.5.</span> <span class="nav-text">【深基3.例7】肥胖问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA3-%E4%BE%8B8%E3%80%91%E4%B8%89%E4%BD%8D%E6%95%B0%E6%8E%92%E5%BA%8F"><span class="nav-number">2.6.</span> <span class="nav-text">【深基3.例8】三位数排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA3-%E4%BE%8B9%E3%80%91%E6%9C%88%E4%BB%BD%E5%A4%A9%E6%95%B0"><span class="nav-number">2.7.</span> <span class="nav-text">【深基3.例9】月份天数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8D%E9%AB%98%E5%85%B4%E7%9A%84%E6%B4%A5%E6%B4%A5"><span class="nav-number">2.8.</span> <span class="nav-text">不高兴的津津</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B9%B0%E9%93%85%E7%AC%94"><span class="nav-number">2.9.</span> <span class="nav-text">买铅笔</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ISBN%E5%8F%B7%E7%A0%81"><span class="nav-number">2.10.</span> <span class="nav-text">ISBN号码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E7%8E%89%E5%AE%B6%E7%9A%84%E7%94%B5%E8%B4%B9"><span class="nav-number">2.11.</span> <span class="nav-text">小玉家的电费</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E9%B1%BC%E7%9A%84%E8%88%AA%E7%A8%8B-%E6%94%B9%E8%BF%9B%E7%89%88"><span class="nav-number">2.12.</span> <span class="nav-text">小鱼的航程(改进版)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E8%A7%92%E5%87%BD%E6%95%B0"><span class="nav-number">2.13.</span> <span class="nav-text">三角函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%99%B6%E9%99%B6%E6%91%98%E8%8B%B9%E6%9E%9C"><span class="nav-number">2.14.</span> <span class="nav-text">陶陶摘苹果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA3-%E4%B9%A08%E3%80%91%E4%B8%89%E8%A7%92%E5%BD%A2%E5%88%86%E7%B1%BB"><span class="nav-number">2.15.</span> <span class="nav-text">【深基3.习8】三角形分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#COCI2006-2007-2-ABC"><span class="nav-number">2.16.</span> <span class="nav-text">[COCI2006-2007#2] ABC</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">0x03 循环结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA4-%E4%BE%8B2%E3%80%91%E6%89%BE%E6%9C%80%E5%B0%8F%E5%80%BC"><span class="nav-number">3.1.</span> <span class="nav-text">【深基4.例2】找最小值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA4-%E4%BE%8B3%E3%80%91%E5%88%86%E7%B1%BB%E5%B9%B3%E5%9D%87"><span class="nav-number">3.2.</span> <span class="nav-text">【深基4.例3】分类平均</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA4-%E4%BE%8B4%E3%80%91%E4%B8%80%E5%B0%BA%E4%B9%8B%E6%A3%B0"><span class="nav-number">3.3.</span> <span class="nav-text">【深基4.例4】一尺之棰</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA4-%E4%BE%8B6%E3%80%91%E6%95%B0%E5%AD%97%E7%9B%B4%E8%A7%92%E4%B8%89%E8%A7%92%E5%BD%A2"><span class="nav-number">3.4.</span> <span class="nav-text">【深基4.例6】数字直角三角形</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6%E4%B9%98%E4%B9%8B%E5%92%8C"><span class="nav-number">3.5.</span> <span class="nav-text">阶乘之和</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E6%95%B0%E9%97%AE%E9%A2%98"><span class="nav-number">3.6.</span> <span class="nav-text">计数问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%A7%E6%95%B0%E6%B1%82%E5%92%8C"><span class="nav-number">3.7.</span> <span class="nav-text">级数求和</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%91%E5%B8%81"><span class="nav-number">3.8.</span> <span class="nav-text">金币</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA4-%E4%BE%8B11%E3%80%91%E6%95%B0%E5%88%97%E6%B1%82%E5%92%8C"><span class="nav-number">3.9.</span> <span class="nav-text">【深基4.例11】数列求和</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA4-%E4%BE%8B13%E3%80%91%E8%B4%A8%E6%95%B0%E5%8F%A3%E8%A2%8B"><span class="nav-number">3.10.</span> <span class="nav-text">【深基4.例13】质数口袋</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#USACO1-5-%E5%9B%9E%E6%96%87%E8%B4%A8%E6%95%B0-Prime-Palindromes"><span class="nav-number">3.11.</span> <span class="nav-text">[USACO1.5]回文质数 Prime Palindromes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E7%8E%89%E5%9C%A8%E6%B8%B8%E6%B3%B3"><span class="nav-number">3.12.</span> <span class="nav-text">小玉在游泳</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E5%8F%8D%E8%BD%AC"><span class="nav-number">3.13.</span> <span class="nav-text">数字反转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%88%E8%90%BD%E4%B9%8C%E5%95%BC%E7%AE%97%E9%92%B1"><span class="nav-number">3.14.</span> <span class="nav-text">月落乌啼算钱</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA4-%E4%B9%A05%E3%80%91%E6%B1%82%E6%9E%81%E5%B7%AE"><span class="nav-number">3.15.</span> <span class="nav-text">【深基4.习5】求极差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E9%95%BF%E8%BF%9E%E5%8F%B7"><span class="nav-number">3.16.</span> <span class="nav-text">最长连号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B4%A8%E5%9B%A0%E6%95%B0%E5%88%86%E8%A7%A3"><span class="nav-number">3.17.</span> <span class="nav-text">质因数分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA4-%E4%B9%A08%E3%80%91%E6%B1%82%E4%B8%89%E8%A7%92%E5%BD%A2"><span class="nav-number">3.18.</span> <span class="nav-text">【深基4.习8】求三角形</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E3%80%90%E6%B7%B1%E5%9F%BA4-%E4%B9%A09%E3%80%91%E6%89%93%E5%88%86"><span class="nav-number">3.19.</span> <span class="nav-text">【深基4.习9】打分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#COCI2017-2018-6-Davor"><span class="nav-number">3.20.</span> <span class="nav-text">[COCI2017-2018#6] Davor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B4%A5%E6%B4%A5%E7%9A%84%E5%82%A8%E8%93%84%E8%AE%A1%E5%88%92"><span class="nav-number">3.21.</span> <span class="nav-text">津津的储蓄计划</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
     </footer>
   </div>
-  
-    
-<nav id="article-nav">
-  
-  
-    <a href="/2020/08/28/ctfshow%E8%90%8C%E6%96%B0%E8%AE%A1%E5%88%92%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">ctfshow萌新计划刷题记录</div>
-    </a>
-  
-</nav>
 
   
-</article>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/c%E8%AF%AD%E8%A8%80/">c语言</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/web/web%E5%AE%89%E5%85%A8/">web安全</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/web%E5%BC%80%E5%8F%91/">web开发</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/web%E5%AE%89%E5%85%A8/">web安全</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/windows%E7%BC%96%E7%A8%8B/">windows编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/">软件工程</a></li></ul>
-    </div>
-  </div>
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
 
 
   
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80/" rel="tag">c语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%AE%89%E5%85%A8/" rel="tag">web安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%BC%80%E5%8F%91/" rel="tag">web开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows%E7%BC%96%E7%A8%8B/" rel="tag">windows编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag">网络编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag">软件工程</a></li></ul>
-    </div>
-  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/c%E8%AF%AD%E8%A8%80/" style="font-size: 10px;">c语言</a> <a href="/tags/web%E5%AE%89%E5%85%A8/" style="font-size: 20px;">web安全</a> <a href="/tags/web%E5%BC%80%E5%8F%91/" style="font-size: 15px;">web开发</a> <a href="/tags/windows%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">windows编程</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">网络编程</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" style="font-size: 10px;">软件工程</a>
-    </div>
-  </div>
 
   
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li></ul>
-    </div>
-  </div>
 
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/08/28/%E6%B4%9B%E8%B0%B7%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95-1-1-2-3%E7%BB%84/">洛谷刷题记录(1)(1,2,3组)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/08/28/ctfshow%E8%90%8C%E6%96%B0%E8%AE%A1%E5%88%92%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">ctfshow萌新计划刷题记录</a>
-          </li>
-        
-          <li>
-            <a href="/2020/08/28/buu%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%951/">buu刷题记录1</a>
-          </li>
-        
-          <li>
-            <a href="/2020/08/28/csrf-ssrf-session%E4%BC%AA%E9%80%A0/">csrf&amp;ssrf&amp;session伪造</a>
-          </li>
-        
-          <li>
-            <a href="/2020/08/28/xxe%E9%97%AE%E9%A2%98/">xxe问题</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-  </div>
 </body>
 </html>
