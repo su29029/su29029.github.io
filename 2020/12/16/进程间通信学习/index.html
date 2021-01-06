@@ -29,7 +29,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="https://leisure_chn.gitee.io/blog/figure/linux_process/task_status.jpg">
 <meta property="article:published_time" content="2020-12-16T03:33:12.000Z">
-<meta property="article:modified_time" content="2021-01-06T18:00:57.775Z">
+<meta property="article:modified_time" content="2021-01-06T18:06:30.102Z">
 <meta property="article:author" content="su29029">
 <meta property="article:tag" content="web安全">
 <meta name="twitter:card" content="summary">
@@ -200,7 +200,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-07 02:00:57" itemprop="dateModified" datetime="2021-01-07T02:00:57+08:00">2021-01-07</time>
+                <time title="Modified: 2021-01-07 02:06:30" itemprop="dateModified" datetime="2021-01-07T02:06:30+08:00">2021-01-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -259,6 +259,8 @@
 
       
         <h2 id="Linux-IPC-学习"><a href="#Linux-IPC-学习" class="headerlink" title="Linux IPC 学习"></a>Linux IPC 学习</h2><h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>专门去学习Linux IPC的缘由是CNSS 2020 Recruit的一道招新题，题目直接给了一个shell，但是获取了shell连上服务器之后，由于flag权限不足，只能通过readflag程序来读取flag，而readflag这个程序需要进行简单的程序交互，通过题目给的shell是无法完成这一操作的，我们需要编写一个交互程序，来自动完成与readflag的交互让其输出flag。</p>
+<a id="more"></a>
+
 <p>这个题的预期解是通过运行一个perl程序来完成交互，服务器上perl环境已经安装好了。但是这个预期解的局限性也就在于必须得有perl环境才能正常操作，深入思考了预期解的payload，会发现其实整个程序的本质就是两个linux进程之间的通信过程，进程间通信我们也可以通过c或者go等语言，编译成binary直接丢上服务器运行，这样就可以不依赖任何特定的语言环境了。</p>
 <h3 id="进程-线程"><a href="#进程-线程" class="headerlink" title="进程/线程"></a>进程/线程</h3><p>首先简单讲讲进程和线程相关的概念。</p>
 <h4 id="进程与线程的概念"><a href="#进程与线程的概念" class="headerlink" title="进程与线程的概念"></a>进程与线程的概念</h4><p>进程：操作系统进行资源分配的基本单位。</p>
