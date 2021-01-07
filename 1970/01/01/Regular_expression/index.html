@@ -20,17 +20,19 @@
     var CONFIG = {"hostname":"su29029.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="因为心在那里">
-<meta property="og:type" content="website">
+  <meta name="description" content="​     正则表达式(Regular expression)简介 简单来说正则表达式就是一种字符串的匹配模式 基于这个模式可以从一个串或许多串当中匹配或者是捕获需要的字符串">
+<meta property="og:type" content="article">
 <meta property="og:title" content="su29029的博客">
-<meta property="og:url" content="https://su29029.github.io/archives/2020/12/index.html">
+<meta property="og:url" content="https://su29029.github.io/1970/01/01/Regular_expression/index.html">
 <meta property="og:site_name" content="su29029的博客">
-<meta property="og:description" content="因为心在那里">
+<meta property="og:description" content="​     正则表达式(Regular expression)简介 简单来说正则表达式就是一种字符串的匹配模式 基于这个模式可以从一个串或许多串当中匹配或者是捕获需要的字符串">
 <meta property="og:locale">
+<meta property="article:published_time" content="1970-01-01T00:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-07T12:03:24.579Z">
 <meta property="article:author" content="su29029">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://su29029.github.io/archives/2020/12/">
+<link rel="canonical" href="https://su29029.github.io/1970/01/01/Regular_expression/">
 
 
 <script id="page-configurations">
@@ -38,12 +40,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-hans'
   };
 </script>
 
-  <title>Archive | su29029的博客</title>
+  <title> | su29029的博客</title>
   
 
 
@@ -158,56 +160,239 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-hans">
+    <link itemprop="mainEntityOfPage" href="https://su29029.github.io/1970/01/01/Regular_expression/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="su29029">
+      <meta itemprop="description" content="因为心在那里">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="su29029的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 1970-01-01 08:00:00" itemprop="dateCreated datePublished" datetime="1970-01-01T08:00:00+08:00">1970-01-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-07 20:03:24" itemprop="dateModified" datetime="2021-01-07T20:03:24+08:00">2021-01-07</time>
+              </span>
+
+          
+            <span id="/1970/01/01/Regular_expression/" class="post-meta-item leancloud_visitors" data-flag-title="" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
   
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <span class="collection-header">Um..! 29 posts in total. Keep on posting.</span>
-      </div>
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/1970/01/01/Regular_expression/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/1970/01/01/Regular_expression/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>2.6k字</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>2 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
+        <p>​    </p>
+<p><big>正则表达式(Regular expression)简介</big></p>
+<p>简单来说正则表达式就是一种<strong>字符串的匹配模式</strong></p>
+<p>基于这个模式可以从一个串或许多串当中匹配或者是捕获需要的字符串</p>
+<a id="more"></a>
+
+<p><strong><em>元字符</em></strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">.</th>
+<th align="left">匹配除换行符以外的任意字符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">*</td>
+<td align="left">重复前面的子表达式0次或多次</td>
+</tr>
+<tr>
+<td align="left">+</td>
+<td align="left">重复前面的子表达式1次或更多次</td>
+</tr>
+<tr>
+<td align="left">?</td>
+<td align="left">重复前面的子表达式0次或一次</td>
+</tr>
+<tr>
+<td align="left">^</td>
+<td align="left">匹配字符串的开始</td>
+</tr>
+<tr>
+<td align="left">$</td>
+<td align="left">匹配字符串的结束</td>
+</tr>
+<tr>
+<td align="left">{n}</td>
+<td align="left">重复n次</td>
+</tr>
+<tr>
+<td align="left">{n,m}</td>
+<td align="left">重复n到m次</td>
+</tr>
+<tr>
+<td align="left">\b</td>
+<td align="left">匹配单词的开始或结尾在单词边界</td>
+</tr>
+<tr>
+<td align="left">\d</td>
+<td align="left">匹配数字,“\D”匹配任意非数字字符</td>
+</tr>
+<tr>
+<td align="left">\s</td>
+<td align="left">匹配任意空白符,“\S”匹配任意非数字字符</td>
+</tr>
+<tr>
+<td align="left">\w</td>
+<td align="left">匹配任意字母、数字或下划线的标示符字符</td>
+</tr>
+<tr>
+<td align="left">[a-z]</td>
+<td align="left">匹配指定范围内的任意字符</td>
+</tr>
+<tr>
+<td align="left">[^a-z]</td>
+<td align="left">匹配任何不在指定范围内的字符</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>正则表达式验证的网站(online regular tester)来举些例子来更好地理解正则表达式的用法</p>
+<p>例:regex101.com(可以进行是否大小写敏感等设置)</p>
+<p>例1:</p>
+<p><strong><em>REGULAR EXPRESSION</em></strong></p>
+<p>hello</p>
+<p><strong><em>TEST STRING</em></strong></p>
+<p>Helllllllllo</p>
+<p>会显示0 match;</p>
+<p>但是把hello 改成 hel+o之后(重复前面的子表达式一次或更多次,见上表)</p>
+<p>就会显示1 match 了</p>
+<p>例2:目的是把所有单词都匹配出来</p>
+<p><strong><em>REGULAR EXPRESSION</em></strong></p>
+<p>[a-zA-Z{1,}] </p>
+<p><strong><em>TEST STRING</em></strong></p>
+<p>I am 1 test sentence.I have 500 books.</p>
+<p>显示7 matches</p>
+<p>例3:把数字匹配出来</p>
+<p><strong><em>REGULAR EXPRESSION</em></strong></p>
+<p>[0-9]{1,}或\d{1,}</p>
+<p><strong><em>TEST STRING</em></strong></p>
+<p>I am 1 test sentence.I have 500 books.</p>
+<p>显示2 matches</p>
+<p>例4:匹配浮点数,(需要把小数点匹配出来)</p>
+<p><strong><em>REGULAR EXPRESSION</em></strong></p>
+<p>\d{1,}.\d{1,}</p>
+<p>1 match</p>
+<p><strong>假如在一封email里要获取IP地址</strong></p>
+<p>只是简单说一下IP地址的获取</p>
+<p>这里不管数字的范围,IP地址是有4个十进制数,每个范围是0-255,中间是用.来分隔的,只是匹配三位长度的数字</p>
+<p><strong><em>REGULAR EXPRESSION</em></strong></p>
+<p>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}</p>
+<p>或</p>
+<p>重复部分较多,可以把他括起来组成一个分组group 重复三次</p>
+<p>(\d{1,3}\.){3}</p>
+<p><strong><em>TEST STRING</em></strong></p>
+<p>192.168.1.32</p>
+<p>1 match</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-12-16T11:33:12+08:00"
-              content="2020-12-16">
-          12-16
-        </time>
-      </div>
+      <footer class="post-footer">
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/12/16/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0/" itemprop="url">
-            <span itemprop="name">Linux IPC 学习</span>
-          </a>
-      </div>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/1970/01/01/%E6%A8%A1%E7%B3%8A%E6%95%B0%E5%AD%A6-%E6%A6%82%E8%BF%B0/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/28/%E5%BD%93%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E8%BE%93%E5%85%A5www-baidu-com%E5%B9%B6%E6%8C%89%E4%B8%8B%E5%9B%9E%E8%BD%A6%E5%90%8E%EF%BC%8C%E9%83%BD%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88/" rel="next" title="当在浏览器中输入www.baidu.com并按下回车后，都发生了什么">
+      当在浏览器中输入www.baidu.com并按下回车后，都发生了什么 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
   </article>
-
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
