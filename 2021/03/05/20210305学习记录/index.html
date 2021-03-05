@@ -28,7 +28,7 @@
 <meta property="og:description" content="2021-03-05 学习记录今天时间浪费（也不算浪费，干别的事去了）的有点多，下午面试了hw的一面和二面，花费了大量时间做安全相关的东西，还算顺利，算法就早上写了一个晚上写了一个，一个自己做了个简单的方法，最优解看了题解才出，另一个题直接看了题解，明天得加点速了。 今天的学习内容：  Leetcode刷题：(1)剑指 Offer 59 - I. 滑动窗口的最大值；(2)#621 任务调度器 学习">
 <meta property="og:locale">
 <meta property="article:published_time" content="2021-03-05T15:30:12.000Z">
-<meta property="article:modified_time" content="2021-03-05T16:21:44.293Z">
+<meta property="article:modified_time" content="2021-03-05T16:28:05.061Z">
 <meta property="article:author" content="su29029">
 <meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
@@ -198,7 +198,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-06 00:21:44" itemprop="dateModified" datetime="2021-03-06T00:21:44+08:00">2021-03-06</time>
+                <time title="Modified: 2021-03-06 00:28:05" itemprop="dateModified" datetime="2021-03-06T00:28:05+08:00">2021-03-06</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -262,6 +262,7 @@
 <li>Leetcode刷题：(1)剑指 Offer 59 - I. 滑动窗口的最大值；(2)#621 任务调度器</li>
 <li>学习微服务架构，完成user-srv的注册模块</li>
 </ol>
+<a id="more"></a>
 <h4 id="1-Leetcode刷题"><a href="#1-Leetcode刷题" class="headerlink" title="1. Leetcode刷题"></a>1. Leetcode刷题</h4><h5 id="剑指-Offer-59-I-滑动窗口的最大值"><a href="#剑指-Offer-59-I-滑动窗口的最大值" class="headerlink" title="剑指 Offer 59 - I. 滑动窗口的最大值"></a>剑指 Offer 59 - I. 滑动窗口的最大值</h5><p>这个题给定一个数组和滑动窗口的长度，让我们去找滑动窗口内的最大元素。首先我无脑的想了暴力法，滑动一次就遍历一次滑动窗口内所有元素，获取一次最大值返回，最后返回最大值集合：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">max</span><span class="params">(arr []<span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">    res := arr[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> _, elem := <span class="keyword">range</span> arr &#123;</span><br><span class="line">        <span class="keyword">if</span> elem &gt; res &#123;</span><br><span class="line">            res = elem</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">maxSlidingWindow</span><span class="params">(nums []<span class="keyword">int</span>, k <span class="keyword">int</span>)</span> []<span class="title">int</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> res []<span class="keyword">int</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(nums) == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt;= <span class="built_in">len</span>(nums)-k; i++&#123;</span><br><span class="line">        res = <span class="built_in">append</span>(res, max(nums[i:i+k]))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
