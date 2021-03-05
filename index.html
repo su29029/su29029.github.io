@@ -164,6 +164,127 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-hans">
+    <link itemprop="mainEntityOfPage" href="https://su29029.github.io/2021/03/05/20210305%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="su29029">
+      <meta itemprop="description" content="因为心在那里">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="su29029的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/05/20210305%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">20210305学习记录</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-03-05 23:30:12 / Modified: 22:03:54" itemprop="dateCreated datePublished" datetime="2021-03-05T23:30:12+08:00">2021-03-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/03/05/20210305%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" class="post-meta-item leancloud_visitors" data-flag-title="20210305学习记录" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/03/05/20210305%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/03/05/20210305%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>13k字</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>12 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="2021-03-05-学习记录"><a href="#2021-03-05-学习记录" class="headerlink" title="2021-03-05 学习记录"></a>2021-03-05 学习记录</h2><p>今天时间浪费（也不算浪费，干别的事去了）的有点多，下午面试了hw的一面和二面，花费了大量时间做安全相关的东西，还算顺利，算法就早上写了一个晚上写了一个，一个自己做了个简单的方法，最优解看了题解才出，另一个题直接看了题解，明天得加点速了。</p>
+<p>今天的学习内容：</p>
+<ol>
+<li>Leetcode刷题：(1)剑指 Offer 59 - I. 滑动窗口的最大值；(2)#621 任务调度器</li>
+<li>学习微服务架构，完成user-srv的注册模块</li>
+</ol>
+<h4 id="1-Leetcode刷题"><a href="#1-Leetcode刷题" class="headerlink" title="1. Leetcode刷题"></a>1. Leetcode刷题</h4><h5 id="剑指-Offer-59-I-滑动窗口的最大值"><a href="#剑指-Offer-59-I-滑动窗口的最大值" class="headerlink" title="剑指 Offer 59 - I. 滑动窗口的最大值"></a>剑指 Offer 59 - I. 滑动窗口的最大值</h5><p>这个题给定一个数组和滑动窗口的长度，让我们去找滑动窗口内的最大元素。首先我无脑的想了暴力法，滑动一次就遍历一次滑动窗口内所有元素，获取一次最大值返回，最后返回最大值集合：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">max</span><span class="params">(arr []<span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">    res := arr[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> _, elem := <span class="keyword">range</span> arr &#123;</span><br><span class="line">        <span class="keyword">if</span> elem &gt; res &#123;</span><br><span class="line">            res = elem</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">maxSlidingWindow</span><span class="params">(nums []<span class="keyword">int</span>, k <span class="keyword">int</span>)</span> []<span class="title">int</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> res []<span class="keyword">int</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(nums) == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt;= <span class="built_in">len</span>(nums)-k; i++&#123;</span><br><span class="line">        res = <span class="built_in">append</span>(res, max(nums[i:i+k]))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方法毫无疑问有不少的重复操作，有<code>len(nums)-2k+2</code>个元素被遍历了k次，效率很低。</p>
+<p>看了题解发现可以使用单调队列来解决：维护一个单调双端队列，每次滑动后都读取队列的首个元素即可。具体来说，我们取双端队列<code>deque</code>，结果列表<code>res</code>，设数组长度为n，则我们让左边界范围为<code>i∈[1-k,n-k]</code>，右边界范围<code>j∈[0,n-1]</code>。每一次滑动时，维护单调非严格递减队列，首先当<code>i&gt;0 &amp;&amp; deque[0] == nums[i-1]</code>时队首元素出队；其次在插入新的右侧边界元素<code>nums[j]</code>前，不断判断队尾元素和欲插入元素的大小，如果队尾元素小则使其从尾部出队，知道队尾元素大于欲插入元素时停止，随后插入<code>nums[j]</code>，并在结果列表<code>res</code>中将<code>deque[0]</code>插入。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">maxSlidingWindow</span><span class="params">(nums []<span class="keyword">int</span>, k <span class="keyword">int</span>)</span> []<span class="title">int</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> deque []<span class="keyword">int</span></span><br><span class="line">    <span class="keyword">var</span> res []<span class="keyword">int</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(nums) == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> i, j := <span class="number">1</span>-k, <span class="number">0</span>; i &lt; <span class="built_in">len</span>(nums)+<span class="number">1</span>-k &amp;&amp; j &lt; <span class="built_in">len</span>(nums); i, j = i+<span class="number">1</span>,j+<span class="number">1</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> i &gt; <span class="number">0</span> &amp;&amp; deque[<span class="number">0</span>] == nums[i<span class="number">-1</span>] &#123;</span><br><span class="line">            deque = deque[<span class="number">1</span>:]</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> <span class="built_in">len</span>(deque) &gt; <span class="number">0</span> &amp;&amp; deque[<span class="built_in">len</span>(deque)<span class="number">-1</span>] &lt; nums[j] &#123;</span><br><span class="line">            deque = deque[:<span class="built_in">len</span>(deque)<span class="number">-1</span>]</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(deque) == <span class="number">0</span> &#123;</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        deque = <span class="built_in">append</span>(deque, nums[j])</span><br><span class="line">        <span class="keyword">if</span> i &gt;= <span class="number">0</span> &#123;</span><br><span class="line">            res = <span class="built_in">append</span>(res, deque[<span class="number">0</span>])</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="621-任务调度器"><a href="#621-任务调度器" class="headerlink" title="#621 任务调度器"></a>#621 任务调度器</h5><p>这个题一开始没有思路，最后看了题解发现使用模拟的方法可以完成。题解看了半个小时才看懂，wtcl</p>
+<p>这个题的总体思路就是每次选择执行剩余次数最多的那个任务，将每种任务的剩余执行次数尽可能平均，使得 CPU 处于待命状态的时间尽可能少。</p>
+<p>这里可以使用一个map来记录一下每种任务需要完成多少次，随后建立两个数组，分别记录某个任务还剩多少次完成，以及需要到哪一时刻才可以进行，且每一次循环时间+1，每执行一次任务该任务的冷却时间+n+1，执行次数-1。</p>
+<p>为了减少遍历次数，当所有任务都处于冷却状态时，我们直接将时间更新为冷却时间的最小值，跳过等待。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">leastInterval</span><span class="params">(tasks []<span class="keyword">byte</span>, n <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> res <span class="keyword">int</span></span><br><span class="line">    cnt := <span class="keyword">map</span>[<span class="keyword">byte</span>]<span class="keyword">int</span>&#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> _, t := <span class="keyword">range</span> tasks &#123;</span><br><span class="line">        cnt[t]++</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    nextValid := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">0</span>, <span class="built_in">len</span>(cnt))</span><br><span class="line">    rest := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">0</span>, <span class="built_in">len</span>(cnt))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> _, t := <span class="keyword">range</span> cnt &#123;</span><br><span class="line">        nextValid = <span class="built_in">append</span>(nextValid, <span class="number">1</span>)</span><br><span class="line">        rest = <span class="built_in">append</span>(rest, t)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> <span class="keyword">range</span> tasks &#123;</span><br><span class="line">        res++</span><br><span class="line">        minNextValid := math.MaxInt64</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i, r := <span class="keyword">range</span> rest &#123;</span><br><span class="line">            <span class="keyword">if</span> r &gt; <span class="number">0</span> &amp;&amp; nextValid[i] &lt; minNextValid &#123;</span><br><span class="line">                minNextValid = nextValid[i]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> res &lt; minNextValid &#123;</span><br><span class="line">            res = minNextValid</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        best := <span class="number">-1</span></span><br><span class="line">        <span class="keyword">for</span> i, r := <span class="keyword">range</span> rest &#123;</span><br><span class="line">            <span class="keyword">if</span> r &gt; <span class="number">0</span> &amp;&amp; nextValid[i] &lt;= res &amp;&amp; (best == <span class="number">-1</span> || r &lt; rest[best]) &#123;</span><br><span class="line">                best = i</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        nextValid[best] = nextValid[best] + n + <span class="number">1</span></span><br><span class="line">        rest[best]--</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-hans">
     <link itemprop="mainEntityOfPage" href="https://su29029.github.io/2021/03/04/20210304%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -195,7 +316,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-05 01:12:02" itemprop="dateModified" datetime="2021-03-05T01:12:02+08:00">2021-03-05</time>
+                <time title="Modified: 2021-03-05 21:37:31" itemprop="dateModified" datetime="2021-03-05T21:37:31+08:00">2021-03-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -203,11 +324,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">web开发</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web%E5%BC%80%E5%8F%91/%E7%AE%97%E6%B3%95%EF%BC%8C%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">算法，操作系统</span></a>
+                  <a href="/categories/%E7%AE%97%E6%B3%95%EF%BC%8C%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">算法，操作系统</span></a>
                 </span>
             </span>
 
@@ -1220,124 +1337,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-hans">
-    <link itemprop="mainEntityOfPage" href="https://su29029.github.io/2020/08/28/xxe%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="su29029">
-      <meta itemprop="description" content="因为心在那里">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="su29029的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/28/xxe%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">xxe问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2020-08-28 10:47:56 / Modified: 15:32:36" itemprop="dateCreated datePublished" datetime="2020-08-28T10:47:56+08:00">2020-08-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web/web%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">web安全</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/08/28/xxe%E9%97%AE%E9%A2%98/" class="post-meta-item leancloud_visitors" data-flag-title="xxe问题" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2020/08/28/xxe%E9%97%AE%E9%A2%98/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/28/xxe%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>26k字</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>24 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>今天学习一下xxe相关的内容。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/08/28/xxe%E9%97%AE%E9%A2%98/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1405,14 +1408,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
