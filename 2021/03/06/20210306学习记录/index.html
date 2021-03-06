@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"su29029.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="2021-03-06 学习记录今天下午去签合同，晚上交流会（虽然最后约饭去了），没有学太多东西…早上复习了一下二叉树的基本内容，对递归算法的不熟练，导致基本的算法写了一早上才写完…太难了。 今天的学习内容：  数据结构：树-二叉树">
+  <meta name="description" content="2021-03-06 学习记录今天下午去签合同，晚上交流会（虽然最后约饭去了），没有学太多东西…早上复习了一下二叉树的基本内容，对递归算法的不熟练，导致基本的算法写了一早上才写完…太难了。 今天的学习内容：  数据结构：树-二叉树 Leetcode刷题：#589 N叉树的前序遍历">
 <meta property="og:type" content="article">
 <meta property="og:title" content="20210306学习记录">
 <meta property="og:url" content="https://su29029.github.io/2021/03/06/20210306%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="su29029的博客">
-<meta property="og:description" content="2021-03-06 学习记录今天下午去签合同，晚上交流会（虽然最后约饭去了），没有学太多东西…早上复习了一下二叉树的基本内容，对递归算法的不熟练，导致基本的算法写了一早上才写完…太难了。 今天的学习内容：  数据结构：树-二叉树">
+<meta property="og:description" content="2021-03-06 学习记录今天下午去签合同，晚上交流会（虽然最后约饭去了），没有学太多东西…早上复习了一下二叉树的基本内容，对递归算法的不熟练，导致基本的算法写了一早上才写完…太难了。 今天的学习内容：  数据结构：树-二叉树 Leetcode刷题：#589 N叉树的前序遍历">
 <meta property="og:locale">
 <meta property="article:published_time" content="2021-03-06T15:30:12.000Z">
-<meta property="article:modified_time" content="2021-03-06T17:25:02.203Z">
+<meta property="article:modified_time" content="2021-03-06T17:51:37.277Z">
 <meta property="article:author" content="su29029">
 <meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
@@ -198,7 +198,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-07 01:25:02" itemprop="dateModified" datetime="2021-03-07T01:25:02+08:00">2021-03-07</time>
+                <time title="Modified: 2021-03-07 01:51:37" itemprop="dateModified" datetime="2021-03-07T01:51:37+08:00">2021-03-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -237,14 +237,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>24k字</span>
+              <span>30k字</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>22 mins.</span>
+              <span>27 mins.</span>
             </span>
 
         </div>
@@ -260,6 +260,7 @@
 <p>今天的学习内容：</p>
 <ol>
 <li>数据结构：树-二叉树</li>
+<li>Leetcode刷题：#589 N叉树的前序遍历</li>
 </ol>
 <a id="more"></a>
 
@@ -287,6 +288,12 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(binaryTree *BinaryTree)</span> <span class="title">CreateByPreOrderSequence</span><span class="params">(arr <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="comment">// ... 同上</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> create <span class="function"><span class="keyword">func</span><span class="params">([]<span class="keyword">interface</span>&#123;&#125;, *<span class="keyword">int</span>)</span> *<span class="title">BinaryTree</span></span></span><br><span class="line">	create = <span class="function"><span class="keyword">func</span><span class="params">(slice []<span class="keyword">interface</span>&#123;&#125;, flag *<span class="keyword">int</span>)</span> *<span class="title">BinaryTree</span></span> &#123;</span><br><span class="line">		<span class="comment">// ... 同上</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	flag := <span class="number">-1</span></span><br><span class="line">	binaryTree := create(slice, &amp;flag)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>初步猜测是binaryTree的值是create函数返回地址处的值，但是main函数中的binaryTree依然指向这个变量new的时候分配的内存空间的地址，这俩地址并不相同，导致main函数中无法读取binaryTree的值，结果返回nil。</p>
+<h4 id="2-Leetcode刷题"><a href="#2-Leetcode刷题" class="headerlink" title="2. Leetcode刷题"></a>2. Leetcode刷题</h4><h5 id="589-N叉树的前序遍历"><a href="#589-N叉树的前序遍历" class="headerlink" title="#589 N叉树的前序遍历"></a>#589 N叉树的前序遍历</h5><p>这个题比较简单，遍历n叉树，这里可以使用递归法和非递归法，先是递归法的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">preorder</span><span class="params">(root *Node)</span> []<span class="title">int</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> res []<span class="keyword">int</span></span><br><span class="line">    <span class="keyword">if</span> root == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> traverse <span class="function"><span class="keyword">func</span><span class="params">(*Node)</span></span> </span><br><span class="line">    traverse = <span class="function"><span class="keyword">func</span><span class="params">(root *Node)</span></span> &#123;</span><br><span class="line">        <span class="keyword">if</span> root == <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">        res = <span class="built_in">append</span>(res, root.Val)</span><br><span class="line">        <span class="keyword">for</span> _, child := <span class="keyword">range</span> root.Children &#123;</span><br><span class="line">            traverse(child)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    traverse(root)</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后是非递归法，参考二叉树前序遍历的非递归法，我们维护一个栈，每次遍历根节点后将其出栈，随后其所有子节点入栈。这里需要前序遍历，我们需要将每个根节点的所有子节点逆序入栈，这样才能保证每次即将遍历的下一个节点刚好在栈顶的位置。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">preorder</span><span class="params">(root *Node)</span> []<span class="title">int</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> res []<span class="keyword">int</span></span><br><span class="line">    <span class="keyword">var</span> stack []*Node</span><br><span class="line">    <span class="keyword">if</span> root == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    &#125;</span><br><span class="line">    stack = <span class="built_in">append</span>(stack, root)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">len</span>(stack) &gt; <span class="number">0</span> &#123;</span><br><span class="line">        node := stack[<span class="built_in">len</span>(stack)<span class="number">-1</span>]</span><br><span class="line">        stack = stack[:<span class="built_in">len</span>(stack)<span class="number">-1</span>]</span><br><span class="line">        res = <span class="built_in">append</span>(res, node.Val)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i := <span class="built_in">len</span>(node.Children)<span class="number">-1</span>; i &gt;= <span class="number">0</span>; i-- &#123;</span><br><span class="line">            stack = <span class="built_in">append</span>(stack, node.Children[i])</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -368,7 +375,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-03-06-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">2021-03-06 学习记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E6%A0%91-%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. 数据结构：树-二叉树</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-03-06-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">2021-03-06 学习记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E6%A0%91-%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. 数据结构：树-二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Leetcode%E5%88%B7%E9%A2%98"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. Leetcode刷题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#589-N%E5%8F%89%E6%A0%91%E7%9A%84%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">#589 N叉树的前序遍历</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
