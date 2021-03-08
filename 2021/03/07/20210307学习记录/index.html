@@ -28,7 +28,7 @@
 <meta property="og:description" content="2021-03-07 学习记录今天的学习内容：  数据结构：树-二叉树（二叉树的非递归遍历，由前&#x2F;中序或中&#x2F;后序序列创建二叉树） Leetcode刷题：#94 二叉树的中序遍历；#105 从前序与中序遍历序列构造二叉树；#226 翻转二叉树 复习web渗透相关内容">
 <meta property="og:locale">
 <meta property="article:published_time" content="2021-03-07T15:30:12.000Z">
-<meta property="article:modified_time" content="2021-03-08T02:06:01.778Z">
+<meta property="article:modified_time" content="2021-03-08T11:00:46.153Z">
 <meta property="article:author" content="su29029">
 <meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
@@ -198,7 +198,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-08 10:06:01" itemprop="dateModified" datetime="2021-03-08T10:06:01+08:00">2021-03-08</time>
+                <time title="Modified: 2021-03-08 19:00:46" itemprop="dateModified" datetime="2021-03-08T19:00:46+08:00">2021-03-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -237,14 +237,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>24k字</span>
+              <span>26k字</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>22 mins.</span>
+              <span>24 mins.</span>
             </span>
 
         </div>
@@ -284,37 +284,30 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * type TreeNode struct &#123;</span></span><br><span class="line"><span class="comment"> *     Val int</span></span><br><span class="line"><span class="comment"> *     Left *TreeNode</span></span><br><span class="line"><span class="comment"> *     Right *TreeNode</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">invertTree</span><span class="params">(root *TreeNode)</span> *<span class="title">TreeNode</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> root == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    root.Left, root.Right = root.Right, root.Left</span><br><span class="line"></span><br><span class="line">    invertTree(root.Left)</span><br><span class="line">    invertTree(root.Right)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> root</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h4 id="web渗透相关内容复习"><a href="#web渗透相关内容复习" class="headerlink" title="web渗透相关内容复习"></a>web渗透相关内容复习</h4><p>最近除了复习数据结构还准备了护网的面试，（恰点钱hhhhh）今天晚上也复习了一点web渗透相关的内容，这里记录一下。</p>
-<p>(1)mysql注入写shell的函数和条件</p>
-<p>函数 into dump_file “path/to/file” 或 into outfile “path/to/file”</p>
+<h5 id="1-mysql注入写shell的函数和条件"><a href="#1-mysql注入写shell的函数和条件" class="headerlink" title="(1)mysql注入写shell的函数和条件"></a>(1)mysql注入写shell的函数和条件</h5><p>函数 into dump_file “path/to/file” 或 into outfile “path/to/file”</p>
 <p>条件 secure_file_priv 置为true</p>
-<p>(2)mysql数据库5.0以下和5.1以上版本注入有什么区别</p>
-<p>5.0以下版本mysql没有information_schema数据库，这个数据库里面存放着所有数据库的信息（数据库名，表名，列名，列属性，对应权限等），5.0以下没有information_schema数据库时，需要通过盲注的方式获取表名列名。</p>
-<p>(3)常见报错注入函数</p>
-<p>extractvalue(), updatexml(), multipoint(), linestring(), exp(), polygen(),multipolygen(),multilinestring()等</p>
-<p>(4)如何获取网站根路径</p>
-<p>可以通过让代码报错的方式获取网站根路径，或者是故意请求一个不存在的页面使服务器报错，从报错信息中也许可以获取。</p>
-<p>(5)木马免杀</p>
-<ol>
+<h5 id="2-mysql数据库5-0以下和5-1以上版本注入有什么区别"><a href="#2-mysql数据库5-0以下和5-1以上版本注入有什么区别" class="headerlink" title="(2)mysql数据库5.0以下和5.1以上版本注入有什么区别"></a>(2)mysql数据库5.0以下和5.1以上版本注入有什么区别</h5><p>5.0以下版本mysql没有information_schema数据库，这个数据库里面存放着所有数据库的信息（数据库名，表名，列名，列属性，对应权限等），5.0以下没有information_schema数据库时，需要通过盲注的方式获取表名列名。</p>
+<h5 id="3-常见报错注入函数"><a href="#3-常见报错注入函数" class="headerlink" title="(3)常见报错注入函数"></a>(3)常见报错注入函数</h5><p>extractvalue(), updatexml(), multipoint(), linestring(), exp(), polygen(),multipolygen(),multilinestring()等</p>
+<h5 id="4-如何获取网站根路径"><a href="#4-如何获取网站根路径" class="headerlink" title="(4)如何获取网站根路径"></a>(4)如何获取网站根路径</h5><p>可以通过让代码报错的方式获取网站根路径，或者是故意请求一个不存在的页面使服务器报错，从报错信息中也许可以获取。</p>
+<h5 id="5-木马免杀"><a href="#5-木马免杀" class="headerlink" title="(5)木马免杀"></a>(5)木马免杀</h5><ol>
 <li>shellcode多次编码。exe文件通过msf x86/shikata_ga_nai编码12次以上可以免杀</li>
 <li>upx加壳</li>
 </ol>
-<p>(6)xss防御</p>
-<p>xss：攻击者通过各种办法，在用户访问的网页中插入自己的脚本，让其在用户访问网页时在其浏览器中进行执行。攻击者通过插入的脚本的执行，来获得用户的信息，比如cookie，发送到攻击者自己的网站</p>
+<h5 id="6-xss防御"><a href="#6-xss防御" class="headerlink" title="(6)xss防御"></a>(6)xss防御</h5><p>xss：攻击者通过各种办法，在用户访问的网页中插入自己的脚本，让其在用户访问网页时在其浏览器中进行执行。攻击者通过插入的脚本的执行，来获得用户的信息，比如cookie，发送到攻击者自己的网站</p>
 <p>xss成因：对URL中的参数，对用户输入提交给web server的内容，没有进行充分的过滤</p>
 <p>防御方法：对提交的所有内容进行过滤，对url中的参数进行过滤，过滤掉会导致脚本执行的相关内容；然后对动态输出到页面的内容进行html编码，使脚本无法在浏览器中执行。</p>
-<p>(7)csrf防御</p>
-<p>csrf：攻击者诱导受害者进入第三方网站，在第三方网站中，向被攻击网站发送跨站请求。利用受害者在被攻击网站已经获取的注册凭证，绕过后台的用户验证，达到冒充用户对被攻击的网站执行某项操作的目的。</p>
+<h5 id="7-csrf防御"><a href="#7-csrf防御" class="headerlink" title="(7)csrf防御"></a>(7)csrf防御</h5><p>csrf：攻击者诱导受害者进入第三方网站，在第三方网站中，向被攻击网站发送跨站请求。利用受害者在被攻击网站已经获取的注册凭证，绕过后台的用户验证，达到冒充用户对被攻击的网站执行某项 操作的目的。</p>
 <p>csrf防御方法：①阻止不明外域访问：同源检测、SameSite Cookie；②提交时附加本域才能获取的信息，例如csrf token</p>
-<p>(8)shiro反序列化漏洞</p>
-<p>shiro反序列化漏洞</p>
-<p>(9)redis未授权访问</p>
-<p>产生原因：redis默认情况绑定0.0.0.0:6379，暴露在公网，如果没有任何防火墙策略，且redis无密码认证的话，会导致任意用户在可以访问目标服务器的情况下未授权访问 Redis 以及读取 Redis 的数据。</p>
+<h5 id="8-shiro反序列化漏洞"><a href="#8-shiro反序列化漏洞" class="headerlink" title="(8)shiro反序列化漏洞"></a>(8)shiro反序列化漏洞</h5><p><strong>shiro-550 rememberMe反序列化漏洞：</strong></p>
+<p>Shiro提供了记住密码的功能，用户登录成功后会生成经过加密并编码的cookie，在服务端rememberMe的cookie值先进行base64解码然后AES解密再反序列化，就导致了反序列化rce漏洞。</p>
+<p><em>命令=&gt;序列化=&gt;AES加密=&gt;base64编码=&gt;RememberMe Cookie值</em></p>
+<p>影响版本：Apache Shiro &lt; 1.2.4 特征：返回包中包含rememberMe=deleteMe字段</p>
+<p><strong>shiro-721 Shiro Padding Oracle Attack</strong></p>
+<p>由于Apache Shiro cookie中通过 AES-128-CBC 模式加密的rememberMe字段存在问题，用户可通过Padding Oracle 加密生成的攻击代码来构造恶意的rememberMe字段，并重新请求网站，进行反序列化攻击，最终导致任意代码执行。<br>影响版本：Apache Shiro &lt; 1.4.2版本。</p>
+<h5 id="9-redis未授权访问"><a href="#9-redis未授权访问" class="headerlink" title="(9)redis未授权访问"></a>(9)redis未授权访问</h5><p>产生原因：redis默认情况绑定0.0.0.0:6379，暴露在公网，如果没有任何防火墙策略，且redis无密码认证的话，会导致任意用户在可以访问目标服务器的情况下未授权访问 Redis 以及读取 Redis 的数据。</p>
 <p>危害：敏感信息泄露，写入后门文件，最严重的如果redis以root身份运行，黑客可以直接写入ssh公钥，通过ssh远程登录服务器。</p>
-<p>(10)安全工具的使用 burpsuite sqlmap 蚁剑</p>
-<p>(11)linux运维基础 查看账号文件 cpu占用率 内存占用率 进程相关操作 日志（ssh登录日志 中间件日志）历史命令 历史登录用户 当前在线用户等</p>
-<p>(12)linux加固</p>
-<p>(13)ms12_020 rdp远程代码执行漏洞原理：use-after-free 利用方式，使用msf进行操作</p>
-
+<h5 id="10-安全工具的使用-burpsuite-sqlmap-蚁剑"><a href="#10-安全工具的使用-burpsuite-sqlmap-蚁剑" class="headerlink" title="(10)安全工具的使用 burpsuite sqlmap 蚁剑"></a>(10)安全工具的使用 burpsuite sqlmap 蚁剑</h5><h5 id="11-linux运维基础-查看账号文件-cpu占用率-内存占用率-进程相关操作-日志（ssh登录日志-中间件日志）历史命令-历史登录用户-当前在线用户等"><a href="#11-linux运维基础-查看账号文件-cpu占用率-内存占用率-进程相关操作-日志（ssh登录日志-中间件日志）历史命令-历史登录用户-当前在线用户等" class="headerlink" title="(11)linux运维基础 查看账号文件 cpu占用率 内存占用率 进程相关操作 日志（ssh登录日志 中间件日志）历史命令 历史登录用户 当前在线用户等"></a>(11)linux运维基础 查看账号文件 cpu占用率 内存占用率 进程相关操作 日志（ssh登录日志 中间件日志）历史命令 历史登录用户 当前在线用户等</h5><h5 id="12-linux加固"><a href="#12-linux加固" class="headerlink" title="(12)linux加固"></a>(12)linux加固</h5><p>修改密码长度，复杂度；禁用删除无用账号；检查特殊账户；设置会话超时；禁止root ssh登录，修改ssh默认端口；隐藏系统版本；关闭不必要的服务。</p>
+<h5 id="13-ms12-020-rdp远程代码执行漏洞原理：use-after-free-利用方式，使用msf进行操作"><a href="#13-ms12-020-rdp远程代码执行漏洞原理：use-after-free-利用方式，使用msf进行操作" class="headerlink" title="(13)ms12_020 rdp远程代码执行漏洞原理：use-after-free 利用方式，使用msf进行操作"></a>(13)ms12_020 rdp远程代码执行漏洞原理：use-after-free 利用方式，使用msf进行操作</h5>
     </div>
 
     
@@ -395,7 +388,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-03-07-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">2021-03-07 学习记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. 数据结构：二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%89%8D%E5%BA%8F%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">前序非递归遍历的实现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%AD%E5%BA%8F%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">中序非递归遍历的实现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.0.1.3.</span> <span class="nav-text">后序遍历的非递归实现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%B1%E5%89%8D-%E4%B8%AD%E5%BA%8F%E6%88%96%E4%B8%AD-%E5%90%8E%E5%BA%8F%E5%BA%8F%E5%88%97%E5%88%9B%E5%BB%BA%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.0.1.4.</span> <span class="nav-text">由前&#x2F;中序或中&#x2F;后序序列创建二叉树</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Leetcode%E5%88%B7%E9%A2%98"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. Leetcode刷题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#226-%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">#226 翻转二叉树</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#web%E6%B8%97%E9%80%8F%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A0"><span class="nav-number">1.0.3.</span> <span class="nav-text">web渗透相关内容复习</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-03-07-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">2021-03-07 学习记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. 数据结构：二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%89%8D%E5%BA%8F%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">前序非递归遍历的实现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%AD%E5%BA%8F%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">中序非递归遍历的实现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E7%9A%84%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.0.1.3.</span> <span class="nav-text">后序遍历的非递归实现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%B1%E5%89%8D-%E4%B8%AD%E5%BA%8F%E6%88%96%E4%B8%AD-%E5%90%8E%E5%BA%8F%E5%BA%8F%E5%88%97%E5%88%9B%E5%BB%BA%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.0.1.4.</span> <span class="nav-text">由前&#x2F;中序或中&#x2F;后序序列创建二叉树</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Leetcode%E5%88%B7%E9%A2%98"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. Leetcode刷题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#226-%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">#226 翻转二叉树</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#web%E6%B8%97%E9%80%8F%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A0"><span class="nav-number">1.0.3.</span> <span class="nav-text">web渗透相关内容复习</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-mysql%E6%B3%A8%E5%85%A5%E5%86%99shell%E7%9A%84%E5%87%BD%E6%95%B0%E5%92%8C%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">(1)mysql注入写shell的函数和条件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-mysql%E6%95%B0%E6%8D%AE%E5%BA%935-0%E4%BB%A5%E4%B8%8B%E5%92%8C5-1%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E6%B3%A8%E5%85%A5%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB"><span class="nav-number">1.0.3.2.</span> <span class="nav-text">(2)mysql数据库5.0以下和5.1以上版本注入有什么区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E5%B8%B8%E8%A7%81%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5%E5%87%BD%E6%95%B0"><span class="nav-number">1.0.3.3.</span> <span class="nav-text">(3)常见报错注入函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96%E7%BD%91%E7%AB%99%E6%A0%B9%E8%B7%AF%E5%BE%84"><span class="nav-number">1.0.3.4.</span> <span class="nav-text">(4)如何获取网站根路径</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-%E6%9C%A8%E9%A9%AC%E5%85%8D%E6%9D%80"><span class="nav-number">1.0.3.5.</span> <span class="nav-text">(5)木马免杀</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-xss%E9%98%B2%E5%BE%A1"><span class="nav-number">1.0.3.6.</span> <span class="nav-text">(6)xss防御</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#7-csrf%E9%98%B2%E5%BE%A1"><span class="nav-number">1.0.3.7.</span> <span class="nav-text">(7)csrf防御</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#8-shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.0.3.8.</span> <span class="nav-text">(8)shiro反序列化漏洞</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#9-redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="nav-number">1.0.3.9.</span> <span class="nav-text">(9)redis未授权访问</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#10-%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8-burpsuite-sqlmap-%E8%9A%81%E5%89%91"><span class="nav-number">1.0.3.10.</span> <span class="nav-text">(10)安全工具的使用 burpsuite sqlmap 蚁剑</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#11-linux%E8%BF%90%E7%BB%B4%E5%9F%BA%E7%A1%80-%E6%9F%A5%E7%9C%8B%E8%B4%A6%E5%8F%B7%E6%96%87%E4%BB%B6-cpu%E5%8D%A0%E7%94%A8%E7%8E%87-%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E7%8E%87-%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C-%E6%97%A5%E5%BF%97%EF%BC%88ssh%E7%99%BB%E5%BD%95%E6%97%A5%E5%BF%97-%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%97%A5%E5%BF%97%EF%BC%89%E5%8E%86%E5%8F%B2%E5%91%BD%E4%BB%A4-%E5%8E%86%E5%8F%B2%E7%99%BB%E5%BD%95%E7%94%A8%E6%88%B7-%E5%BD%93%E5%89%8D%E5%9C%A8%E7%BA%BF%E7%94%A8%E6%88%B7%E7%AD%89"><span class="nav-number">1.0.3.11.</span> <span class="nav-text">(11)linux运维基础 查看账号文件 cpu占用率 内存占用率 进程相关操作 日志（ssh登录日志 中间件日志）历史命令 历史登录用户 当前在线用户等</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#12-linux%E5%8A%A0%E5%9B%BA"><span class="nav-number">1.0.3.12.</span> <span class="nav-text">(12)linux加固</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#13-ms12-020-rdp%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86%EF%BC%9Ause-after-free-%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F%EF%BC%8C%E4%BD%BF%E7%94%A8msf%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C"><span class="nav-number">1.0.3.13.</span> <span class="nav-text">(13)ms12_020 rdp远程代码执行漏洞原理：use-after-free 利用方式，使用msf进行操作</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
