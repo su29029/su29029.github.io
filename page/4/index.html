@@ -164,6 +164,238 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-hans">
+    <link itemprop="mainEntityOfPage" href="https://su29029.github.io/2020/08/28/%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E6%A8%A1%E6%8B%9Fjs%E5%89%8D%E5%90%8E%E7%AB%AF%E4%BA%A4%E4%BA%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="su29029">
+      <meta itemprop="description" content="因为心在那里">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="su29029的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/28/%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E6%A8%A1%E6%8B%9Fjs%E5%89%8D%E5%90%8E%E7%AB%AF%E4%BA%A4%E4%BA%92/" class="post-title-link" itemprop="url">使用C语言模拟js前后端交互</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-08-28 10:31:36 / Modified: 15:33:01" itemprop="dateCreated datePublished" datetime="2020-08-28T10:31:36+08:00">2020-08-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">网络编程</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/web%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">web开发</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/c%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">c语言</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/08/28/%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E6%A8%A1%E6%8B%9Fjs%E5%89%8D%E5%90%8E%E7%AB%AF%E4%BA%A4%E4%BA%92/" class="post-meta-item leancloud_visitors" data-flag-title="使用C语言模拟js前后端交互" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/08/28/%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E6%A8%A1%E6%8B%9Fjs%E5%89%8D%E5%90%8E%E7%AB%AF%E4%BA%A4%E4%BA%92/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/28/%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E6%A8%A1%E6%8B%9Fjs%E5%89%8D%E5%90%8E%E7%AB%AF%E4%BA%A4%E4%BA%92/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>27k字</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>24 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近一个月复习了初中学习的C语言，刚好学校C语言要做一个期末设计的作业，作为一个web开发者总想着在自己的代码里加一点跟服务器有关的东西，那么，不如用C语言实现一波js的前后端交互吧。   </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/28/%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E6%A8%A1%E6%8B%9Fjs%E5%89%8D%E5%90%8E%E7%AB%AF%E4%BA%A4%E4%BA%92/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-hans">
+    <link itemprop="mainEntityOfPage" href="https://su29029.github.io/2020/08/28/%E5%AD%A6%E4%B9%A0win32%E7%BC%96%E7%A8%8B-1-%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="su29029">
+      <meta itemprop="description" content="因为心在那里">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="su29029的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/28/%E5%AD%A6%E4%B9%A0win32%E7%BC%96%E7%A8%8B-1-%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3/" class="post-title-link" itemprop="url">学习win32编程(1)--创建窗口</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-08-28 10:30:29 / Modified: 15:32:56" itemprop="dateCreated datePublished" datetime="2020-08-28T10:30:29+08:00">2020-08-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/windows%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">windows编程</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/08/28/%E5%AD%A6%E4%B9%A0win32%E7%BC%96%E7%A8%8B-1-%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3/" class="post-meta-item leancloud_visitors" data-flag-title="学习win32编程(1)--创建窗口" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/08/28/%E5%AD%A6%E4%B9%A0win32%E7%BC%96%E7%A8%8B-1-%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/28/%E5%AD%A6%E4%B9%A0win32%E7%BC%96%E7%A8%8B-1-%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>41k字</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>37 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>期中考试结束了，又回想起了期中考试前花了八天时间搞出来的小脚本，决定完善一下，增加点稳定性。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/28/%E5%AD%A6%E4%B9%A0win32%E7%BC%96%E7%A8%8B-1-%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-hans">
     <link itemprop="mainEntityOfPage" href="https://su29029.github.io/2020/08/28/%E8%B0%88%E8%B0%88%E5%AF%B9MVC%EF%BC%8CMVP%EF%BC%8CMVVM%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%90%86%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -585,7 +817,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
